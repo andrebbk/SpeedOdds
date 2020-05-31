@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="SpeedOdds.UserControls.MainContent.UserControl_Menu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SpeedOdds.UserControls.MainContent"
+             mc:Ignorable="d" 
+             Height="924" Width="310">
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="30,35,0,0" TextWrapping="Wrap" Text="Menu" VerticalAlignment="Top" FontFamily="Yu Gothic" FontWeight="Bold" FontSize="24" Foreground="#FF363030"/>
+
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonHome" TextElement.FontSize="22px" Padding="35, 0, 0, 0" Margin="16,98,0,0" VerticalAlignment="Top" Width="278" Height="62" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonHome_Click">
+            <StackPanel Orientation="Horizontal" Width="202" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Início" VerticalAlignment="Center" Margin="0,0,112,0" FontWeight="Normal"/>
+                <Image  Width="23" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,13,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/HomeIconV2.png"/>
+            </StackPanel>
+        </Button>
+
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonCompetitions" TextElement.FontSize="22px" Padding="35, 0, 0, 0" Margin="16,174,0,0" VerticalAlignment="Top" Width="278" Height="62" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonCompetitions_Click">
+            <StackPanel Orientation="Horizontal" Width="202" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Ligas" VerticalAlignment="Center" Margin="0,0,113,0" FontWeight="Normal" />
+                <Image  Width="29" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/trophy_icon.png"/>
+            </StackPanel>
+        </Button>
+
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonTeams" TextElement.FontSize="22px" Padding="35, 0, 0, 0" Margin="16,250,0,0" VerticalAlignment="Top" Width="278" Height="62" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonTeams_Click">
+            <StackPanel Orientation="Horizontal" Width="202" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Equipas" VerticalAlignment="Center" Margin="0,0,90,0" FontWeight="Normal" />
+                <Image  Width="24" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,12,0,5" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/teams_icon.png"/>
+            </StackPanel>
+        </Button>
+    </Grid>
+</UserControl>

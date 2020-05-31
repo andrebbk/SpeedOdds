@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpeedOdds.Windows;
+using System;
 using System.Threading;
 using System.Windows.Controls;
 
@@ -23,6 +24,10 @@ namespace SpeedOdds.UserControls.Start
                 ));
 
                 Thread.Sleep(1000);
+
+                startWindow.Dispatcher.BeginInvoke((Action)(
+                  () => new MainWindow(startWindow).Show()
+                ));
 
             }).Start();
         }

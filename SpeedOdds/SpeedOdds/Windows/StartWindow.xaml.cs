@@ -1,7 +1,7 @@
 ﻿using SpeedOdds.UserControls.Start;
 using System.Windows;
 
-namespace SpeedOdds
+namespace SpeedOdds.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

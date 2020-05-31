@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="SpeedOdds.UserControls.Competitions.UserControl_Competitions"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SpeedOdds.UserControls.Competitions"
+             mc:Ignorable="d" 
+             Height="924" Width="1548">
+    <Grid>
+        <!--TITULO-->
+        <TextBlock TextElement.FontSize="55px" TextElement.FontWeight="Bold" Margin="142,42,1064,808" Foreground="#DD171717" Text="Ligas"/>
+
+        <Border BorderThickness="1" HorizontalAlignment="Left" Height="4" Margin="112,116,0,0" VerticalAlignment="Top" Width="1250" Background="#FF171717" RenderTransformOrigin="0.5,0.5">
+            <Border.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleY="-1"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Border.RenderTransform>
+        </Border>
+
+
+        <!--BUTTONS-->
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonManageSeasons" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="142,788,0,0" VerticalAlignment="Top" Width="164" Height="44" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonManageSeasons_Click">
+            <StackPanel Orientation="Horizontal" Width="145" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Gerir Épocas" VerticalAlignment="Center" Margin="7,0,23,0" FontWeight="Normal" FontSize="14" />
+                <Image  Width="25" Height="23" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,10" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/seasons_icon.png"/>
+            </StackPanel>
+        </Button>
+        
+        
+    </Grid>
+</UserControl>
