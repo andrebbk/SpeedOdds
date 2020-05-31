@@ -105,6 +105,12 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="ToastNotifications, Version=2.5.1.0, Culture=neutral, PublicKeyToken=e89d9d7314a7c797, processorArchitecture=MSIL">
+      <HintPath>..\packages\ToastNotifications.2.5.1\lib\net40\ToastNotifications.dll</HintPath>
+    </Reference>
+    <Reference Include="ToastNotifications.Messages, Version=2.5.1.0, Culture=neutral, PublicKeyToken=e89d9d7314a7c797, processorArchitecture=MSIL">
+      <HintPath>..\packages\ToastNotifications.Messages.2.5.1\lib\net40\ToastNotifications.Messages.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -114,6 +120,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commons\Helpers\NotificationHelper.cs" />
+    <Compile Include="Notifications\CostumInput\CustomCommandExtensions.cs" />
+    <Compile Include="Notifications\CostumInput\CustomInputDisplayPart.xaml.cs">
+      <DependentUpon>CustomInputDisplayPart.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Notifications\CostumInput\CustomInputNotification.cs" />
+    <Compile Include="Notifications\CustomMessage\CustomDisplayPart.xaml.cs">
+      <DependentUpon>CustomDisplayPart.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Notifications\CustomMessage\CustomMessageExtensions.cs" />
+    <Compile Include="Notifications\CustomMessage\CustomNotification.cs" />
+    <Compile Include="Notifications\Utilities\RelayCommand.cs" />
     <Compile Include="UserControls\Competitions\UserControl_Competitions.xaml.cs">
       <DependentUpon>UserControl_Competitions.xaml</DependentUpon>
     </Compile>
@@ -132,6 +150,13 @@
     <Compile Include="UserControls\Start\UserControl_StartWindow.xaml.cs">
       <DependentUpon>UserControl_StartWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Notifications\CostumInput\CustomInputDisplayPart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Notifications\CustomMessage\CustomDisplayPart.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Buttons\ButtonStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -194,6 +219,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\ImageFiles\Buttons\goback-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\ImageFiles\Buttons\seasons_icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

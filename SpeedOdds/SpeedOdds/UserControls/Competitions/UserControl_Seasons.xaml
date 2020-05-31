@@ -20,6 +20,31 @@
                 </TransformGroup>
             </Border.RenderTransform>
         </Border>
+        <Image x:Name="ButtonGoBack" HorizontalAlignment="Left" Height="45" Margin="10,868,0,0" VerticalAlignment="Top" Width="45" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/goback-icon.png" MouseDown="ButtonGoBack_MouseDown"/>
+        <ComboBox x:Name="ComboBoxStartYear" HorizontalAlignment="Left" Margin="1094,319,0,0" VerticalAlignment="Top" Width="102" FontSize="18" Background="{x:Null}" Foreground="#FF1B1A1A" RenderTransformOrigin="-0.029,-0.264"/>
+        <ComboBox x:Name="ComboBoxEndYear" HorizontalAlignment="Left" Margin="1094,455,0,0" VerticalAlignment="Top" Width="102" FontSize="18" Background="{x:Null}" Foreground="#FF1B1A1A"/>
+        <Border BorderThickness="1" HorizontalAlignment="Left" Height="446" Margin="1076,202,0,0" VerticalAlignment="Top" Width="4" Background="#FF171717" RenderTransformOrigin="0.5,0.5">
+            <Border.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleY="-1"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Border.RenderTransform>
+        </Border>
+        <Label Content="Registar nova época" HorizontalAlignment="Left" Margin="1094,204,0,0" VerticalAlignment="Top" Foreground="#DD171717" FontSize="22" />
+        <Label Content="Ano do início da época:" HorizontalAlignment="Left" Margin="1094,277,0,0" VerticalAlignment="Top" Foreground="#DD171717" FontSize="18" />
+        <Label Content="Ano do fim da época:" HorizontalAlignment="Left" Margin="1094,418,0,0" VerticalAlignment="Top" Foreground="#DD171717" FontSize="18" />
+
+
+        <!--BUTTONS-->
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonSaveSeason" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="1094,585,0,0" VerticalAlignment="Top" Width="164" Height="44" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonSaveSeason_Click">
+            <StackPanel Orientation="Horizontal" Width="145" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Guardar" VerticalAlignment="Center" Margin="7,0,50,0" FontWeight="Normal" FontSize="14" />
+                <Image  Width="25" Height="23" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,10" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/seasons_icon.png"/>
+            </StackPanel>
+        </Button>
 
     </Grid>
 </UserControl>

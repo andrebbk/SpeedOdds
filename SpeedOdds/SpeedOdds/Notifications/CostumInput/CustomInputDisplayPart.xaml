@@ -1,0 +1,32 @@
+﻿<core:NotificationDisplayPart x:Class="SpeedOdds.Notifications.CostumInput.CustomInputDisplayPart"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:core="clr-namespace:ToastNotifications.Core;assembly=ToastNotifications"
+             xmlns:customInput="clr-namespace:SpeedOdds.Notifications.CostumInput"
+             mc:Ignorable="d" 
+             d:DesignHeight="60" d:DesignWidth="250" Background="WhiteSmoke"
+             d:DataContext="{d:DesignInstance customInput:CustomInputNotification, IsDesignTimeCreatable=False}" >
+    <Border BorderThickness="1" BorderBrush="LightGray">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="19" />
+                <RowDefinition Height="20*" />
+                <RowDefinition Height="19*" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="234"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Message}" FontWeight="Bold" Foreground="Black" Margin="5,0,2,0" />
+
+            <TextBox  Grid.Row="1"  Grid.Column="1" Text="{Binding InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding InputText}" />
+
+            <Image Grid.Row="0" HorizontalAlignment="Left" Height="19" VerticalAlignment="Top" Width="16" Source="/SpeedOdds;component/Resources/ImageFiles/Icon/red-icon.png"/>
+        </Grid>
+    </Border>
+</core:NotificationDisplayPart>
