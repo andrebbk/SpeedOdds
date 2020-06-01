@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.1062
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeedOdds", "SpeedOdds\SpeedOdds.csproj", "{5F520B8F-02B0-4E4A-8EBE-8E69EAE50694}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlurMessageBox", "..\BlurMessageBox\BlurMessageBox.csproj", "{036659E4-59F2-4485-BFED-3627ECEA2FBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{5F520B8F-02B0-4E4A-8EBE-8E69EAE50694}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F520B8F-02B0-4E4A-8EBE-8E69EAE50694}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F520B8F-02B0-4E4A-8EBE-8E69EAE50694}.Release|Any CPU.Build.0 = Release|Any CPU
+		{036659E4-59F2-4485-BFED-3627ECEA2FBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{036659E4-59F2-4485-BFED-3627ECEA2FBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{036659E4-59F2-4485-BFED-3627ECEA2FBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{036659E4-59F2-4485-BFED-3627ECEA2FBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
