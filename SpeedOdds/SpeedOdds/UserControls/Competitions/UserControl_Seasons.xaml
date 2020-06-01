@@ -59,6 +59,22 @@
         <Label Content="Ano do início da época:" HorizontalAlignment="Left" Margin="1103,273,0,0" VerticalAlignment="Top" Foreground="#DD171717" FontSize="18" />
         <Label Content="Ano do fim da época:" HorizontalAlignment="Left" Margin="1103,370,0,0" VerticalAlignment="Top" Foreground="#DD171717" FontSize="18" />
 
+        <!--DATA GRID-->
+        <DataGrid x:Name="DataGridSeasons" HorizontalAlignment="Left" Height="494" Margin="195,205,0,0" VerticalAlignment="Top" Width="710" AutoGenerateColumns="False" FontSize="16"
+            IsReadOnly="True" CanUserAddRows="False" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" SelectionUnit="FullRow" SelectionMode="Single" Background="{x:Null}">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Background" Value="{Binding BackgroundColorSet}"/>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Width="70" Binding="{Binding SeasonId}"/>
+                <DataGridTextColumn Header="Designação" Width="200" Binding="{Binding SeasonName}" />
+                <DataGridTextColumn Header="Início" Width="100" Binding="{Binding StartYear}" />
+                <DataGridTextColumn Header="Fim" Width="100" Binding="{Binding EndYear}" />
+                <DataGridTextColumn Header="Data de Registo" Width="200" Binding="{Binding CreateDate}" />
+            </DataGrid.Columns>
+        </DataGrid>
 
         <!--BUTTONS-->
         <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonSaveSeason" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="1103,471,0,0" VerticalAlignment="Top" Width="164" Height="44" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonSaveSeason_Click">

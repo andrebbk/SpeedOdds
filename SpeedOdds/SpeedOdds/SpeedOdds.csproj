@@ -143,6 +143,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commons\Helpers\NotificationHelper.cs" />
+    <Compile Include="Commons\Helpers\Utils.cs" />
     <Compile Include="Data\SpeedOddsContext.cs" />
     <Compile Include="Models\Season.cs" />
     <Compile Include="Notifications\CostumInput\CustomCommandExtensions.cs" />
@@ -162,6 +163,9 @@
     </Compile>
     <Compile Include="UserControls\Competitions\UserControl_Seasons.xaml.cs">
       <DependentUpon>UserControl_Seasons.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Loading\UserControl_Loading.xaml.cs">
+      <DependentUpon>UserControl_Loading.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\MainContent\UserControl_ControlBox.xaml.cs">
       <DependentUpon>UserControl_ControlBox.xaml</DependentUpon>
@@ -191,6 +195,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\Competitions\UserControl_Seasons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Loading\UserControl_Loading.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -272,7 +280,9 @@
     <Content Include="Assets\snap_loaderblack2.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Data\DataFile\SpeedOdds.sl3" />
+    <None Include="Data\DataFile\SpeedOdds.sl3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

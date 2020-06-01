@@ -56,5 +56,29 @@ namespace SpeedOdds.Services
                 return false;
             }
         }
+
+        public IEnumerable<Season> GetSeasons()
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var query = db.Seasons.OrderByDescending(x => x.SeasonId).ToList();
+
+                    if (query != null)
+                        return query;
+                    else
+                        return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting Seasons from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+
+                return null;
+            }
+        }
     }
 }

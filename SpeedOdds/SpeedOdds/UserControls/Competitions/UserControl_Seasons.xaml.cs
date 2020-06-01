@@ -1,11 +1,14 @@
 ﻿using SpeedOdds.Commons.Helpers;
 using SpeedOdds.Notifications.CustomMessage;
+using SpeedOdds.Services;
+using SpeedOdds.UserControls.Loading;
 using SpeedOdds.UserControls.MainContent;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,37 +28,97 @@ namespace SpeedOdds.UserControls.Competitions
     public partial class UserControl_Seasons : UserControl
     {
         private UserControl_MainContent _mainContent;
+        private SeasonService seasonService;
 
         public UserControl_Seasons(UserControl_MainContent mainContent)
         {
+            mainContent.WFAPContentContainer.Content = new UserControl_Loading();
+
             InitializeComponent();
             _mainContent = mainContent;
 
+            seasonService = new SeasonService();
             LoadFormData();
         }
 
         private void LoadFormData()
         {
-            //Get seasons
+            new Thread(() =>
+            {
+                //Get seasons
+                var seasonList = seasonService.GetSeasons();
 
-            //Load other data
-            ObservableCollection<int> yearsList = new ObservableCollection<int>();
-            int currentYear = DateTime.Now.Year;
+                DataGridSeasons.Dispatcher.BeginInvoke((Action)(() => DataGridSeasons.ItemsSource = null));
+                ObservableCollection<SeasonDataModel> seasonItems = new ObservableCollection<SeasonDataModel>();
 
-            //10 years before
-            for(int i = currentYear - 10; i < currentYear; i++)
-                yearsList.Add(i);
+                if (seasonList != null && seasonList.Count() > 0)
+                {
+                    foreach (var item in seasonList)
+                        seasonItems.Add(new SeasonDataModel()
+                        {
+                            SeasonId = item.SeasonId,
+                            SeasonName = item.Name,
+                            StartYear = item.StartYear,
+                            EndYear = item.EndYear,
+                            CreateDate = Utils.FormatDateTimeToGrid(item.CreateDate)
+                        });
 
-            yearsList.Add(currentYear);
+                    //BINDING
+                    DataGridSeasons.Dispatcher.BeginInvoke((Action)(() => DataGridSeasons.ItemsSource = seasonItems));                    
+                }
 
-            //10 years after
-            for (int i = currentYear + 1; i < currentYear + 10; i++)
-                yearsList.Add(i);
 
-            ComboBoxStartYear.ItemsSource = yearsList;
-            ComboBoxStartYear.SelectedValue = currentYear;
-            ComboBoxEndYear.ItemsSource = yearsList;
-            ComboBoxEndYear.SelectedValue = currentYear;
+                //Load other data
+                ObservableCollection<int> yearsList = new ObservableCollection<int>();
+                int currentYear = DateTime.Now.Year;
+
+                //10 years before
+                for (int i = currentYear - 10; i < currentYear; i++)
+                    yearsList.Add(i);
+
+                yearsList.Add(currentYear);
+
+                //10 years after
+                for (int i = currentYear + 1; i < currentYear + 10; i++)
+                    yearsList.Add(i);
+
+                ComboBoxStartYear.Dispatcher.BeginInvoke((Action)(() => ComboBoxStartYear.ItemsSource = yearsList));
+                ComboBoxStartYear.Dispatcher.BeginInvoke((Action)(() => ComboBoxStartYear.SelectedValue = currentYear));
+                ComboBoxEndYear.Dispatcher.BeginInvoke((Action)(() => ComboBoxEndYear.ItemsSource = yearsList));
+                ComboBoxEndYear.Dispatcher.BeginInvoke((Action)(() => ComboBoxEndYear.SelectedValue = currentYear));
+
+                _mainContent.Dispatcher.BeginInvoke((Action)(() => _mainContent.WFAPContentContainer.Content = this)); 
+
+            }).Start();            
+        }
+
+        private void LoadSeasonsGrid()
+        {
+            new Thread(() =>
+            {
+                //Get seasons
+                var seasonList = seasonService.GetSeasons();
+
+                DataGridSeasons.Dispatcher.BeginInvoke((Action)(() => DataGridSeasons.ItemsSource = null));
+                ObservableCollection<SeasonDataModel> seasonItems = new ObservableCollection<SeasonDataModel>();
+
+                if (seasonList != null && seasonList.Count() > 0)
+                {
+                    foreach (var item in seasonList)
+                        seasonItems.Add(new SeasonDataModel()
+                        {
+                            SeasonId = item.SeasonId,
+                            SeasonName = item.Name,
+                            StartYear = item.StartYear,
+                            EndYear = item.EndYear,
+                            CreateDate = Utils.FormatDateTimeToGrid(item.CreateDate)
+                        });
+
+                    //BINDING
+                    DataGridSeasons.Dispatcher.BeginInvoke((Action)(() => DataGridSeasons.ItemsSource = seasonItems));
+                }                
+
+            }).Start();
         }
 
         //Buttons
@@ -78,6 +141,39 @@ namespace SpeedOdds.UserControls.Competitions
                 return;
             }
 
+            if (seasonService.AlreadyExistsSeason((int)ComboBoxStartYear.SelectedValue, (int)ComboBoxEndYear.SelectedValue))
+            {
+                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Época já criada!");
+                return;
+            }
+
+            //Save new season
+            if(seasonService.CreateSeason((int)ComboBoxStartYear.SelectedValue, (int)ComboBoxEndYear.SelectedValue))
+            {
+                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Época criada com sucesso!");
+
+                //Reset UI
+                ComboBoxStartYear.SelectedValue = DateTime.Now.Year;
+                ComboBoxEndYear.SelectedValue = DateTime.Now.Year;
+
+                LoadSeasonsGrid();
+            }
+            else
+                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Ocorreu um erro a criar a Época!");
+
         }
+    }
+
+    class SeasonDataModel
+    {
+        public int SeasonId { get; set; }
+
+        public string SeasonName { get; set; }
+
+        public int StartYear { get; set; }
+
+        public int EndYear { get; set; }
+
+        public string CreateDate { get; set; }
     }
 }
