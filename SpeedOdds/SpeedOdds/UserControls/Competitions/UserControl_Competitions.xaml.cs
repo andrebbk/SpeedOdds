@@ -34,5 +34,16 @@ namespace SpeedOdds.UserControls.Competitions
             if (!(_mainContent.WFAPContentContainer.Content is UserControl_Seasons)) 
                 _mainContent.WFAPContentContainer.Content = new UserControl_Seasons(_mainContent);
         }
+
+        //BUTTONS
+        private void ButtonSaveCompetition_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonRemoveSeason_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

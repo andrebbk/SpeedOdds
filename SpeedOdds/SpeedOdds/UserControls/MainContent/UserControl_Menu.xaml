@@ -18,7 +18,7 @@
 
         <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonCompetitions" TextElement.FontSize="22px" Padding="35, 0, 0, 0" Margin="16,174,0,0" VerticalAlignment="Top" Width="278" Height="62" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonCompetitions_Click">
             <StackPanel Orientation="Horizontal" Width="202" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="Ligas" VerticalAlignment="Center" Margin="0,0,113,0" FontWeight="Normal" />
+                <TextBlock Text="Competições" VerticalAlignment="Center" Margin="0,0,35,0" FontWeight="Normal" />
                 <Image  Width="29" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/trophy_icon.png"/>
             </StackPanel>
         </Button>

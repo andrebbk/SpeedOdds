@@ -11,5 +11,7 @@ namespace SpeedOdds.Data
     class SpeedOddsContext: DbContext
     {
         public DbSet<Season> Seasons { get; set; }
+
+        public DbSet<Competition> Competitions { get; set; }
     }
 }

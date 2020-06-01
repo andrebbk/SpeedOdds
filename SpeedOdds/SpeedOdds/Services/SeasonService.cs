@@ -28,6 +28,25 @@ namespace SpeedOdds.Services
             }
         }
 
+        public bool CanDeleteById(int seasonId)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    return !db.Competitions.Where(c => c.SeasonId == seasonId).Any();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error checking seasons in competitions from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+
+                return false;
+            }
+        }
+
         public bool CreateSeason(int sy, int ey)
         {
             try

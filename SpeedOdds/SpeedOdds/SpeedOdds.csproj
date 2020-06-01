@@ -145,6 +145,7 @@
     <Compile Include="Commons\Helpers\NotificationHelper.cs" />
     <Compile Include="Commons\Helpers\Utils.cs" />
     <Compile Include="Data\SpeedOddsContext.cs" />
+    <Compile Include="Models\Competition.cs" />
     <Compile Include="Models\Season.cs" />
     <Compile Include="Notifications\CostumInput\CustomCommandExtensions.cs" />
     <Compile Include="Notifications\CostumInput\CustomInputDisplayPart.xaml.cs">
@@ -157,6 +158,7 @@
     <Compile Include="Notifications\CustomMessage\CustomMessageExtensions.cs" />
     <Compile Include="Notifications\CustomMessage\CustomNotification.cs" />
     <Compile Include="Notifications\Utilities\RelayCommand.cs" />
+    <Compile Include="Services\CompetitionService.cs" />
     <Compile Include="Services\SeasonService.cs" />
     <Compile Include="UserControls\Competitions\UserControl_Competitions.xaml.cs">
       <DependentUpon>UserControl_Competitions.xaml</DependentUpon>

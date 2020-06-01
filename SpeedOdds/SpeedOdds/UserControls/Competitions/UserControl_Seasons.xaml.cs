@@ -33,8 +33,6 @@ namespace SpeedOdds.UserControls.Competitions
 
         public UserControl_Seasons(UserControl_MainContent mainContent)
         {
-            mainContent.WFAPContentContainer.Content = new UserControl_Loading();
-
             InitializeComponent();
             _mainContent = mainContent;
 
@@ -172,13 +170,18 @@ namespace SpeedOdds.UserControls.Competitions
                 if (this.MessageBoxShow("Tens a certeza que pretendes remover a " + item.SeasonName + "?", "Speed Odds",
                 Buttons.YesNo, Icons.Warning, AnimateStyle.FadeIn) == System.Windows.Forms.DialogResult.Yes)
                 {
-                    if (seasonService.RemoveSeason(item.SeasonId))
+                    if (seasonService.CanDeleteById(item.SeasonId))
                     {
-                        NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Época removida com sucesso!");
-                        LoadSeasonsGrid();
+                        if (seasonService.RemoveSeason(item.SeasonId))
+                        {
+                            NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Época removida com sucesso!");
+                            LoadSeasonsGrid();
+                        }
+                        else
+                            NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Erro ao remover época!");
                     }
                     else
-                        NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Erro ao remover época!");
+                        NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Não é possivel eliminar esta época!\nContacte o Admin do sistema...");
                 }
                 
             }
