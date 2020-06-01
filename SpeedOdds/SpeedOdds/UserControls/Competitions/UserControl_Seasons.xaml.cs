@@ -67,7 +67,17 @@ namespace SpeedOdds.UserControls.Competitions
         private void ButtonSaveSeason_Click(object sender, RoutedEventArgs e)
         {
             if((int)ComboBoxStartYear.SelectedValue > (int)ComboBoxEndYear.SelectedValue)
+            {
                 NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Os anos da época são inválidos!");
+                return;
+            }
+
+            if((int)ComboBoxStartYear.SelectedValue == (int)ComboBoxEndYear.SelectedValue)
+            {
+                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Os anos da época são inválidos!");
+                return;
+            }
+
         }
     }
 }
