@@ -162,6 +162,21 @@ namespace SpeedOdds.UserControls.Competitions
                 NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Ocorreu um erro a criar a Época!");
 
         }
+
+        private void ButtonRemoveSeason_Click(object sender, RoutedEventArgs e)
+        {
+            SeasonDataModel item = (sender as Button).DataContext as SeasonDataModel;
+            if(item != null)
+            {
+                if (seasonService.RemoveSeason(item.SeasonId))
+                {
+                    NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Season removed successfully!");
+                    LoadSeasonsGrid();
+                }                    
+                else
+                    NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Error removing season!");
+            }
+        }
     }
 
     class SeasonDataModel

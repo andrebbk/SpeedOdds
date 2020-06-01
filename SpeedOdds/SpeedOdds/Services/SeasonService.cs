@@ -63,7 +63,7 @@ namespace SpeedOdds.Services
             {
                 using (var db = new SpeedOddsContext())
                 {
-                    var query = db.Seasons.OrderByDescending(x => x.SeasonId).ToList();
+                    var query = db.Seasons.OrderByDescending(x => x.EndYear).ThenByDescending(x => x.StartYear).ToList();
 
                     if (query != null)
                         return query;
@@ -78,6 +78,34 @@ namespace SpeedOdds.Services
                 Console.WriteLine(ex.Message);
 
                 return null;
+            }
+        }
+
+        public bool RemoveSeason(int seasonId)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var season = db.Seasons.Where(x => x.SeasonId == seasonId).FirstOrDefault();
+
+                    if (season != null)
+                    {
+                        db.Seasons.Remove(season);
+                        db.SaveChanges();
+                        return true;
+                    }
+
+                    return false;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error removing season from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+
+                return false;
             }
         }
     }
