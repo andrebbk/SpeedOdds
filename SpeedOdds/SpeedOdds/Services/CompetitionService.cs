@@ -99,6 +99,61 @@ namespace SpeedOdds.Services
             }
         }
 
+        public string GetCompetitionName(int competitionId)
+        {
+            string output = "";
+
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var comp = db.Competitions.Where(x => x.CompetitionId == competitionId).FirstOrDefault();
+
+                    if (comp != null)
+                    {
+                        output = comp.Name;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting competition name from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+            }
+
+            return output;
+        }
+
+        public string GetCompetitionSeasonName(int competitionId)
+        {
+            string output = "";
+
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var season = (from c in db.Competitions
+                               join s in db.Seasons on c.SeasonId equals s.SeasonId
+                               where c.CompetitionId == competitionId
+                               select new { s.Name }).FirstOrDefault();
+
+                    if (season != null)
+                    {
+                        output = season.Name;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting competition season name from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+            }
+
+            return output;
+        }
+
         public bool RemoveCompetition(int competitionId)
         {
             try

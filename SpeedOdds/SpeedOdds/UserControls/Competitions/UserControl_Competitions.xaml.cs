@@ -52,12 +52,12 @@ namespace SpeedOdds.UserControls.Competitions
                 var competitionList = competitionService.GetCompetitions();
 
                 DataGridCompetitions.Dispatcher.BeginInvoke((Action)(() => DataGridCompetitions.ItemsSource = null));
-                ObservableCollection<CompetitionnDataModel> compItems = new ObservableCollection<CompetitionnDataModel>();
+                ObservableCollection<CompetitionDataModel> compItems = new ObservableCollection<CompetitionDataModel>();
 
                 if (competitionList != null && competitionList.Count() > 0)
                 {
                     foreach (var item in competitionList)
-                        compItems.Add(new CompetitionnDataModel()
+                        compItems.Add(new CompetitionDataModel()
                         {
                             CompetitionId = item.CompetitionId,
                             CompetitionName = item.Name,
@@ -97,12 +97,12 @@ namespace SpeedOdds.UserControls.Competitions
                 var competitionList = competitionService.GetCompetitions();
 
                 DataGridCompetitions.Dispatcher.BeginInvoke((Action)(() => DataGridCompetitions.ItemsSource = null));
-                ObservableCollection<CompetitionnDataModel> compItems = new ObservableCollection<CompetitionnDataModel>();
+                ObservableCollection<CompetitionDataModel> compItems = new ObservableCollection<CompetitionDataModel>();
 
                 if (competitionList != null && competitionList.Count() > 0)
                 {
                     foreach (var item in competitionList)
-                        compItems.Add(new CompetitionnDataModel()
+                        compItems.Add(new CompetitionDataModel()
                         {
                             CompetitionId = item.CompetitionId,
                             CompetitionName = item.Name,
@@ -129,26 +129,26 @@ namespace SpeedOdds.UserControls.Competitions
         {
             if (String.IsNullOrEmpty(TextBoxCompetitionName.Text) || TextBoxCompetitionName.Text.Length < 3)
             {
-                NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Nome da competição inválido!");
+                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Nome da competição inválido!");
                 return;
             }
 
             if ((SeasonComboModel)ComboBoxSeason.SelectedValue == null)
             {
-                NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Falta escolher a época!");
+                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Falta escolher a época!");
                 return;
             }                  
 
             if(competitionService.AlreadyExistsCompetition(TextBoxCompetitionName.Text, ((SeasonComboModel)ComboBoxSeason.SelectedValue).SeasonId))
             {
-                NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Já existe uma competição idêntica!");
+                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Já existe uma competição idêntica!");
                 return;
             }
 
-            //Save new season
+            //Save new competition
             if (competitionService.CreateCompetition(TextBoxCompetitionName.Text, ((SeasonComboModel)ComboBoxSeason.SelectedValue).SeasonId))
             {
-                NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Competição criada com sucesso!");
+                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Competição criada com sucesso!");
 
                 //Reset UI
                 TextBoxCompetitionName.Clear();
@@ -156,36 +156,40 @@ namespace SpeedOdds.UserControls.Competitions
                 LoadCompetitionsGrid();
             }
             else
-                NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Ocorreu um erro ao criar a Competição!");
+                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Ocorreu um erro ao criar a Competição!");
         }
 
         private void ButtonRemoveCompetition_Click(object sender, RoutedEventArgs e)
         {
-            CompetitionnDataModel item = (sender as Button).DataContext as CompetitionnDataModel;
+            CompetitionDataModel item = (sender as Button).DataContext as CompetitionDataModel;
             if (item != null)
             {
-                if (this.MessageBoxShow("Tens a certeza que pretendes remover a competição '" + item.CompetitionName + "'?", "Speed Odds",
+                if (this.MessageBoxShow("Tens a certeza que pretendes remover a competição '" + item.CompetitionName + "'?", "SpeedOdds",
                 Buttons.YesNo, Icons.Warning, AnimateStyle.FadeIn) == System.Windows.Forms.DialogResult.Yes)
                 {
-                    if (competitionService.CanDeleteById(item.CompetitionId))
+                    new Thread(() =>
                     {
-                        if (competitionService.RemoveCompetition(item.CompetitionId))
+                        if (competitionService.CanDeleteById(item.CompetitionId))
                         {
-                            NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Competição removida com sucesso!");
-                            LoadCompetitionsGrid();
+                            if (competitionService.RemoveCompetition(item.CompetitionId))
+                            {
+                                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Competição removida com sucesso!");
+                                LoadCompetitionsGrid();
+                            }
+                            else
+                                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Erro ao remover competição!");
                         }
                         else
-                            NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Erro ao remover competição!");
-                    }
-                    else
-                        NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Não é possivel eliminar esta competição!\nContacte o Admin do sistema...");
+                            NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Não é possivel eliminar esta competição!\nContacte o Admin do sistema...");
+                    }).Start();
+                    
                 }
 
             }
         }
     }
 
-    class CompetitionnDataModel
+    class CompetitionDataModel
     {
         public int CompetitionId { get; set; }
 

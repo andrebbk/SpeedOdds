@@ -1,4 +1,5 @@
 ﻿using SpeedOdds.UserControls.Competitions;
+using SpeedOdds.UserControls.Teams;
 using SpeedOdds.Windows;
 using System;
 using System.Collections.Generic;
@@ -43,7 +44,8 @@ namespace SpeedOdds.UserControls.MainContent
 
         private void ButtonTeams_Click(object sender, RoutedEventArgs e)
         {
-
+            if (!(_mainContent.WFAPContentContainer.Content is UserControl_Teams))
+                _mainContent.WFAPContentContainer.Content = new UserControl_Teams(_mainContent);
         }
     }
 }

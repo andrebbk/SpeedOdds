@@ -25,6 +25,6 @@
             </Button.Background>
         </Button>
         <Image HorizontalAlignment="Left" Height="54" VerticalAlignment="Top" Width="60" Margin="10,6,0,0" Source="/SpeedOdds;component/Resources/ImageFiles/Icon/red-icon.png"/>
-        <TextBlock HorizontalAlignment="Left" Margin="83,19,0,0" TextWrapping="Wrap" Text="Speed Odds" VerticalAlignment="Top" FontFamily="Yu Gothic" FontWeight="Bold" FontSize="24" Foreground="#FF363030"/>
+        <TextBlock HorizontalAlignment="Left" Margin="83,19,0,0" TextWrapping="Wrap" Text="SpeedOdds" VerticalAlignment="Top" FontFamily="Yu Gothic" FontWeight="Bold" FontSize="24" Foreground="#FF363030"/>
     </Grid>
 </UserControl>

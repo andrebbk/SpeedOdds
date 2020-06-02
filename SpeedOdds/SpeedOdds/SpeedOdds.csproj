@@ -54,6 +54,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.3.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Kent.Boogaart.HelperTrinity, Version=1.5.2.0, Culture=neutral, PublicKeyToken=cc96fa93a217f7a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\Kent.Boogaart.HelperTrinity.1.5.2\lib\net45\Kent.Boogaart.HelperTrinity.dll</HintPath>
+    </Reference>
     <Reference Include="LottieSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\LottieSharp.1.0.0\lib\net461\LottieSharp.dll</HintPath>
     </Reference>
@@ -147,6 +150,7 @@
     <Compile Include="Data\SpeedOddsContext.cs" />
     <Compile Include="Models\Competition.cs" />
     <Compile Include="Models\Season.cs" />
+    <Compile Include="Models\Shared\ObservableObject.cs" />
     <Compile Include="Models\Team.cs" />
     <Compile Include="Notifications\CostumInput\CustomCommandExtensions.cs" />
     <Compile Include="Notifications\CostumInput\CustomInputDisplayPart.xaml.cs">
@@ -161,6 +165,7 @@
     <Compile Include="Notifications\Utilities\RelayCommand.cs" />
     <Compile Include="Services\CompetitionService.cs" />
     <Compile Include="Services\SeasonService.cs" />
+    <Compile Include="Services\TeamService.cs" />
     <Compile Include="UserControls\Competitions\UserControl_Competitions.xaml.cs">
       <DependentUpon>UserControl_Competitions.xaml</DependentUpon>
     </Compile>
@@ -217,6 +222,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\Teams\UserControl_Teams.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -228,6 +237,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UserControls\Teams\TeamDataModel.cs" />
+    <Compile Include="UserControls\Teams\UserControl_Teams.xaml.cs">
+      <DependentUpon>UserControl_Teams.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -255,6 +268,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\ImageFiles\black_tilde_arrow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\ImageFiles\unnamed_star.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\ImageFiles\Buttons\goback-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

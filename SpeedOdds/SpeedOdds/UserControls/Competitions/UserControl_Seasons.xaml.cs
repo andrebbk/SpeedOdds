@@ -135,26 +135,26 @@ namespace SpeedOdds.UserControls.Competitions
         {
             if((int)ComboBoxStartYear.SelectedValue > (int)ComboBoxEndYear.SelectedValue)
             {
-                NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Os anos da época são inválidos!");
+                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Os anos da época são inválidos!");
                 return;
             }
 
             if((int)ComboBoxStartYear.SelectedValue == (int)ComboBoxEndYear.SelectedValue)
             {
-                NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Os anos da época são inválidos!");
+                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Os anos da época são inválidos!");
                 return;
             }
 
             if (seasonService.AlreadyExistsSeason((int)ComboBoxStartYear.SelectedValue, (int)ComboBoxEndYear.SelectedValue))
             {
-                NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Época já criada!");
+                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Época já criada!");
                 return;
             }
 
             //Save new season
             if(seasonService.CreateSeason((int)ComboBoxStartYear.SelectedValue, (int)ComboBoxEndYear.SelectedValue))
             {
-                NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Época criada com sucesso!");
+                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Época criada com sucesso!");
 
                 //Reset UI
                 ComboBoxStartYear.SelectedValue = DateTime.Now.Year;
@@ -172,21 +172,25 @@ namespace SpeedOdds.UserControls.Competitions
             SeasonDataModel item = (sender as Button).DataContext as SeasonDataModel;
             if(item != null)
             {
-                if (this.MessageBoxShow("Tens a certeza que pretendes remover a " + item.SeasonName + "?", "Speed Odds",
+                if (this.MessageBoxShow("Tens a certeza que pretendes remover a " + item.SeasonName + "?", "SpeedOdds",
                 Buttons.YesNo, Icons.Warning, AnimateStyle.FadeIn) == System.Windows.Forms.DialogResult.Yes)
                 {
-                    if (seasonService.CanDeleteById(item.SeasonId))
+                    new Thread(() =>
                     {
-                        if (seasonService.RemoveSeason(item.SeasonId))
+                        if (seasonService.CanDeleteById(item.SeasonId))
                         {
-                            NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Época removida com sucesso!");
-                            LoadSeasonsGrid();
+                            if (seasonService.RemoveSeason(item.SeasonId))
+                            {
+                                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Época removida com sucesso!");
+                                LoadSeasonsGrid();
+                            }
+                            else
+                                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Erro ao remover época!");
                         }
                         else
-                            NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Erro ao remover época!");
-                    }
-                    else
-                        NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Não é possivel eliminar esta época!\nContacte o Admin do sistema...");
+                            NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Não é possivel eliminar esta época!\nContacte o Admin do sistema...");
+                    }).Start();
+                    
                 }
                 
             }
