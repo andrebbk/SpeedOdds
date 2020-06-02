@@ -147,6 +147,7 @@
     <Compile Include="Data\SpeedOddsContext.cs" />
     <Compile Include="Models\Competition.cs" />
     <Compile Include="Models\Season.cs" />
+    <Compile Include="Models\Team.cs" />
     <Compile Include="Notifications\CostumInput\CustomCommandExtensions.cs" />
     <Compile Include="Notifications\CostumInput\CustomInputDisplayPart.xaml.cs">
       <DependentUpon>CustomInputDisplayPart.xaml</DependentUpon>

@@ -100,6 +100,32 @@ namespace SpeedOdds.Services
             }
         }
 
+        public string GetSeasonName(int seasonId)
+        {
+            string output = "";
+
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var season = db.Seasons.Where(x => x.SeasonId == seasonId).FirstOrDefault();
+
+                    if (season != null)
+                    {
+                        output = season.Name;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting season name from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);                
+            }
+
+            return output;
+        }
+
         public bool RemoveSeason(int seasonId)
         {
             try

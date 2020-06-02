@@ -29,7 +29,8 @@
                 <Image  Width="25" Height="23" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,10" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/seasons_icon.png"/>
             </StackPanel>
         </Button>
-        <ComboBox x:Name="ComboBoxSeason" HorizontalAlignment="Left" Margin="1116,407,0,0" VerticalAlignment="Top" Width="102" FontSize="18" Background="{x:Null}" Foreground="#FF1B1A1A">
+        <ComboBox x:Name="ComboBoxSeason" HorizontalAlignment="Left" Margin="1116,407,0,0" VerticalAlignment="Top" Width="176" FontSize="18" Background="{x:Null}" Foreground="#FF1B1A1A"
+          ItemsSource="{Binding Path=SeasonDataModel}" DisplayMemberPath="SeasonName">
             <ComboBox.Style>
                 <Style TargetType="{x:Type ComboBox}">
                     <Style.Triggers>
@@ -64,13 +65,13 @@
             </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Width="70" Binding="{Binding CompetitionId}"/>
-                <DataGridTextColumn Header="Designação" Width="300" Binding="{Binding CompetitionName}" />
-                <DataGridTextColumn Header="Época" Width="100" Binding="{Binding StartYear}" />
+                <DataGridTextColumn Header="Designação" Width="280" Binding="{Binding CompetitionName}" />
+                <DataGridTextColumn Header="Época" Width="170" Binding="{Binding SeasonName}" />
                 <DataGridTextColumn Header="Data de Registo" Width="160" Binding="{Binding CreateDate}" />
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonRemoveSeason" TextElement.FontSize="20px" Padding="1, 0, 0, 0" Margin="0, 0, 35, 0" VerticalAlignment="center" Width="80" Height="35" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" IsEnabled="{Binding ButtonSaveEnable}" Click="ButtonRemoveSeason_Click">
+                            <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonRemoveCompetition" TextElement.FontSize="20px" Padding="1, 0, 0, 0" Margin="0, 0, 35, 0" VerticalAlignment="center" Width="80" Height="35" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" IsEnabled="{Binding ButtonSaveEnable}" Click="ButtonRemoveCompetition_Click">
                                 <StackPanel Orientation="Horizontal" Width="80" Height="35" VerticalAlignment="Center" HorizontalAlignment="Center">
                                     <TextBlock Text="Remover" VerticalAlignment="Center" Margin="13, 0, 10, 0" FontWeight="Normal" FontSize="12" />
                                 </StackPanel>

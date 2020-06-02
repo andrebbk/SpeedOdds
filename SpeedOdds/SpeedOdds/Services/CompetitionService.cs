@@ -28,6 +28,25 @@ namespace SpeedOdds.Services
             }
         }
 
+        public bool CanDeleteById(int competitionId)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    return !db.Teams.Where(t => t.CompetitionId == competitionId).Any();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error checking competitions in teams from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+
+                return false;
+            }
+        }
+
         public bool CreateCompetition(string name, int seasonId)
         {
             try
@@ -80,7 +99,7 @@ namespace SpeedOdds.Services
             }
         }
 
-        public bool RemoveSeason(int competitionId)
+        public bool RemoveCompetition(int competitionId)
         {
             try
             {

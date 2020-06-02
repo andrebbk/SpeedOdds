@@ -13,5 +13,7 @@ namespace SpeedOdds.Data
         public DbSet<Season> Seasons { get; set; }
 
         public DbSet<Competition> Competitions { get; set; }
+
+        public DbSet<Team> Teams { get; set; }
     }
 }

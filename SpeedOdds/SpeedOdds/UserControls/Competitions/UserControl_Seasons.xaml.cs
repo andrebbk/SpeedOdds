@@ -163,7 +163,7 @@ namespace SpeedOdds.UserControls.Competitions
                 LoadSeasonsGrid();
             }
             else
-                NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Ocorreu um erro a criar a Época!");
+                NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Ocorreu um erro ao  criar a Época!");
 
         }
 
