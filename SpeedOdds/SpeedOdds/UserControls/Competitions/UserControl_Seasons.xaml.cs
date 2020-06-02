@@ -34,6 +34,9 @@ namespace SpeedOdds.UserControls.Competitions
         public UserControl_Seasons(UserControl_MainContent mainContent)
         {
             InitializeComponent();
+            ComboBoxStartYear.IsEnabled = false;
+            ComboBoxEndYear.IsEnabled = false;
+            ButtonSaveSeason.IsEnabled = false;
             _mainContent = mainContent;
 
             seasonService = new SeasonService();
@@ -86,8 +89,10 @@ namespace SpeedOdds.UserControls.Competitions
                 ComboBoxEndYear.Dispatcher.BeginInvoke((Action)(() => ComboBoxEndYear.ItemsSource = yearsList));
                 ComboBoxEndYear.Dispatcher.BeginInvoke((Action)(() => ComboBoxEndYear.SelectedValue = currentYear));
 
-                _mainContent.Dispatcher.BeginInvoke((Action)(() => _mainContent.WFAPContentContainer.Content = this)); 
-
+                //Enable Ui
+                ComboBoxStartYear.Dispatcher.BeginInvoke((Action)(() => ComboBoxStartYear.IsEnabled = true));
+                ComboBoxEndYear.Dispatcher.BeginInvoke((Action)(() => ComboBoxEndYear.IsEnabled = true));
+                ButtonSaveSeason.Dispatcher.BeginInvoke((Action)(() => ButtonSaveSeason.IsEnabled = true));
             }).Start();            
         }
 
