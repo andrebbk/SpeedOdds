@@ -109,6 +109,37 @@ namespace SpeedOdds.Services
             }
         }
 
+        public Tuple<IEnumerable<Team>, int> GetFilteredTeams(string filterVal, int? compId, bool? isFav)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var query = db.Teams.OrderBy(x => x.Name).ThenBy(x => x.CreateDate).ToList();
+
+                    if (!String.IsNullOrWhiteSpace(filterVal))
+                        query = query.Where(x => x.Name.IndexOf(filterVal, StringComparison.OrdinalIgnoreCase) != -1).ToList();
+                    if(compId.HasValue)
+                        query = query.Where(x => x.CompetitionId == compId.Value).ToList();
+                    if (isFav.HasValue)
+                        query = query.Where(x => x.IsFavorite == isFav.Value).ToList();
+
+                    if (query != null)
+                        return new Tuple<IEnumerable<Team>, int>(query, query.Count());
+                    else
+                        return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting filtered Teams from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+
+                return null;
+            }
+        }
+
         public int GetTeamsNumber()
         {
             int nTeams = 0;

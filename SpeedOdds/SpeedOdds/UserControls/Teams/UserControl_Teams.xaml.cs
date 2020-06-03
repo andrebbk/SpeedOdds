@@ -48,6 +48,7 @@ namespace SpeedOdds.UserControls.Teams
 
             LoadConfigurationForPagination();
             LoadFormTeams();
+            IniSearchControls();
         }
 
         private void LoadFormTeams()
@@ -137,15 +138,58 @@ namespace SpeedOdds.UserControls.Teams
             }).Start();
         }
 
-        private void LoadConfigurationForPagination()
+        private void IniSearchControls()
+        {
+            new Thread(() =>
+            {
+                TextBoxFilterValue.Dispatcher.BeginInvoke((Action)(() => TextBoxFilterValue.Clear()));
+
+                //Load data
+                var competitionList = competitionService.GetCompetitions();
+
+                ObservableCollection<CompetitionComboModel> compsBox = new ObservableCollection<CompetitionComboModel>();
+                compsBox.Add(new CompetitionComboModel()
+                {
+                    CompetitionId = 0,
+                    CompetitionName = ""
+                });
+
+                foreach (var item in competitionList)
+                    compsBox.Add(new CompetitionComboModel()
+                    {
+                        CompetitionId = item.CompetitionId,
+                        CompetitionName = item.Name + " - " + competitionService.GetCompetitionSeasonName(item.CompetitionId)
+                    });
+
+                ComboBoxFilterCompetition.Dispatcher.BeginInvoke((Action)(() => ComboBoxFilterCompetition.ItemsSource = compsBox));
+                ComboBoxFilterCompetition.Dispatcher.BeginInvoke((Action)(() => ComboBoxFilterCompetition.SelectedValue = compsBox.FirstOrDefault()));
+
+                CheckBoxFilterIsFavoriteYes.Dispatcher.BeginInvoke((Action)(() => CheckBoxFilterIsFavoriteYes.IsChecked = false));
+                CheckBoxFilterIsFavoriteNo.Dispatcher.BeginInvoke((Action)(() => CheckBoxFilterIsFavoriteNo.IsChecked = false));
+
+            }).Start();
+        }
+
+        private void LoadConfigurationForPagination(int? total = null)
         {
             //Itens por página
             IPP = 30;
 
-            //Total de páginas
-            pagLastNumber = teamService.GetTeamsNumber() / IPP;
-            if (teamService.GetTeamsNumber() % IPP != 0)
-                pagLastNumber += 1;
+            if (total.HasValue)
+            {
+                //Total de páginas
+                pagLastNumber = total.Value / IPP;
+                if (total.Value % IPP != 0)
+                    pagLastNumber += 1;
+            }
+            else
+            {
+                //Total de páginas
+                pagLastNumber = teamService.GetTeamsNumber() / IPP;
+                if (teamService.GetTeamsNumber() % IPP != 0)
+                    pagLastNumber += 1;
+            }
+            
 
             if (pagLastNumber == 0) pagLastNumber = 1;
         }
@@ -293,6 +337,69 @@ namespace SpeedOdds.UserControls.Teams
                 pagNumber += 1;
                 LoadTeamsGrid();
             }
+        }
+
+        private void ButtonFilterTeams_Click(object sender, RoutedEventArgs e)
+        {
+            //prepare data
+            int? compId = ((CompetitionComboModel)ComboBoxCompetition.SelectedValue).CompetitionId != 0 ?
+                (int?)((CompetitionComboModel)ComboBoxCompetition.SelectedValue).CompetitionId : null;
+
+            bool? isFav = CheckBoxFilterIsFavoriteYes.IsChecked;
+            if (!CheckBoxFilterIsFavoriteYes.IsChecked.Value && !CheckBoxFilterIsFavoriteNo.IsChecked.Value) isFav = null;
+
+            new Thread(() =>
+            {                      
+                string txtFilter = String.Empty;
+                TextBoxFilterValue.Dispatcher.Invoke((Action)(() => { txtFilter = TextBoxFilterValue.Text; }));
+
+                //Get competitions
+                var dados = teamService.GetFilteredTeams(txtFilter, compId, isFav);
+
+                if(dados != null)
+                {
+                    LoadConfigurationForPagination(dados.Item2);
+
+                    var teamList = dados.Item1.OrderBy(x => x.Name).Skip((pagNumber - 1) * IPP).Take(IPP);
+
+                    DataGridTeams.Dispatcher.BeginInvoke((Action)(() => DataGridTeams.ItemsSource = null));
+                    ObservableCollection<TeamDataModel> teamItems = new ObservableCollection<TeamDataModel>();
+
+                    if (teamList != null && teamList.Count() > 0)
+                    {
+                        foreach (var item in teamList)
+                            teamItems.Add(new TeamDataModel()
+                            {
+                                TeamId = item.TeamId,
+                                TeamName = item.Name,
+                                CompetitionName = competitionService.GetCompetitionName(item.CompetitionId),
+                                SeasonName = competitionService.GetCompetitionSeasonName(item.CompetitionId),
+                                FavStarPath = item.IsFavorite ? "pack://application:,,/Resources/ImageFiles/unnamed_star.png" :
+                                "pack://application:,,/Resources/ImageFiles/black_tilde_arrow.png",
+                                CreateDate = Utils.FormatDateTimeToGrid(item.CreateDate)
+                            });
+
+                        //BINDING
+                        DataGridTeams.Dispatcher.BeginInvoke((Action)(() => DataGridTeams.ItemsSource = teamItems));
+                    }
+
+                    //PAGINATION TEXT
+                    ShowPaginationText();
+                }                
+
+            }).Start();
+        }      
+
+        private void CheckBoxFilterIsFavoriteYes_Click(object sender, RoutedEventArgs e)
+        {
+            if (CheckBoxFilterIsFavoriteNo.IsChecked.HasValue && CheckBoxFilterIsFavoriteNo.IsChecked.Value)
+                CheckBoxFilterIsFavoriteNo.IsChecked = false;
+        }
+
+        private void CheckBoxFilterIsFavoriteNo_Click(object sender, RoutedEventArgs e)
+        {
+            if (CheckBoxFilterIsFavoriteYes.IsChecked.HasValue && CheckBoxFilterIsFavoriteYes.IsChecked.Value)
+                CheckBoxFilterIsFavoriteYes.IsChecked = false;
         }
     }
 

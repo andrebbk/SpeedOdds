@@ -120,5 +120,42 @@
 
         <TextBlock x:Name="TextBlock_PaginationText" HorizontalAlignment="Left" Foreground="#DD171717" Margin="250,867,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="127"/>
         <!--Pagination Controls-->
+
+        <Border BorderThickness="1" HorizontalAlignment="Left" Height="6" Margin="59,194,0,0" VerticalAlignment="Top" Width="984" Background="#FF171717" RenderTransformOrigin="0.5,0.5">
+            <Border.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleY="-1"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Border.RenderTransform>
+        </Border>
+
+        <!--FILTERS Controls-->
+        <TextBox x:Name="TextBoxFilterValue" HorizontalAlignment="Left" Height="36" Margin="165,145,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="214" FontSize="18" Foreground="#FF171717"/>
+        <Label Content="Designação:" HorizontalAlignment="Left" Margin="61,149,0,0" VerticalAlignment="Top" Foreground="#DD171717" FontSize="18" />
+        <ComboBox x:Name="ComboBoxFilterCompetition" HorizontalAlignment="Left" Margin="511,151,0,0" VerticalAlignment="Top" Width="240" FontSize="18" Background="{x:Null}" Foreground="#FF1B1A1A"
+            ItemsSource="{Binding CompetitionComboModel}" DisplayMemberPath="CompetitionName">
+            <ComboBox.Style>
+                <Style TargetType="{x:Type ComboBox}">
+                    <Style.Triggers>
+                        <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                            <Setter Property="IsDropDownOpen" Value="true" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ComboBox.Style>
+        </ComboBox>
+        <Label Content="Competição:" HorizontalAlignment="Left" Margin="398,149,0,0" VerticalAlignment="Top" Foreground="#DD171717" FontSize="18" />
+        <Label Content="Favoritos:" HorizontalAlignment="Left" Margin="770,149,0,0" VerticalAlignment="Top" Foreground="#DD171717" FontSize="18" />
+        <CheckBox x:Name="CheckBoxFilterIsFavoriteYes" Content="Sim" HorizontalAlignment="Left" Margin="862,141,0,0" VerticalAlignment="Top" Height="24" Width="87" FontSize="14" Foreground="#DD171717" Click="CheckBoxFilterIsFavoriteYes_Click"/>
+        <CheckBox x:Name="CheckBoxFilterIsFavoriteNo" Content="Não" HorizontalAlignment="Left" Margin="862,168,0,0" VerticalAlignment="Top" Height="24" Width="87" FontSize="14" Foreground="#DD171717" Click="CheckBoxFilterIsFavoriteNo_Click"/>
+
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonFilterTeams" TextElement.FontSize="22px" Padding="2, 0, 0, 0" Margin="941,149,0,0" VerticalAlignment="Top" Width="79" Height="36" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonFilterTeams_Click">
+            <StackPanel Orientation="Horizontal" Width="77" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Pesquisar" VerticalAlignment="Center" Margin="7,0,50,0" FontWeight="Normal" FontSize="14" />
+            </StackPanel>
+        </Button>
     </Grid>
 </UserControl>
