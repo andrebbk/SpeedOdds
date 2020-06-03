@@ -109,6 +109,26 @@ namespace SpeedOdds.Services
             }
         }
 
+        public int GetTeamsNumber()
+        {
+            int nTeams = 0;
+
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    nTeams = db.Teams.Count();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error counting teams -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+            }
+
+            return nTeams;
+        }
+
         public bool RemoveTeam(int teamId)
         {
             try

@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
               Height="924" Width="1548">
     <Grid>
-        
+
         <!--TITULO-->
         <TextBlock TextElement.FontSize="55px" TextElement.FontWeight="Bold" Margin="142,42,1064,808" Foreground="#DD171717" Text="Equipas"/>
 
@@ -83,8 +83,8 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        
-        
+
+
         <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonSaveTeam" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="1103,481,0,0" VerticalAlignment="Top" Width="164" Height="44" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonSaveTeam_Click">
             <StackPanel Orientation="Horizontal" Width="145" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <TextBlock Text="Guardar" VerticalAlignment="Center" Margin="7,0,50,0" FontWeight="Normal" FontSize="14" />
@@ -94,5 +94,31 @@
         <TextBox x:Name="TextBoxTeamName" HorizontalAlignment="Left" Height="36" Margin="1116,305,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="379" FontSize="18" Foreground="#FF171717"/>
         <Label Content="Favoritos:" HorizontalAlignment="Left" Margin="1414,370,0,0" VerticalAlignment="Top" Foreground="#DD171717" FontSize="18" />
         <CheckBox x:Name="CheckBoxIsFavorite" Content="Adicionar" HorizontalAlignment="Left" Margin="1430,402,0,0" VerticalAlignment="Top" Height="35" Width="87" FontSize="14" Foreground="#DD171717"/>
+
+
+        <!--Pagination Controls-->
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="Button_Pag_Left" TextElement.FontSize="22px" Padding="10, 5, 5, 5" Margin="84,848,0,0" VerticalAlignment="Top" Width="35" Height="35" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="Button_Pag_Left_Click">
+            <StackPanel Orientation="Horizontal" Width="32" Height="48" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Image  Width="23" Stretch="Fill" RenderTransformOrigin="2.75,0.65"   Source="/SpeedOdds;component/Resources/Arrows/flecha_deerecha_L.png" Margin="1,14,0,13"/>
+            </StackPanel>
+        </Button>
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="Button_Pag_First" TextElement.FontSize="22px" Padding="0, 5, 5, 5" Margin="122,848,0,0" VerticalAlignment="Top" Width="34" Height="35" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="Button_Pag_First_Click">
+            <StackPanel Orientation="Horizontal" Width="32" Height="48" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Image  Width="19" Stretch="Fill" RenderTransformOrigin="2.75,0.65"   Source="/SpeedOdds;component/Resources/Arrows/pngfuel_L.png" Margin="8,16,0,14"/>
+            </StackPanel>
+        </Button>
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="Button_Pag_Last" TextElement.FontSize="22px" Padding="0, 5, 5, 5" Margin="165,848,0,0" VerticalAlignment="Top" Width="34" Height="35" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="Button_Pag_Last_Click">
+            <StackPanel Orientation="Horizontal" Width="32" Height="48" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Image  Width="19" Stretch="Fill" RenderTransformOrigin="2.75,0.65"   Source="/SpeedOdds;component/Resources/Arrows/pngfuel_R.png" Margin="11 ,16,0,14"/>
+            </StackPanel>
+        </Button>
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="Button_Pag_Right" TextElement.FontSize="22px" Padding="10, 5, 5, 5" Margin="204,848,0,0" VerticalAlignment="Top" Width="35" Height="35" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="Button_Pag_Right_Click">
+            <StackPanel Orientation="Horizontal" Width="32" Height="48" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Image  Width="23" Stretch="Fill" RenderTransformOrigin="2.75,0.65"   Source="/SpeedOdds;component/Resources/Arrows/flecha_deerecha_R.png" Margin="2,14,0,13"/>
+            </StackPanel>
+        </Button>
+
+        <TextBlock x:Name="TextBlock_PaginationText" HorizontalAlignment="Left" Foreground="#DD171717" Margin="250,867,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="127"/>
+        <!--Pagination Controls-->
     </Grid>
 </UserControl>

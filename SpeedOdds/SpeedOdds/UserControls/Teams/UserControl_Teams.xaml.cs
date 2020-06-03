@@ -32,6 +32,11 @@ namespace SpeedOdds.UserControls.Teams
         private CompetitionService competitionService;
         private TeamService teamService;
 
+        //Pagination
+        private int pagNumber = 1;
+        private int pagLastNumber = 1;
+        private int IPP = 30;
+
         public UserControl_Teams(UserControl_MainContent mainContent)
         {
             InitializeComponent();
@@ -41,6 +46,7 @@ namespace SpeedOdds.UserControls.Teams
             teamService = new TeamService();
             competitionService = new CompetitionService();
 
+            LoadConfigurationForPagination();
             LoadFormTeams();
         }
 
@@ -49,7 +55,7 @@ namespace SpeedOdds.UserControls.Teams
             new Thread(() =>
             {
                 //Get competitions
-                var teamList = teamService.GetTeams();
+                var teamList = teamService.GetTeams().OrderBy(x => x.Name).Skip((pagNumber - 1) * IPP).Take(IPP);
 
                 DataGridTeams.Dispatcher.BeginInvoke((Action)(() => DataGridTeams.ItemsSource = null));
                 ObservableCollection<TeamDataModel> teamItems = new ObservableCollection<TeamDataModel>();
@@ -69,8 +75,11 @@ namespace SpeedOdds.UserControls.Teams
                         });
 
                     //BINDING
-                    DataGridTeams.Dispatcher.BeginInvoke((Action)(() => DataGridTeams.ItemsSource = teamItems));
+                    DataGridTeams.Dispatcher.BeginInvoke((Action)(() => DataGridTeams.ItemsSource = teamItems));                    
                 }
+
+                //PAGINATION TEXT
+                ShowPaginationText();
 
 
                 //Load other data
@@ -96,8 +105,10 @@ namespace SpeedOdds.UserControls.Teams
         {
             new Thread(() =>
             {
+                LoadConfigurationForPagination();
+
                 //Get competitions
-                var teamList = teamService.GetTeams();
+                var teamList = teamService.GetTeams().OrderBy(x => x.Name).Skip((pagNumber - 1) * IPP).Take(IPP);
 
                 DataGridTeams.Dispatcher.BeginInvoke((Action)(() => DataGridTeams.ItemsSource = null));
                 ObservableCollection<TeamDataModel> teamItems = new ObservableCollection<TeamDataModel>();
@@ -120,10 +131,36 @@ namespace SpeedOdds.UserControls.Teams
                     DataGridTeams.Dispatcher.BeginInvoke((Action)(() => DataGridTeams.ItemsSource = teamItems));
                 }
 
+                //PAGINATION TEXT
+                ShowPaginationText();
+
             }).Start();
         }
 
+        private void LoadConfigurationForPagination()
+        {
+            //Itens por página
+            IPP = 30;
 
+            //Total de páginas
+            pagLastNumber = teamService.GetTeamsNumber() / IPP;
+            if (teamService.GetTeamsNumber() % IPP != 0)
+                pagLastNumber += 1;
+
+            if (pagLastNumber == 0) pagLastNumber = 1;
+        }
+
+        private void ShowPaginationText()
+        {
+            string texto = pagLastNumber == 0 ? "0" : pagNumber.ToString();
+            texto += " de " + pagLastNumber + ((pagLastNumber > 1 || pagLastNumber == 0) ? " páginas" : " página");
+
+            TextBlock_PaginationText.Dispatcher.BeginInvoke((Action)(
+                  () => TextBlock_PaginationText.Text = texto));
+        }
+
+
+        //BUTTONS
         private void ButtonSaveTeam_Click(object sender, RoutedEventArgs e)
         {
             if (String.IsNullOrEmpty(TextBoxTeamName.Text) || TextBoxTeamName.Text.Length < 3)
@@ -219,7 +256,46 @@ namespace SpeedOdds.UserControls.Teams
                 }
             }
         }
+
+
+        //PAGINATION
+        private void Button_Pag_Left_Click(object sender, RoutedEventArgs e)
+        {
+            if ((pagNumber - 1) >= 1)
+            {
+                pagNumber -= 1;
+                LoadTeamsGrid();
+            }
+        }
+
+        private void Button_Pag_First_Click(object sender, RoutedEventArgs e)
+        {
+            if (pagNumber != 1)
+            {
+                pagNumber = 1;
+                LoadTeamsGrid();
+            }
+        }
+
+        private void Button_Pag_Last_Click(object sender, RoutedEventArgs e)
+        {
+            if (pagNumber != pagLastNumber)
+            {
+                pagNumber = pagLastNumber;
+                LoadTeamsGrid();
+            }
+        }
+
+        private void Button_Pag_Right_Click(object sender, RoutedEventArgs e)
+        {
+            if ((pagNumber + 1) <= pagLastNumber)
+            {
+                pagNumber += 1;
+                LoadTeamsGrid();
+            }
+        }
     }
+
 
     class CompetitionComboModel
     {
