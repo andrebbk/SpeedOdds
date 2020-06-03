@@ -342,8 +342,8 @@ namespace SpeedOdds.UserControls.Teams
         private void ButtonFilterTeams_Click(object sender, RoutedEventArgs e)
         {
             //prepare data
-            int? compId = ((CompetitionComboModel)ComboBoxCompetition.SelectedValue).CompetitionId != 0 ?
-                (int?)((CompetitionComboModel)ComboBoxCompetition.SelectedValue).CompetitionId : null;
+            int? compId = ((CompetitionComboModel)ComboBoxFilterCompetition.SelectedValue).CompetitionId != 0 ?
+                (int?)((CompetitionComboModel)ComboBoxFilterCompetition.SelectedValue).CompetitionId : null;
 
             bool? isFav = CheckBoxFilterIsFavoriteYes.IsChecked;
             if (!CheckBoxFilterIsFavoriteYes.IsChecked.Value && !CheckBoxFilterIsFavoriteNo.IsChecked.Value) isFav = null;
