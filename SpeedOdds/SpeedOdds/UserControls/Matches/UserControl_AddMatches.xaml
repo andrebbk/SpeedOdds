@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="SpeedOdds.UserControls.Matches.UserControl_AddMatches"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SpeedOdds.UserControls.Matches"
+             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+             mc:Ignorable="d" 
+             Height="924" Width="1548">
+    <Grid>
+        <!--TITULO-->
+        <TextBlock TextElement.FontSize="55px" TextElement.FontWeight="Bold" Margin="142,42,1016,808" Foreground="#DD171717" Text="Registar Jogos"/>
+
+        <Border BorderThickness="1" HorizontalAlignment="Left" Height="4" Margin="112,116,0,0" VerticalAlignment="Top" Width="1250" Background="#FF171717" RenderTransformOrigin="0.5,0.5">
+            <Border.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleY="-1"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Border.RenderTransform>
+        </Border>
+
+        <!--BUTTONS-->
+        <Image x:Name="ButtonGoBack" HorizontalAlignment="Left" Height="45" Margin="10,868,0,0" VerticalAlignment="Top" Width="45" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/goback-icon.png" MouseDown="ButtonGoBack_MouseDown"/>
+
+        <Controls:TransitioningContentControl x:Name="MatchContainer" Padding="0" Transition="Right" Margin="10,121,10,90"  />
+    </Grid>
+</UserControl>

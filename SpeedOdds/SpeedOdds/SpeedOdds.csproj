@@ -150,6 +150,7 @@
     <Compile Include="Commons\Helpers\UtilsNotification.cs" />
     <Compile Include="Data\SpeedOddsContext.cs" />
     <Compile Include="Models\Competition.cs" />
+    <Compile Include="Models\Match.cs" />
     <Compile Include="Models\Season.cs" />
     <Compile Include="Models\Shared\ObservableObject.cs" />
     <Compile Include="Models\Team.cs" />
@@ -184,6 +185,15 @@
     </Compile>
     <Compile Include="UserControls\MainContent\UserControl_Menu.xaml.cs">
       <DependentUpon>UserControl_Menu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Matches\UserControl_AddMatches.xaml.cs">
+      <DependentUpon>UserControl_AddMatches.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Matches\UserControl_AddMatch_StartTime.xaml.cs">
+      <DependentUpon>UserControl_AddMatch_StartTime.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Matches\UserControl_Matches.xaml.cs">
+      <DependentUpon>UserControl_Matches.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Start\UserControl_StartWindow.xaml.cs">
       <DependentUpon>UserControl_StartWindow.xaml</DependentUpon>
@@ -220,6 +230,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\MainContent\UserControl_Menu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Matches\UserControl_AddMatches.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Matches\UserControl_AddMatch_StartTime.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Matches\UserControl_Matches.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -269,6 +291,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\ImageFiles\Buttons\soccer-ball-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Arrows\flecha_deerecha_L.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

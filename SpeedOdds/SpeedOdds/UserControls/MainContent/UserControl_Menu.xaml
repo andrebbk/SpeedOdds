@@ -31,6 +31,13 @@
             </StackPanel>
         </Button>
 
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonMatches" TextElement.FontSize="22px" Padding="35, 0, 0, 0" Margin="16,327,0,0" VerticalAlignment="Top" Width="278" Height="62" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonMatches_Click">
+            <StackPanel Orientation="Horizontal" Width="202" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Jogos" VerticalAlignment="Center" Margin="0,0,104,0" FontWeight="Normal" />
+                <Image  Width="33" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,10,0,0" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/soccer-ball-icon.png"/>
+            </StackPanel>
+        </Button>
+
 
         <!--Edit UI: 1- Remove FileName section from LottieAnimationView-->
         <!--Edit Loading: Remove Visibility="Hidden"-->

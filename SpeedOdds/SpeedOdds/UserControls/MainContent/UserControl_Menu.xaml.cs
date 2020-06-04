@@ -1,5 +1,6 @@
 ﻿using SpeedOdds.Commons.Helpers;
 using SpeedOdds.UserControls.Competitions;
+using SpeedOdds.UserControls.Matches;
 using SpeedOdds.UserControls.Teams;
 using SpeedOdds.Windows;
 using System;
@@ -53,6 +54,12 @@ namespace SpeedOdds.UserControls.MainContent
                 _mainContent.WFAPContentContainer.Content = new UserControl_Teams(_mainContent);
         }
 
+        private void ButtonMatches_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(_mainContent.WFAPContentContainer.Content is UserControl_Matches))
+                _mainContent.WFAPContentContainer.Content = new UserControl_Matches(_mainContent);
+        }
+
 
         //Public Methods
         public void LockMenu()
@@ -60,6 +67,7 @@ namespace SpeedOdds.UserControls.MainContent
             ButtonHome.Dispatcher.BeginInvoke((Action)(() => ButtonHome.IsEnabled = false));
             ButtonCompetitions.Dispatcher.BeginInvoke((Action)(() => ButtonCompetitions.IsEnabled = false));
             ButtonTeams.Dispatcher.BeginInvoke((Action)(() => ButtonTeams.IsEnabled = false));
+            ButtonMatches.Dispatcher.BeginInvoke((Action)(() => ButtonMatches.IsEnabled = false));
         }
 
         public void UnlockMenu()
@@ -67,6 +75,7 @@ namespace SpeedOdds.UserControls.MainContent
             ButtonHome.Dispatcher.BeginInvoke((Action)(() => ButtonHome.IsEnabled = true));
             ButtonCompetitions.Dispatcher.BeginInvoke((Action)(() => ButtonCompetitions.IsEnabled = true));
             ButtonTeams.Dispatcher.BeginInvoke((Action)(() => ButtonTeams.IsEnabled = true));
-        }
+            ButtonMatches.Dispatcher.BeginInvoke((Action)(() => ButtonMatches.IsEnabled = true));
+        }        
     }
 }
