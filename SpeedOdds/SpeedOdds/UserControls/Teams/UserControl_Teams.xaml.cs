@@ -55,6 +55,8 @@ namespace SpeedOdds.UserControls.Teams
         {
             new Thread(() =>
             {
+                UtilsNotification.StartLoadingAnimation();
+
                 //Get competitions
                 var teamList = teamService.GetTeams().OrderBy(x => x.Name).Skip((pagNumber - 1) * IPP).Take(IPP);
 
@@ -99,6 +101,8 @@ namespace SpeedOdds.UserControls.Teams
 
                 //Enable Ui
                 ComboBoxCompetition.Dispatcher.BeginInvoke((Action)(() => ComboBoxCompetition.IsEnabled = true));
+
+                UtilsNotification.StopLoadingAnimation();
             }).Start();
         }
 
@@ -106,6 +110,8 @@ namespace SpeedOdds.UserControls.Teams
         {
             new Thread(() =>
             {
+                UtilsNotification.StartLoadingAnimation();
+
                 LoadConfigurationForPagination();
 
                 //Get competitions
@@ -135,6 +141,8 @@ namespace SpeedOdds.UserControls.Teams
                 //PAGINATION TEXT
                 ShowPaginationText();
 
+                UtilsNotification.StopLoadingAnimation();
+
             }).Start();
         }
 
@@ -142,6 +150,8 @@ namespace SpeedOdds.UserControls.Teams
         {
             new Thread(() =>
             {
+                UtilsNotification.StartLoadingAnimation();
+
                 TextBoxFilterValue.Dispatcher.BeginInvoke((Action)(() => TextBoxFilterValue.Clear()));
 
                 //Load data
@@ -167,6 +177,7 @@ namespace SpeedOdds.UserControls.Teams
                 CheckBoxFilterIsFavoriteYes.Dispatcher.BeginInvoke((Action)(() => CheckBoxFilterIsFavoriteYes.IsChecked = false));
                 CheckBoxFilterIsFavoriteNo.Dispatcher.BeginInvoke((Action)(() => CheckBoxFilterIsFavoriteNo.IsChecked = false));
 
+                UtilsNotification.StopLoadingAnimation();
             }).Start();
         }
 
@@ -225,20 +236,32 @@ namespace SpeedOdds.UserControls.Teams
                 return;
             }
 
-            //Save new team
-            if (teamService.CreateTeam(TextBoxTeamName.Text, ((CompetitionComboModel)ComboBoxCompetition.SelectedValue).CompetitionId, 
-                CheckBoxIsFavorite.IsChecked.HasValue? CheckBoxIsFavorite.IsChecked.Value : false))
+            string teamName = TextBoxTeamName.Text;
+            int compID = ((CompetitionComboModel)ComboBoxCompetition.SelectedValue).CompetitionId;
+            bool checkedFav = CheckBoxIsFavorite.IsChecked.HasValue ? CheckBoxIsFavorite.IsChecked.Value : false;
+
+            new Thread(() =>
             {
-                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Equipa criada com sucesso!");
+                UtilsNotification.StartLoadingAnimation();
+                
+                //Save new team
+                if (teamService.CreateTeam(teamName, compID, checkedFav))
+                {
+                    NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Equipa criada com sucesso!");
 
-                //Reset UI
-                TextBoxTeamName.Clear();
-                CheckBoxIsFavorite.IsChecked = false;
+                    //Reset UI
+                    TextBoxTeamName.Dispatcher.BeginInvoke((Action)(() => TextBoxTeamName.Clear()));
+                    CheckBoxIsFavorite.Dispatcher.BeginInvoke((Action)(() => CheckBoxIsFavorite.IsChecked = false));                    
 
-                LoadTeamsGrid();
-            }
-            else
-                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Ocorreu um erro ao criar a Equipa!");
+                    LoadTeamsGrid();
+                }
+                else
+                    NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Ocorreu um erro ao criar a Equipa!");
+
+                UtilsNotification.StopLoadingAnimation();
+
+            }).Start();
+            
         }
 
         private void ButtonRemoveTeam_Click(object sender, RoutedEventArgs e)
@@ -251,6 +274,8 @@ namespace SpeedOdds.UserControls.Teams
                 {
                     new Thread(() =>
                     {
+                        UtilsNotification.StartLoadingAnimation();
+
                         if (teamService.RemoveTeam(item.TeamId))
                         {
                             NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Equipa removida com sucesso!");
@@ -258,11 +283,13 @@ namespace SpeedOdds.UserControls.Teams
                         }
                         else
                             NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Erro ao remover equipa!");
+
+                        UtilsNotification.StopLoadingAnimation();
                     }).Start();
-                    
                 }
 
             }
+
         }
 
         private void ButtonFav_MouseDown(object sender, MouseButtonEventArgs e)
@@ -289,6 +316,8 @@ namespace SpeedOdds.UserControls.Teams
                 {
                     new Thread(() =>
                     {
+                        UtilsNotification.StartLoadingAnimation();
+
                         if (teamService.ChangeFavoriteValue(item.TeamId, flagFav))
                         {
                             NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Favoritismo do clube alterado com sucesso!");
@@ -296,6 +325,9 @@ namespace SpeedOdds.UserControls.Teams
                         }
                         else
                             NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Erro ao mudar o favoritismo do clube/nContacte o Admin do sistema...");
+
+                        UtilsNotification.StopLoadingAnimation();
+
                     }).Start();
                 }
             }
@@ -349,7 +381,9 @@ namespace SpeedOdds.UserControls.Teams
             if (!CheckBoxFilterIsFavoriteYes.IsChecked.Value && !CheckBoxFilterIsFavoriteNo.IsChecked.Value) isFav = null;
 
             new Thread(() =>
-            {                      
+            {
+                UtilsNotification.StartLoadingAnimation();
+
                 string txtFilter = String.Empty;
                 TextBoxFilterValue.Dispatcher.Invoke((Action)(() => { txtFilter = TextBoxFilterValue.Text; }));
 
@@ -385,6 +419,8 @@ namespace SpeedOdds.UserControls.Teams
 
                     //PAGINATION TEXT
                     ShowPaginationText();
+
+                    UtilsNotification.StopLoadingAnimation();
                 }                
 
             }).Start();

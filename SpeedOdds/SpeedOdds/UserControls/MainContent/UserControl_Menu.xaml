@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SpeedOdds.UserControls.MainContent"
+             xmlns:lottieSharp="clr-namespace:LottieSharp;assembly=LottieSharp"
              mc:Ignorable="d" 
              Height="924" Width="310">
     <Grid>
@@ -29,5 +30,14 @@
                 <Image  Width="24" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,12,0,5" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/teams_icon.png"/>
             </StackPanel>
         </Button>
+
+
+        <!--Edit UI: 1- Remove FileName section from LottieAnimationView-->
+        <!--Edit Loading: Remove Visibility="Hidden"-->
+        <!--FileName="Assets/snap_loaderblack2.json"-->
+        <lottieSharp:LottieAnimationView x:Name="LottieAnimationView" DefaultCacheStrategy="None" AutoPlay="True" Speed="1.5"      
+                                         FileName="Assets/snap_loaderblack2.json"
+                                         VerticalAlignment="Center" HorizontalAlignment="Center" Height="161" Margin="70,706,75,57" Width="165" Visibility="Hidden"/>
+        <TextBlock x:Name="TextBoxLoading" HorizontalAlignment="Left" Margin="120,872,0,0" TextWrapping="Wrap" Text="A carregar..." VerticalAlignment="Top" FontFamily="Yu Gothic" FontWeight="Bold" FontSize="18" Foreground="#FF363030" Visibility="Hidden" Height="26"/>
     </Grid>
 </UserControl>

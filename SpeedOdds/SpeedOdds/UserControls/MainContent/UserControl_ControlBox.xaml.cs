@@ -1,18 +1,8 @@
-﻿using SpeedOdds.Windows;
+﻿using SpeedOdds.Commons.Helpers;
+using SpeedOdds.Windows;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SpeedOdds.UserControls.MainContent
 {
@@ -27,6 +17,8 @@ namespace SpeedOdds.UserControls.MainContent
         {
             InitializeComponent();
             _mainWindow = mainWindow;
+
+            UtilsNotification.ControlBoxController = this;
         }
 
         private void ButtonExit_Click(object sender, RoutedEventArgs e)
@@ -38,6 +30,20 @@ namespace SpeedOdds.UserControls.MainContent
         {
             _mainWindow.WindowState = WindowState.Minimized;
         }
+
+
+        //Public Methods
+        public void LockControlBox()
+        {
+            ButtonMinimize.Dispatcher.BeginInvoke((Action)(() => ButtonMinimize.IsEnabled = false));
+            ButtonExit.Dispatcher.BeginInvoke((Action)(() => ButtonExit.IsEnabled = false));
+        }
+
+        public void UnlockControlBox()
+        {
+            ButtonMinimize.Dispatcher.BeginInvoke((Action)(() => ButtonMinimize.IsEnabled = true));
+            ButtonExit.Dispatcher.BeginInvoke((Action)(() => ButtonExit.IsEnabled = true));
+        }       
 
     }    
 }

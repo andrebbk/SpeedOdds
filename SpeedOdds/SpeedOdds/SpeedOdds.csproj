@@ -147,6 +147,7 @@
     </ApplicationDefinition>
     <Compile Include="Commons\Helpers\NotificationHelper.cs" />
     <Compile Include="Commons\Helpers\Utils.cs" />
+    <Compile Include="Commons\Helpers\UtilsNotification.cs" />
     <Compile Include="Data\SpeedOddsContext.cs" />
     <Compile Include="Models\Competition.cs" />
     <Compile Include="Models\Season.cs" />

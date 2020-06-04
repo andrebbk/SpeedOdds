@@ -1,4 +1,5 @@
-﻿using SpeedOdds.UserControls.Competitions;
+﻿using SpeedOdds.Commons.Helpers;
+using SpeedOdds.UserControls.Competitions;
 using SpeedOdds.UserControls.Teams;
 using SpeedOdds.Windows;
 using System;
@@ -29,6 +30,10 @@ namespace SpeedOdds.UserControls.MainContent
         {
             InitializeComponent();
             _mainContent = mainContent;
+
+            UtilsNotification.MenuController = this;
+            UtilsNotification.LoadingLottieAnimationView = LottieAnimationView;
+            UtilsNotification.TextBoxLoading = TextBoxLoading;
         }
 
         private void ButtonHome_Click(object sender, RoutedEventArgs e)
@@ -46,6 +51,22 @@ namespace SpeedOdds.UserControls.MainContent
         {
             if (!(_mainContent.WFAPContentContainer.Content is UserControl_Teams))
                 _mainContent.WFAPContentContainer.Content = new UserControl_Teams(_mainContent);
+        }
+
+
+        //Public Methods
+        public void LockMenu()
+        {
+            ButtonHome.Dispatcher.BeginInvoke((Action)(() => ButtonHome.IsEnabled = false));
+            ButtonCompetitions.Dispatcher.BeginInvoke((Action)(() => ButtonCompetitions.IsEnabled = false));
+            ButtonTeams.Dispatcher.BeginInvoke((Action)(() => ButtonTeams.IsEnabled = false));
+        }
+
+        public void UnlockMenu()
+        {
+            ButtonHome.Dispatcher.BeginInvoke((Action)(() => ButtonHome.IsEnabled = true));
+            ButtonCompetitions.Dispatcher.BeginInvoke((Action)(() => ButtonCompetitions.IsEnabled = true));
+            ButtonTeams.Dispatcher.BeginInvoke((Action)(() => ButtonTeams.IsEnabled = true));
         }
     }
 }
