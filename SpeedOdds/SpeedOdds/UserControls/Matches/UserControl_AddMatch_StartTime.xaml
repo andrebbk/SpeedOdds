@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SpeedOdds.UserControls.Matches"
+             xmlns:wpfx="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              Height="713" Width="1528">
     <Grid>
@@ -23,7 +24,8 @@
             </ComboBox.Style>
         </ComboBox>
 
-        <TextBox x:Name="TextBoxFixture" HorizontalAlignment="Left" Height="30" Margin="526,37,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="99" FontSize="18" Foreground="#FF171717"/>
+        <wpfx:IntegerUpDown x:Name="TextBoxFixture" FormatString="F0" Margin="528,31,936,646" Value="1"
+                    Increment="1" Maximum="40" Minimum="1" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#DD171717" FontWeight="Bold" FontSize="18"/>
 
         <!--BUTTONS-->
         <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonLoadForm" TextElement.FontSize="22px" Padding="2, 0, 0, 0" Margin="656,31,0,0" VerticalAlignment="Top" Width="115" Height="36" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonLoadForm_Click">
@@ -41,6 +43,132 @@
                 </TransformGroup>
             </Border.RenderTransform>
         </Border>
+
+
+        <!--DATA GRID-->
+        <DataGrid x:Name="DataGridTeams" HorizontalAlignment="Left" Height="537" Margin="89,102,0,0" VerticalAlignment="Top" Width="1324" AutoGenerateColumns="False" FontSize="16"
+            IsReadOnly="false" CanUserAddRows="False" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" SelectionUnit="FullRow" SelectionMode="Single" Background="{x:Null}"
+            Visibility="Collapsed" ItemsSource="{Binding MatchesModel}">
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background" Value="{Binding BackgroundColorSet}"/>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Width="70" Binding="{Binding MatchViewId}"/>
+
+                <DataGridTemplateColumn Header="Equipa Casa" Width="320">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox x:Name="ComboBoxHomeTeam" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="300" FontSize="18" Background="{x:Null}" Foreground="#FF1B1A1A"
+                                        ItemsSource="{Binding TeamsList}" DisplayMemberPath="TeamName" SelectedItem="{Binding HomeTeamId, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding HomeTeamId, UpdateSourceTrigger=PropertyChanged}">
+                                <ComboBox.Style>
+                                    <Style TargetType="{x:Type ComboBox}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                                <Setter Property="IsDropDownOpen" Value="true" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ComboBox.Style>
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Equipa Fora" Width="320">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox x:Name="ComboBoxAwayTeam" HorizontalAlignment="Left" VerticalAlignment="Top" Width="300" FontSize="18" Background="{x:Null}" Foreground="#FF1B1A1A"
+                                        ItemsSource="{Binding TeamsList}" DisplayMemberPath="TeamName" SelectedItem="{Binding AwayTeamId, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding AwayTeamId, UpdateSourceTrigger=PropertyChanged}">
+                                <ComboBox.Style>
+                                    <Style TargetType="{x:Type ComboBox}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                                <Setter Property="IsDropDownOpen" Value="true" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ComboBox.Style>
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="FTHG">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <wpfx:IntegerUpDown x:Name="TextBoxHomeGoals" FormatString="F0" Value="{Binding HomeGoals, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
+                                Increment="1" Maximum="50" Minimum="0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#DD171717" FontWeight="Bold" FontSize="18"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="FTAG">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <wpfx:IntegerUpDown x:Name="TextBoxAwayGoals" FormatString="F0" Value="{Binding AwayGoals, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
+                                Increment="1" Maximum="50" Minimum="0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#DD171717" FontWeight="Bold" FontSize="18"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="PSH">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <wpfx:DecimalUpDown x:Name="TextBoxPSH" FormatString="F1" Value="{Binding OddsHome, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
+                                Increment="0.1" Maximum="1000" Minimum="0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#DD171717" FontWeight="Bold" FontSize="18"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="PSD">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <wpfx:DecimalUpDown x:Name="TextBoxPSD" FormatString="F1" Value="{Binding OddsDraw, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
+                                Increment="0.1" Maximum="1000" Minimum="0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#DD171717" FontWeight="Bold" FontSize="18"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="PSA">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <wpfx:DecimalUpDown x:Name="TextBoxPSA" FormatString="F1" Value="{Binding OddsAway, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
+                                Increment="0.1" Maximum="1000" Minimum="0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#DD171717" FontWeight="Bold" FontSize="18"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Opções">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonSaveSingleMatch" TextElement.FontSize="22px" Padding="2, 0, 0, 0" VerticalAlignment="Top" Width="120" Height="36" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonSaveSingleMatch_Click">
+                                <StackPanel Orientation="Horizontal" Width="125" Height="44" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock Text="Calcular/Guardar" VerticalAlignment="Center" Margin="7,0,7,0" FontWeight="Normal" FontSize="14" />
+                                </StackPanel>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <!--DATA GRID-->
+
+        <!--INFO-->
+        <Image x:Name="ImageLogo" HorizontalAlignment="Left" Height="130" Margin="670,262,0,0" VerticalAlignment="Top" Width="132" Source="/SpeedOdds;component/Resources/ImageFiles/Icon/red-icon.png"/>
+        <Label x:Name="LabelInfo" Content="Para efetuar o registo de jogos, por favor selecione primeiro a competição e a jornada" HorizontalAlignment="Left" Margin="278,431,0,0" VerticalAlignment="Top" Foreground="#DD171717" FontSize="24" />
+
+
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonSaveAllMatches" TextElement.FontSize="22px" Padding="2, 0, 0, 0" Margin="1202,650,0,0" 
+                VerticalAlignment="Top" Width="202" Height="56" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
+                Click="ButtonSaveAllMatches_Click" Visibility="Collapsed">
+            <StackPanel Orientation="Horizontal" Width="190" Height="44" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Calcular todos" VerticalAlignment="Center" Margin="15,12,40,10" FontWeight="Normal" FontSize="16" Width="105" Height="22" />
+                <Image Width="28" Margin="0,10,0, 7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/seasons_icon.png" Height="34" VerticalAlignment="Top" />
+            </StackPanel>
+        </Button>
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonAddNewGame" TextElement.FontSize="22px" Padding="2, 0, 0, 0" Margin="985,650,0,0" 
+            VerticalAlignment="Top" Width="202" Height="56" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
+            Click="ButtonAddNewGame_Click" Visibility="Collapsed">
+            <StackPanel Orientation="Horizontal" Width="190" Height="44" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Adicionar Jogo" VerticalAlignment="Center" Margin="15,12,30,10" FontWeight="Normal" FontSize="16" Width="105" Height="22" />
+                <Image Width="37" Margin="0,10,0,0" Source="/SpeedOdds;component/Resources/ImageFiles/sneaker_skystalker.png" Height="34" VerticalAlignment="Top" />
+            </StackPanel>
+        </Button>
 
     </Grid>
 </UserControl>
