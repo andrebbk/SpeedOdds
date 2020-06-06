@@ -112,7 +112,7 @@
                 <DataGridTemplateColumn Header="PSH">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <wpfx:DecimalUpDown x:Name="TextBoxPSH" FormatString="F1" Value="{Binding OddsHome, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
+                            <wpfx:DecimalUpDown x:Name="TextBoxPSH" FormatString="F2" Value="{Binding OddsHome, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
                                 Increment="0.1" Maximum="1000" Minimum="0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#DD171717" FontWeight="Bold" FontSize="18"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -120,7 +120,7 @@
                 <DataGridTemplateColumn Header="PSD">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <wpfx:DecimalUpDown x:Name="TextBoxPSD" FormatString="F1" Value="{Binding OddsDraw, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
+                            <wpfx:DecimalUpDown x:Name="TextBoxPSD" FormatString="F2" Value="{Binding OddsDraw, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
                                 Increment="0.1" Maximum="1000" Minimum="0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#DD171717" FontWeight="Bold" FontSize="18"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -128,7 +128,7 @@
                 <DataGridTemplateColumn Header="PSA">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <wpfx:DecimalUpDown x:Name="TextBoxPSA" FormatString="F1" Value="{Binding OddsAway, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
+                            <wpfx:DecimalUpDown x:Name="TextBoxPSA" FormatString="F2" Value="{Binding OddsAway, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
                                 Increment="0.1" Maximum="1000" Minimum="0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#DD171717" FontWeight="Bold" FontSize="18"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -136,7 +136,9 @@
                 <DataGridTemplateColumn Header="Opções">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonSaveSingleMatch" TextElement.FontSize="22px" Padding="2, 0, 0, 0" VerticalAlignment="Top" Width="120" Height="36" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonSaveSingleMatch_Click">
+                            <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonSaveSingleMatch" TextElement.FontSize="22px" Padding="2, 0, 0, 0" VerticalAlignment="Top" 
+                                    Width="120" Height="36" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
+                                    Click="ButtonSaveSingleMatch_Click" Visibility="{Binding ButtonSaveVisibility}">
                                 <StackPanel Orientation="Horizontal" Width="125" Height="44" VerticalAlignment="Center" HorizontalAlignment="Center">
                                     <TextBlock Text="Calcular/Guardar" VerticalAlignment="Center" Margin="7,0,7,0" FontWeight="Normal" FontSize="14" />
                                 </StackPanel>

@@ -29,13 +29,15 @@ namespace SpeedOdds.UserControls.Matches
         private CompetitionService competitionService;
         private TeamService teamService;
 
-        //properties
+        //model
+        private ObservableCollection<MatchesModel> matchItems;
 
         public UserControl_AddMatch_StartTime()
         {
             InitializeComponent();
             competitionService = new CompetitionService();
             teamService = new TeamService();
+            matchItems = new ObservableCollection<MatchesModel>();
 
             IniForm();
         }
@@ -70,37 +72,29 @@ namespace SpeedOdds.UserControls.Matches
             }).Start();
         }
 
-        private bool IsMatchesListValid()
+        private bool IsMatchesListValid(int? nRows = null, bool teamsValid = true, int teamSide = 0, int matchId = 0)
         {
-            int nRows = 0;
-            DataGridTeams.Dispatcher.BeginInvoke((Action)(() => nRows = DataGridTeams.ItemsSource.OfType<object>().Count()));
-            if(nRows < 1)
+            if(!nRows.HasValue || nRows < 1)
             {
                 NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Adiciona jogos para procederes com as odds!");
                 return false;
             }
 
-            Tuple<int, string> matches = null;
-            DataGridTeams.Dispatcher.BeginInvoke((Action)(() =>
+            if(!teamsValid && teamSide == 0 && matchId != 0)
             {
-                foreach (var item in DataGridTeams.ItemsSource)
-                    if (((MatchesModel)item).HomeTeamId == 0)
-                    {
-                        matches = new Tuple<int, string>(((MatchesModel)item).MatchViewId, "casa");
-                    }
-                    else if(((MatchesModel)item).AwayTeamId == 0)
-                    {
-                        matches = new Tuple<int, string>(((MatchesModel)item).MatchViewId, "fora");
-                    }
-            }));
-            if(matches != null)
+                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "No jogo nº " + matchId.ToString() +
+                            " falta selecionar a equipa de casa");
+                return false;
+            }
+            else if (!teamsValid && teamSide == 1 && matchId != 0)
             {
-                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "No jogo nº " + matches.Item1.ToString() + 
-                    " falta selecionar a equipa de " + matches.Item2);
+                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "No jogo nº " + matchId.ToString() +
+                            " falta selecionar a equipa de fora");
                 return false;
             }
 
             return true;
+
         }
 
         //BUTTONS
@@ -115,11 +109,10 @@ namespace SpeedOdds.UserControls.Matches
 
                 //GRID
                 DataGridTeams.Dispatcher.BeginInvoke((Action)(() => DataGridTeams.ItemsSource = null));
-                ObservableCollection<MatchesModel> matchItems = new ObservableCollection<MatchesModel>();
+                matchItems = new ObservableCollection<MatchesModel>();
 
                 //GetCompTeams
                 var tList = teamService.GetCompetitionTeams(compId);
-                ObservableCollection<TeamComboModel> auxTeams = new ObservableCollection<TeamComboModel>();
 
                 for (int i = 1; i < 11; i++)
                 {
@@ -164,24 +157,81 @@ namespace SpeedOdds.UserControls.Matches
             MatchesModel item = (sender as Button).DataContext as MatchesModel;
             if (item != null)
             {
-
+                item.ButtonSaveVisibility = Visibility.Collapsed;
             }
         }
 
         private void ButtonSaveAllMatches_Click(object sender, RoutedEventArgs e)
         {
+            //hold temp values
+            int nRows = 0;
+            int matchId = 0;
+            int teamSide = 0;
+            bool teamsValid = true;
+
+            UtilsNotification.StartLoadingAnimation();
+
+            //Has to be calculated this way
+            Thread thread = new System.Threading.Thread(() => {
+
+                nRows = DataGridTeams.ItemsSource.OfType<object>().Count();
+
+                foreach (var item in DataGridTeams.ItemsSource)
+                    if (((MatchesModel)item).HomeTeamId == 0)
+                    {
+                        matchId = ((MatchesModel)item).MatchViewId;
+                        teamSide = 0;
+                        teamsValid = false;
+                        break;
+                    }
+                    else if (((MatchesModel)item).AwayTeamId == 0)
+                    {
+                        matchId = ((MatchesModel)item).MatchViewId;
+                        teamSide = 1;
+                        teamsValid = false;
+                        break;
+                    }
+
+            });
+            thread.Start();
+            thread.Join();
+
             new Thread(() =>
             {
-                if (IsMatchesListValid())
+                if (IsMatchesListValid(nRows, teamsValid, teamSide, matchId))
                 {
-
+                    Thread.Sleep(5000);
                 }
+
+                UtilsNotification.StopLoadingAnimation();
+
             }).Start();
         }
 
         private void ButtonAddNewGame_Click(object sender, RoutedEventArgs e)
         {
+            int compId = ((CompetitionComboModel)ComboBoxCompetition.SelectedItem).CompetitionId;
 
+            new Thread(() =>
+            {
+                //Get teams
+                var tList = teamService.GetCompetitionTeams(compId);
+
+                MatchesModel newMatch = new MatchesModel()
+                {
+                    MatchViewId = matchItems.Count() + 1,
+                    HomeGoals = 1,
+                    AwayGoals = 1,
+                    OddsDraw = (decimal)3.75
+                };
+
+                if (tList != null && tList.Count() > 0)
+                    foreach (var item in tList) newMatch.TeamsList.Add(new TeamComboModel() { TeamId = item.TeamId, TeamName = item.Name });
+
+                Application.Current.Dispatcher.BeginInvoke((Action)(() => { matchItems.Add(newMatch); }));
+                
+
+            }).Start();
         }
     }
 
@@ -219,6 +269,8 @@ namespace SpeedOdds.UserControls.Matches
             oddsHome = 0;
             oddsDraw = 0;
             oddsAway = 0;
+
+            ButtonSaveVisibility = Visibility.Visible;
         }
 
         private int matchViewId;
@@ -317,6 +369,17 @@ namespace SpeedOdds.UserControls.Matches
             {
                 oddsAway = value;
                 OnPropertyChanged("OddsAway");
+            }
+        }
+
+        private Visibility buttonSaveVisibility;
+        public Visibility ButtonSaveVisibility
+        {
+            get { return buttonSaveVisibility; }
+            set
+            {
+                buttonSaveVisibility = value;
+                OnPropertyChanged("ButtonSaveVisibility");
             }
         }
     }
