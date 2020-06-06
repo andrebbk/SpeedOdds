@@ -163,11 +163,14 @@
     <Compile Include="Commons\Helpers\NotificationHelper.cs" />
     <Compile Include="Commons\Helpers\Utils.cs" />
     <Compile Include="Commons\Helpers\UtilsNotification.cs" />
+    <Compile Include="Commons\OperationTypeValues.cs" />
     <Compile Include="Data\SpeedOddsContext.cs" />
     <Compile Include="Models\Competition.cs" />
     <Compile Include="Models\Match.cs" />
     <Compile Include="Models\Season.cs" />
+    <Compile Include="Models\Shared\CompetitionComboModel.cs" />
     <Compile Include="Models\Shared\ObservableObject.cs" />
+    <Compile Include="Models\Shared\TeamComboModel.cs" />
     <Compile Include="Models\Team.cs" />
     <Compile Include="Notifications\CostumInput\CustomCommandExtensions.cs" />
     <Compile Include="Notifications\CostumInput\CustomInputDisplayPart.xaml.cs">
@@ -181,6 +184,7 @@
     <Compile Include="Notifications\CustomMessage\CustomNotification.cs" />
     <Compile Include="Notifications\Utilities\RelayCommand.cs" />
     <Compile Include="Services\CompetitionService.cs" />
+    <Compile Include="Services\MatchService.cs" />
     <Compile Include="Services\SeasonService.cs" />
     <Compile Include="Services\TeamService.cs" />
     <Compile Include="UserControls\Competitions\UserControl_Competitions.xaml.cs">
@@ -201,6 +205,7 @@
     <Compile Include="UserControls\MainContent\UserControl_Menu.xaml.cs">
       <DependentUpon>UserControl_Menu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Matches\MatchesModel.cs" />
     <Compile Include="UserControls\Matches\UserControl_AddMatches.xaml.cs">
       <DependentUpon>UserControl_AddMatches.xaml</DependentUpon>
     </Compile>

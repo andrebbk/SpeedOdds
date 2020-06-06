@@ -166,6 +166,31 @@ namespace SpeedOdds.Services
             }
         }
 
+        public string GetTeamName(int teamId)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var team = db.Teams.Where(x => x.TeamId == teamId).FirstOrDefault();
+
+                    if (team != null)
+                    {
+                        return team.Name;
+                    }
+
+                    return "";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting team from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return "";
+            }
+        }
+
         public int GetTeamsNumber()
         {
             int nTeams = 0;

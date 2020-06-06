@@ -22,6 +22,7 @@ namespace SpeedOdds.UserControls.Matches
         private UserControl_AddMatches _matchesParent;
         private CompetitionService competitionService;
         private TeamService teamService;
+        private MatchService matchService;
         
         //model
         private ObservableCollection<MatchesModel> matchItems;
@@ -39,6 +40,7 @@ namespace SpeedOdds.UserControls.Matches
             _matchesParent = matchesParent;
             competitionService = new CompetitionService();
             teamService = new TeamService();
+            matchService = new MatchService();
             matchItems = new ObservableCollection<MatchesModel>();
 
             IniForm();
@@ -133,6 +135,45 @@ namespace SpeedOdds.UserControls.Matches
             }                
         }
 
+        private void LoadMatchesToGrid()
+        {
+            //GetCompTeams
+            var tList = teamService.GetCompetitionTeams(comboBoxCompetionId);
+
+            //GetMatches
+            var mList = matchService.GetMatchesByCompetitionFixture(comboBoxCompetionId, numericBoxFixtureId);
+
+            if (tList != null && tList.Count() > 0 && mList != null && mList.Count() > 0)
+            {
+                int idx = 1;
+                foreach (var itemMatch in mList)
+                {
+                    MatchesModel match = new MatchesModel()
+                    {
+                        MatchViewId = idx,
+                        MatchId = itemMatch.MatchId,
+                        CompetitionId = itemMatch.CompetitionId,
+                        FixtureId = itemMatch.FixtureId,
+                        HomeTeamId = itemMatch.HomeTeamId,
+                        HomeGoals = itemMatch.HomeGoals,
+                        AwayTeamId = itemMatch.AwayTeamId,
+                        AwayGoals = itemMatch.AwayGoals,
+                        OddsHome = itemMatch.HomeOdd,
+                        OddsDraw = itemMatch.DrawOdd,
+                        OddsAway = itemMatch.AwayOdd,
+                        ButtonRemoveVisibility = Visibility.Hidden
+                    };
+
+                    //Fill Teams
+                    if (tList != null && tList.Count() > 0)
+                        foreach (var item in tList) match.TeamsList.Add(new TeamComboModel() { TeamId = item.TeamId, TeamName = item.Name });
+
+                    matchItems.Add(match);
+                    idx++;
+                }
+            }
+        }
+
         private void LockAddMatchesUI()
         {
             //Lock parent UI controls
@@ -177,6 +218,30 @@ namespace SpeedOdds.UserControls.Matches
                 return;
             }
 
+            int auxFixture = 0;
+            try{
+
+                if(Int32.TryParse(TextBoxFixture.Text, out auxFixture))
+                {
+                    if (auxFixture < 1)
+                    {
+                        NotificationHelper.notifier.ShowCustomMessage("Selecione uma jornada!");
+                        return;
+                    }
+                }
+                else
+                {
+                    NotificationHelper.notifier.ShowCustomMessage("Ocorreu um erro com a jornada!");
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                NotificationHelper.notifier.ShowCustomMessage("Ocorreu um erro com a jornada!");
+                return;
+            }
+
             Visibility auxGridVisibility = DataGridTeams.Visibility;
             int compId = ((CompetitionComboModel)ComboBoxCompetition.SelectedItem).CompetitionId;
             comboBoxCompetionId = compId;
@@ -190,9 +255,16 @@ namespace SpeedOdds.UserControls.Matches
                 DataGridTeams.Dispatcher.BeginInvoke((Action)(() => DataGridTeams.ItemsSource = null));
                 matchItems = new ObservableCollection<MatchesModel>();
 
-
-                //Logic to fill data grid
-                LoadCompetitionDataToGrid();
+                if(matchService.HasInitialMatchesForCompetitionFixture(comboBoxCompetionId, numericBoxFixtureId))
+                {
+                    //fill data grid with registered matches
+                    LoadMatchesToGrid();
+                }
+                else
+                {
+                    //Logic to fill data grid (pre load)
+                    LoadCompetitionDataToGrid();
+                }                
 
                 if (matchItems.Count() > 0)
                 {
@@ -244,9 +316,61 @@ namespace SpeedOdds.UserControls.Matches
             MatchesModel item = (sender as Button).DataContext as MatchesModel;
             if (item != null)
             {
-                item.ButtonSaveVisibility = Visibility.Collapsed;
-                item.ButtonRemoveVisibility = Visibility.Collapsed;
-                item.ImageDoneVisibility = Visibility.Visible;
+                //VALIDATIONS
+                if (item.HomeTeamId == 0)
+                {
+                    NotificationHelper.notifier.ShowCustomMessage("No jogo nº " + item.MatchViewId.ToString() +
+                                " falta selecionar a equipa de casa");
+                    return;
+                }
+                else if (item.AwayTeamId == 0)
+                {
+                    NotificationHelper.notifier.ShowCustomMessage("No jogo nº " + item.MatchViewId.ToString() +
+                                " falta selecionar a equipa de fora");
+                    return;
+                }
+                else if(comboBoxCompetionId < 1)
+                {
+                    NotificationHelper.notifier.ShowCustomMessage("A competição está em falta!");
+                    return;
+                }
+                else if (numericBoxFixtureId < 1)
+                {
+                    NotificationHelper.notifier.ShowCustomMessage("A jornada está em falta!");
+                    return;
+                }
+
+                //Load necessary data
+                item.CompetitionId = comboBoxCompetionId;
+                item.FixtureId = numericBoxFixtureId;
+
+                new Thread(() =>
+                {
+                    UtilsNotification.StartLoadingAnimation();
+                    LockAddMatchesUI();
+
+                    //save data
+                    var resultado = matchService.CreateOrUpdateMatch(item);
+
+                    if (resultado != null)
+                    {
+                        //update model
+                        item.MatchId = resultado.Item1;
+                        item.ButtonSaveVisibility = Visibility.Collapsed;
+                        item.ButtonRemoveVisibility = Visibility.Collapsed;
+                        item.ImageDoneVisibility = Visibility.Visible;
+
+                        string opType = resultado.Item2 == Commons.OperationTypeValues.Create ? "registado" :
+                            resultado.Item2 == Commons.OperationTypeValues.Edit ? "editado" : "inalterado (erro)";
+                        NotificationHelper.notifier.ShowCustomMessage("O jogo nº " + item.MatchViewId + " foi " + opType + " com sucesso!");
+                    }
+                    else
+                        NotificationHelper.notifier.ShowCustomMessage("Ocorreu um erro ao registar o jogo nº " + item.MatchViewId);
+
+                    UnlockAddMatchesUI();
+                    UtilsNotification.StopLoadingAnimation();
+
+                }).Start();                
             }
         }
 
@@ -287,26 +411,41 @@ namespace SpeedOdds.UserControls.Matches
 
             new Thread(() =>
             {
-                /*if (IsMatchesListValid(nRows, teamsValid, teamSide, matchId))
+                if (IsMatchesListValid(nRows, teamsValid, teamSide, matchId))
                 {
-                    
-                }*/
+                    LockAddMatchesUI();
 
-                //Save
-                LockAddMatchesUI();
-                foreach(var item in matchItems)
-                {
-                    Thread.Sleep(2000);
+                    //Save
+                    foreach (var item in matchItems)
+                    {
+                        //Load necessary data
+                        item.CompetitionId = comboBoxCompetionId;
+                        item.FixtureId = numericBoxFixtureId;
 
-                    item.ButtonSaveVisibility = Visibility.Collapsed;
-                    item.ButtonRemoveVisibility = Visibility.Collapsed;
-                    item.ImageDoneVisibility = Visibility.Visible;
+                        //save data
+                        var resultado = matchService.CreateOrUpdateMatch(item);
 
-                    Thread.Sleep(1000);
-                }
+                        if (resultado != null)
+                        {
+                            //update model
+                            item.MatchId = resultado.Item1;
+                            item.ButtonSaveVisibility = Visibility.Collapsed;
+                            item.ButtonRemoveVisibility = Visibility.Collapsed;
+                            item.ImageDoneVisibility = Visibility.Visible;
 
-                NotificationHelper.notifier.ShowCustomMessage(matchItems.Count().ToString() + " jogos registados com successo!");
-                UnlockAddMatchesUI();
+                            string opType = resultado.Item2 == Commons.OperationTypeValues.Create ? "registado" :
+                                resultado.Item2 == Commons.OperationTypeValues.Edit ? "editado" : "inalterado (erro)";
+                            NotificationHelper.notifier.ShowCustomMessage("O jogo nº " + item.MatchViewId + " foi " + opType + " com sucesso!");
+                        }
+                        else
+                            NotificationHelper.notifier.ShowCustomMessage("Ocorreu um erro ao registar o jogo nº " + item.MatchViewId);                        
+
+                        Thread.Sleep(300);
+                    }
+
+                    NotificationHelper.notifier.ShowCustomMessage("Operação concluída!");
+                    UnlockAddMatchesUI();
+                }               
 
                 UtilsNotification.StopLoadingAnimation();
 
@@ -510,178 +649,6 @@ namespace SpeedOdds.UserControls.Matches
             }
         }      
         
-    }
-
-    public class CompetitionComboModel
-    {
-        public int CompetitionId { get; set; }
-
-        public string CompetitionName { get; set; }
-    }
-
-    public class TeamComboModel
-    {
-        public int TeamId { get; set; }
-
-        public string TeamName { get; set; }
-    }
-
-    public class MatchesModel: ObservableObject
-    {
-        public MatchesModel()
-        {
-            homeTeamId = 0;
-            awayTeamId = 0;
-
-            teamsList = new ObservableCollection<TeamComboModel>();
-            teamsList.Add(new TeamComboModel()
-            {
-                TeamId = 0,
-                TeamName = "Selecionar Equipa"
-            });
-
-            homeGoals = 0;
-            awayGoals = 0;
-
-            oddsHome = 0;
-            oddsDraw = 0;
-            oddsAway = 0;
-
-            ButtonSaveVisibility = Visibility.Visible;
-            ButtonRemoveVisibility = Visibility.Visible;
-            ImageDoneVisibility = Visibility.Collapsed;
-        }
-
-        private int matchViewId;
-        public int MatchViewId
-        {
-            get { return matchViewId; }
-            set
-            {
-                matchViewId = value;
-                OnPropertyChanged("MatchViewId");
-            }
-        }
-
-        private int homeTeamId;
-        public int HomeTeamId
-        {
-            get { return homeTeamId; }
-            set
-            {
-                homeTeamId = value;
-                OnPropertyChanged("HomeTeamId");
-            }
-        }
-
-        private int awayTeamId;
-        public int AwayTeamId
-        {
-            get { return awayTeamId; }
-            set
-            {
-                awayTeamId = value;
-                OnPropertyChanged("AwayTeamId");
-            }
-        }
-
-        private ObservableCollection<TeamComboModel> teamsList;
-        public ObservableCollection<TeamComboModel> TeamsList
-        {
-            get { return teamsList; }
-            set
-            {
-                teamsList = value;
-                OnPropertyChanged("TeamsList");
-            }
-        }
-
-        private int homeGoals;
-        public int HomeGoals
-        {
-            get { return homeGoals; }
-            set
-            {
-                homeGoals = value;
-                OnPropertyChanged("HomeGoals");
-            }
-        }
-
-        private int awayGoals;
-        public int AwayGoals
-        {
-            get { return awayGoals; }
-            set
-            {
-                awayGoals = value;
-                OnPropertyChanged("AwayGoals");
-            }
-        }
-
-        private decimal oddsHome;
-        public decimal OddsHome
-        {
-            get { return oddsHome; }
-            set
-            {
-                oddsHome = value;
-                OnPropertyChanged("OddsHome");
-            }
-        }
-
-        private decimal oddsDraw;
-        public decimal OddsDraw
-        {
-            get { return oddsDraw; }
-            set
-            {
-                oddsDraw = value;
-                OnPropertyChanged("OddsDraw");
-            }
-        }
-
-        private decimal oddsAway;
-        public decimal OddsAway
-        {
-            get { return oddsAway; }
-            set
-            {
-                oddsAway = value;
-                OnPropertyChanged("OddsAway");
-            }
-        }
-
-        private Visibility buttonSaveVisibility;
-        public Visibility ButtonSaveVisibility
-        {
-            get { return buttonSaveVisibility; }
-            set
-            {
-                buttonSaveVisibility = value;
-                OnPropertyChanged("ButtonSaveVisibility");
-            }
-        }
-
-        private Visibility buttonRemoveVisibility;
-        public Visibility ButtonRemoveVisibility
-        {
-            get { return buttonRemoveVisibility; }
-            set
-            {
-                buttonRemoveVisibility = value;
-                OnPropertyChanged("ButtonRemoveVisibility");
-            }
-        }
-
-        private Visibility imageDoneVisibility;
-        public Visibility ImageDoneVisibility
-        {
-            get { return imageDoneVisibility; }
-            set
-            {
-                imageDoneVisibility = value;
-                OnPropertyChanged("ImageDoneVisibility");
-            }
-        }
-    }
+    }   
+    
 }
