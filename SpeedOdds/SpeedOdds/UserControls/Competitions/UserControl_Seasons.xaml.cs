@@ -1,25 +1,15 @@
-﻿using BlurMessageBox;
-using SpeedOdds.Commons.Helpers;
+﻿using SpeedOdds.Commons.Helpers;
 using SpeedOdds.Notifications.CustomMessage;
 using SpeedOdds.Services;
-using SpeedOdds.UserControls.Loading;
 using SpeedOdds.UserControls.MainContent;
+using SpeedOdds.Windows;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SpeedOdds.UserControls.Competitions
 {
@@ -144,19 +134,19 @@ namespace SpeedOdds.UserControls.Competitions
         {
             if ((int)ComboBoxStartYear.SelectedValue > (int)ComboBoxEndYear.SelectedValue)
             {
-                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Os anos da época são inválidos!");
+                NotificationHelper.notifier.ShowCustomMessage("Os anos da época são inválidos!");
                 return;
             }
 
             if ((int)ComboBoxStartYear.SelectedValue == (int)ComboBoxEndYear.SelectedValue)
             {
-                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Os anos da época são inválidos!");
+                NotificationHelper.notifier.ShowCustomMessage("Os anos da época são inválidos!");
                 return;
             }
 
             if (seasonService.AlreadyExistsSeason((int)ComboBoxStartYear.SelectedValue, (int)ComboBoxEndYear.SelectedValue))
             {
-                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Época já criada!");
+                NotificationHelper.notifier.ShowCustomMessage("Época já criada!");
                 return;
             }
 
@@ -170,7 +160,7 @@ namespace SpeedOdds.UserControls.Competitions
                 //Save new season
                 if (seasonService.CreateSeason(sYear, eYear))
                 {
-                    NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Época criada com sucesso!");
+                    NotificationHelper.notifier.ShowCustomMessage("Época criada com sucesso!");
 
                     //Reset UI
                     ComboBoxStartYear.Dispatcher.BeginInvoke((Action)(() => ComboBoxStartYear.SelectedValue = DateTime.Now.Year));
@@ -179,7 +169,7 @@ namespace SpeedOdds.UserControls.Competitions
                     LoadSeasonsGrid();
                 }
                 else
-                    NotificationHelper.notifier.ShowCustomMessage("Speed Odds", "Ocorreu um erro ao  criar a Época!");
+                    NotificationHelper.notifier.ShowCustomMessage("Ocorreu um erro ao  criar a Época!");
 
                 UtilsNotification.StopLoadingAnimation();
 
@@ -191,8 +181,8 @@ namespace SpeedOdds.UserControls.Competitions
             SeasonDataModel item = (sender as Button).DataContext as SeasonDataModel;
             if(item != null)
             {
-                if (this.MessageBoxShow("Tens a certeza que pretendes remover a " + item.SeasonName + "?", "SpeedOdds",
-                Buttons.YesNo, Icons.Warning, AnimateStyle.FadeIn) == System.Windows.Forms.DialogResult.Yes)
+                ConfirmationWindow _popupConfirm = new ConfirmationWindow("Tens a certeza que pretendes remover a " + item.SeasonName + "?");
+                if (_popupConfirm.ShowDialog() == true)
                 {
                     new Thread(() =>
                     {
@@ -202,14 +192,14 @@ namespace SpeedOdds.UserControls.Competitions
                         {
                             if (seasonService.RemoveSeason(item.SeasonId))
                             {
-                                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Época removida com sucesso!");
+                                NotificationHelper.notifier.ShowCustomMessage("Época removida com sucesso!");
                                 LoadSeasonsGrid();
                             }
                             else
-                                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Erro ao remover época!");
+                                NotificationHelper.notifier.ShowCustomMessage("Erro ao remover época!");
                         }
                         else
-                            NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Não é possivel eliminar esta época!\nContacte o Admin do sistema...");
+                            NotificationHelper.notifier.ShowCustomMessage("Não é possivel eliminar esta época!\nContacte o Admin do sistema...");
 
                         UtilsNotification.StopLoadingAnimation();
 

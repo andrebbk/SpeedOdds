@@ -1,8 +1,8 @@
-﻿using BlurMessageBox;
-using SpeedOdds.Commons.Helpers;
+﻿using SpeedOdds.Commons.Helpers;
 using SpeedOdds.Notifications.CustomMessage;
 using SpeedOdds.Services;
 using SpeedOdds.UserControls.MainContent;
+using SpeedOdds.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -138,19 +138,19 @@ namespace SpeedOdds.UserControls.Competitions
         {
             if (String.IsNullOrEmpty(TextBoxCompetitionName.Text) || TextBoxCompetitionName.Text.Length < 3)
             {
-                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Nome da competição inválido!");
+                NotificationHelper.notifier.ShowCustomMessage("Nome da competição inválido!");
                 return;
             }
 
             if ((SeasonComboModel)ComboBoxSeason.SelectedValue == null)
             {
-                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Falta escolher a época!");
+                NotificationHelper.notifier.ShowCustomMessage("Falta escolher a época!");
                 return;
             }
 
             if (competitionService.AlreadyExistsCompetition(TextBoxCompetitionName.Text, ((SeasonComboModel)ComboBoxSeason.SelectedValue).SeasonId))
             {
-                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Já existe uma competição idêntica!");
+                NotificationHelper.notifier.ShowCustomMessage("Já existe uma competição idêntica!");
                 return;
             }
 
@@ -164,7 +164,7 @@ namespace SpeedOdds.UserControls.Competitions
                 //Save new competition
                 if (competitionService.CreateCompetition(compName, seasonID))
                 {
-                    NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Competição criada com sucesso!");
+                    NotificationHelper.notifier.ShowCustomMessage("Competição criada com sucesso!");
 
                     //Reset UI
                     TextBoxCompetitionName.Dispatcher.BeginInvoke((Action)(() => TextBoxCompetitionName.Clear()));
@@ -172,7 +172,7 @@ namespace SpeedOdds.UserControls.Competitions
                     LoadCompetitionsGrid();
                 }
                 else
-                    NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Ocorreu um erro ao criar a Competição!");
+                    NotificationHelper.notifier.ShowCustomMessage("Ocorreu um erro ao criar a Competição!");
 
                 UtilsNotification.StopLoadingAnimation();
 
@@ -184,8 +184,8 @@ namespace SpeedOdds.UserControls.Competitions
             CompetitionDataModel item = (sender as Button).DataContext as CompetitionDataModel;
             if (item != null)
             {
-                if (this.MessageBoxShow("Tens a certeza que pretendes remover a competição '" + item.CompetitionName + "'?", "SpeedOdds",
-                Buttons.YesNo, Icons.Warning, AnimateStyle.FadeIn) == System.Windows.Forms.DialogResult.Yes)
+                ConfirmationWindow _popupConfirm = new ConfirmationWindow("Tens a certeza que pretendes remover a competição '" + item.CompetitionName + "'?");
+                if (_popupConfirm.ShowDialog() == true)
                 {
                     new Thread(() =>
                     {
@@ -195,14 +195,14 @@ namespace SpeedOdds.UserControls.Competitions
                         {
                             if (competitionService.RemoveCompetition(item.CompetitionId))
                             {
-                                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Competição removida com sucesso!");
+                                NotificationHelper.notifier.ShowCustomMessage("Competição removida com sucesso!");
                                 LoadCompetitionsGrid();
                             }
                             else
-                                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Erro ao remover competição!");
+                                NotificationHelper.notifier.ShowCustomMessage("Erro ao remover competição!");
                         }
                         else
-                            NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Não é possivel eliminar esta competição!\nContacte o Admin do sistema...");
+                            NotificationHelper.notifier.ShowCustomMessage("Não é possivel eliminar esta competição!\nContacte o Admin do sistema...");
 
                         UtilsNotification.StopLoadingAnimation();
 

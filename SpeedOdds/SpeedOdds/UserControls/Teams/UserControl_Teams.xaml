@@ -58,19 +58,19 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Width="70" Binding="{Binding TeamId}"/>
-                <DataGridTextColumn Header="Designação" Width="220" Binding="{Binding TeamName}" />
-                <DataGridTextColumn Header="Competição" Width="170" Binding="{Binding CompetitionName}" />
-                <DataGridTextColumn Header="Época" Width="170" Binding="{Binding SeasonName}" />
-                <DataGridTextColumn Header="Data de Registo" Width="160" Binding="{Binding CreateDate}" />
-                <DataGridTemplateColumn>
+                <DataGridTextColumn Header="ID" Width="70" Binding="{Binding TeamId}" CanUserResize="False"/>
+                <DataGridTextColumn Header="Designação" Width="220" Binding="{Binding TeamName}" CanUserResize="False"/>
+                <DataGridTextColumn Header="Competição" Width="170" Binding="{Binding CompetitionName}" CanUserResize="False"/>
+                <DataGridTextColumn Header="Época" Width="170" Binding="{Binding SeasonName}" CanUserResize="False"/>
+                <DataGridTextColumn Header="Data de Registo" Width="160" Binding="{Binding CreateDate}" CanUserResize="False"/>
+                <DataGridTemplateColumn CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Image x:Name="ButtonFav" MouseDown="ButtonFav_MouseDown" Height="20" Width="20" Source="{Binding Path=FavStarPath}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn>
+                <DataGridTemplateColumn CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonRemoveTeam" TextElement.FontSize="20px" Padding="1, 0, 0, 0" Margin="0, 0, 35, 0" VerticalAlignment="center" Width="80" Height="35" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" IsEnabled="{Binding ButtonSaveEnable}" Click="ButtonRemoveTeam_Click">

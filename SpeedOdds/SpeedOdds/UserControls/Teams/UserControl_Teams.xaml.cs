@@ -1,25 +1,15 @@
-﻿using BlurMessageBox;
-using SpeedOdds.Commons.Helpers;
-using SpeedOdds.Models.Shared;
+﻿using SpeedOdds.Commons.Helpers;
 using SpeedOdds.Notifications.CustomMessage;
 using SpeedOdds.Services;
 using SpeedOdds.UserControls.MainContent;
+using SpeedOdds.Windows;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SpeedOdds.UserControls.Teams
 {
@@ -220,19 +210,19 @@ namespace SpeedOdds.UserControls.Teams
         {
             if (String.IsNullOrEmpty(TextBoxTeamName.Text) || TextBoxTeamName.Text.Length < 3)
             {
-                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Nome da equipa inválido!");
+                NotificationHelper.notifier.ShowCustomMessage("Nome da equipa inválido!");
                 return;
             }
 
             if ((CompetitionComboModel)ComboBoxCompetition.SelectedValue == null)
             {
-                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Falta escolher a competição!");
+                NotificationHelper.notifier.ShowCustomMessage("Falta escolher a competição!");
                 return;
             }
 
             if (teamService.AlreadyExistsTeam(TextBoxTeamName.Text, ((CompetitionComboModel)ComboBoxCompetition.SelectedValue).CompetitionId))
             {
-                NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Já existe uma equipa idêntica!");
+                NotificationHelper.notifier.ShowCustomMessage("Já existe uma equipa idêntica!");
                 return;
             }
 
@@ -247,7 +237,7 @@ namespace SpeedOdds.UserControls.Teams
                 //Save new team
                 if (teamService.CreateTeam(teamName, compID, checkedFav))
                 {
-                    NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Equipa criada com sucesso!");
+                    NotificationHelper.notifier.ShowCustomMessage("Equipa criada com sucesso!");
 
                     //Reset UI
                     TextBoxTeamName.Dispatcher.BeginInvoke((Action)(() => TextBoxTeamName.Clear()));
@@ -256,7 +246,7 @@ namespace SpeedOdds.UserControls.Teams
                     LoadTeamsGrid();
                 }
                 else
-                    NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Ocorreu um erro ao criar a Equipa!");
+                    NotificationHelper.notifier.ShowCustomMessage("Ocorreu um erro ao criar a Equipa!");
 
                 UtilsNotification.StopLoadingAnimation();
 
@@ -269,8 +259,8 @@ namespace SpeedOdds.UserControls.Teams
             TeamDataModel item = (sender as Button).DataContext as TeamDataModel;
             if (item != null)
             {
-                if (this.MessageBoxShow("Tens a certeza que pretendes remover a equipa '" + item.TeamName + "'?", "SpeedOdds",
-                Buttons.YesNo, Icons.Warning, AnimateStyle.FadeIn) == System.Windows.Forms.DialogResult.Yes)
+                ConfirmationWindow _popupConfirm = new ConfirmationWindow("Tens a certeza que pretendes remover a equipa '" + item.TeamName + "'?");
+                if (_popupConfirm.ShowDialog() == true)
                 {
                     new Thread(() =>
                     {
@@ -278,11 +268,11 @@ namespace SpeedOdds.UserControls.Teams
 
                         if (teamService.RemoveTeam(item.TeamId))
                         {
-                            NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Equipa removida com sucesso!");
+                            NotificationHelper.notifier.ShowCustomMessage("Equipa removida com sucesso!");
                             LoadTeamsGrid();
                         }
                         else
-                            NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Erro ao remover equipa!");
+                            NotificationHelper.notifier.ShowCustomMessage("Erro ao remover equipa!");
 
                         UtilsNotification.StopLoadingAnimation();
                     }).Start();
@@ -311,8 +301,8 @@ namespace SpeedOdds.UserControls.Teams
                     flagFav = true;
                 }                    
 
-                if (this.MessageBoxShow(msg, "SpeedOdds",
-                Buttons.YesNo, Icons.Warning, AnimateStyle.FadeIn) == System.Windows.Forms.DialogResult.Yes)
+                ConfirmationWindow _popupConfirm = new ConfirmationWindow(msg);
+                if (_popupConfirm.ShowDialog() == true)
                 {
                     new Thread(() =>
                     {
@@ -320,11 +310,11 @@ namespace SpeedOdds.UserControls.Teams
 
                         if (teamService.ChangeFavoriteValue(item.TeamId, flagFav))
                         {
-                            NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Favoritismo do clube alterado com sucesso!");
+                            NotificationHelper.notifier.ShowCustomMessage("Favoritismo do clube alterado com sucesso!");
                             LoadTeamsGrid();
                         }
                         else
-                            NotificationHelper.notifier.ShowCustomMessage("SpeedOdds", "Erro ao mudar o favoritismo do clube/nContacte o Admin do sistema...");
+                            NotificationHelper.notifier.ShowCustomMessage("Erro ao mudar o favoritismo do clube/nContacte o Admin do sistema...");
 
                         UtilsNotification.StopLoadingAnimation();
 
