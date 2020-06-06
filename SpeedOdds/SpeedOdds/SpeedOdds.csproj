@@ -204,6 +204,9 @@
     <Compile Include="UserControls\Matches\UserControl_AddMatches.xaml.cs">
       <DependentUpon>UserControl_AddMatches.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Matches\UserControl_AddMatch_HalfTime.xaml.cs">
+      <DependentUpon>UserControl_AddMatch_HalfTime.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Matches\UserControl_AddMatch_StartTime.xaml.cs">
       <DependentUpon>UserControl_AddMatch_StartTime.xaml</DependentUpon>
     </Compile>
@@ -249,6 +252,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\Matches\UserControl_AddMatches.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Matches\UserControl_AddMatch_HalfTime.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -313,6 +320,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\ImageFiles\Buttons\half_time_light_grey.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\ImageFiles\Buttons\whistle-grey.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\ImageFiles\checked_dark_grey.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

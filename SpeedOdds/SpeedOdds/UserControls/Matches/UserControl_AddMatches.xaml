@@ -11,6 +11,8 @@
         <!--TITULO-->
         <TextBlock TextElement.FontSize="55px" TextElement.FontWeight="Bold" Margin="142,42,1016,808" Foreground="#DD171717" Text="Registar Jogos"/>
 
+        <TextBlock x:Name="TextBoxSubTitle" TextElement.FontSize="30px" TextElement.FontWeight="Normal" Margin="532,69,756,813" Foreground="#DD171717" Text="(Ataque/ Defesa)"/>
+
         <Border BorderThickness="1" HorizontalAlignment="Left" Height="4" Margin="112,116,0,0" VerticalAlignment="Top" Width="1250" Background="#FF171717" RenderTransformOrigin="0.5,0.5">
             <Border.RenderTransform>
                 <TransformGroup>
@@ -26,5 +28,23 @@
         <Image x:Name="ButtonGoBack" HorizontalAlignment="Left" Height="45" Margin="10,868,0,0" VerticalAlignment="Top" Width="45" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/goback-icon.png" MouseDown="ButtonGoBack_MouseDown"/>
 
         <Controls:TransitioningContentControl x:Name="MatchContainer" Padding="0" Transition="Right" Margin="10,121,10,90"  />
+
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonAddMatchesStartMatch" TextElement.FontSize="22px" Padding="2, 0, 0, 0" Margin="142,857,0,0" 
+                VerticalAlignment="Top" Width="202" Height="56" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
+                Click="ButtonAddMatchesStartMatch_Click" >
+            <StackPanel Orientation="Horizontal" Width="190" Height="44" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Ataque Defesa" VerticalAlignment="Center" Margin="15,12,10,10" FontWeight="Normal" FontSize="18" Width="120" Height="22" />
+                <Image Width="42" Margin="0,6,0,0" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/whistle-grey.png" Height="38" VerticalAlignment="Top" />
+            </StackPanel>
+        </Button>
+
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonAddMatchesHalfTime" TextElement.FontSize="22px" Padding="2, 0, 0, 0" Margin="364,857,0,0" 
+                VerticalAlignment="Top" Width="202" Height="56" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
+                Click="ButtonAddMatchesHalfTime_Click" >
+            <StackPanel Orientation="Horizontal" Width="190" Height="44" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Intervalo" VerticalAlignment="Center" Margin="20,12,20,10" FontWeight="Normal" FontSize="18" Width="105" Height="22" />
+                <Image Width="42" Margin="0,6,0,0" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/half_time_light_grey.png" Height="38" VerticalAlignment="Top" />
+            </StackPanel>
+        </Button>
     </Grid>
 </UserControl>
