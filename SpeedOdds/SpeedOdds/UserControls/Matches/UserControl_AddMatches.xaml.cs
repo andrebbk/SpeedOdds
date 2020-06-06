@@ -22,12 +22,23 @@ namespace SpeedOdds.UserControls.Matches
             InitializeComponent();
             _mainContent = mainContent;
 
-            this.MatchContainer.Content = new UserControl_AddMatch_StartTime();
+            this.MatchContainer.Content = new UserControl_AddMatch_StartTime(this);
         }
 
         private void ButtonGoBack_MouseDown(object sender, MouseButtonEventArgs e)
         {
             _mainContent.WFAPContentContainer.Content = new UserControl_Matches(_mainContent);
+        }
+
+        //PUBLIC METHODS
+        public void LockMatchesUI()
+        {
+            ButtonGoBack.Dispatcher.BeginInvoke((Action)(() => ButtonGoBack.Visibility = Visibility.Hidden ));
+        }
+
+        public void UnlockMatchesUI()
+        {
+            ButtonGoBack.Dispatcher.BeginInvoke((Action)(() => ButtonGoBack.Visibility = Visibility.Visible));
         }
     }
 }

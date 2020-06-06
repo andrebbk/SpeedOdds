@@ -19,9 +19,10 @@ namespace SpeedOdds.UserControls.Matches
     /// </summary>
     public partial class UserControl_AddMatch_StartTime : UserControl
     {
+        private UserControl_AddMatches _matchesParent;
         private CompetitionService competitionService;
         private TeamService teamService;
-
+        
         //model
         private ObservableCollection<MatchesModel> matchItems;
 
@@ -29,10 +30,13 @@ namespace SpeedOdds.UserControls.Matches
         private int comboBoxCompetionId = 0;
         private int numericBoxFixtureId = 0;
 
+        private bool IsUiTeamsLocked = false;
 
-        public UserControl_AddMatch_StartTime()
+
+        public UserControl_AddMatch_StartTime(UserControl_AddMatches matchesParent)
         {
             InitializeComponent();
+            _matchesParent = matchesParent;
             competitionService = new CompetitionService();
             teamService = new TeamService();
             matchItems = new ObservableCollection<MatchesModel>();
@@ -129,6 +133,39 @@ namespace SpeedOdds.UserControls.Matches
             }                
         }
 
+        private void LockAddMatchesUI()
+        {
+            //Lock parent UI controls
+            _matchesParent.LockMatchesUI();
+
+            ButtonLoadForm.Dispatcher.BeginInvoke((Action)(() => {
+                if (ButtonLoadForm.Visibility == Visibility.Visible)
+                    ButtonLoadForm.IsEnabled = false;
+            }));
+            ComboBoxCompetition.Dispatcher.BeginInvoke((Action)(() => ComboBoxCompetition.IsEnabled = false));
+            TextBoxFixture.Dispatcher.BeginInvoke((Action)(() => TextBoxFixture.IsEnabled = false));
+            ButtonAddNewGame.Dispatcher.BeginInvoke((Action)(() => ButtonAddNewGame.IsEnabled = false));
+            ButtonSaveAllMatches.Dispatcher.BeginInvoke((Action)(() => ButtonSaveAllMatches.IsEnabled = false));
+            IsUiTeamsLocked = true;
+        }
+
+        private void UnlockAddMatchesUI()
+        {
+            //Unlock parent UI controls
+            _matchesParent.UnlockMatchesUI();
+
+            ButtonLoadForm.Dispatcher.BeginInvoke((Action)(() => {
+                if (!ButtonLoadForm.IsEnabled)
+                    ButtonLoadForm.IsEnabled = true;
+            }));
+            ComboBoxCompetition.Dispatcher.BeginInvoke((Action)(() => ComboBoxCompetition.IsEnabled = true));
+            TextBoxFixture.Dispatcher.BeginInvoke((Action)(() => TextBoxFixture.IsEnabled = true));
+            ButtonAddNewGame.Dispatcher.BeginInvoke((Action)(() => ButtonAddNewGame.IsEnabled = true));
+            ButtonSaveAllMatches.Dispatcher.BeginInvoke((Action)(() => ButtonSaveAllMatches.IsEnabled = true));
+            IsUiTeamsLocked = false;
+        }
+
+
 
         //BUTTONS
         private void ButtonLoadForm_Click(object sender, RoutedEventArgs e)
@@ -201,11 +238,15 @@ namespace SpeedOdds.UserControls.Matches
 
         private void ButtonSaveSingleMatch_Click(object sender, RoutedEventArgs e)
         {
+            if (IsUiTeamsLocked)
+                return;
+
             MatchesModel item = (sender as Button).DataContext as MatchesModel;
             if (item != null)
             {
                 item.ButtonSaveVisibility = Visibility.Collapsed;
                 item.ButtonRemoveVisibility = Visibility.Collapsed;
+                item.ImageDoneVisibility = Visibility.Visible;
             }
         }
 
@@ -246,10 +287,26 @@ namespace SpeedOdds.UserControls.Matches
 
             new Thread(() =>
             {
-                if (IsMatchesListValid(nRows, teamsValid, teamSide, matchId))
+                /*if (IsMatchesListValid(nRows, teamsValid, teamSide, matchId))
                 {
-                    Thread.Sleep(5000);
+                    
+                }*/
+
+                //Save
+                LockAddMatchesUI();
+                foreach(var item in matchItems)
+                {
+                    Thread.Sleep(2000);
+
+                    item.ButtonSaveVisibility = Visibility.Collapsed;
+                    item.ButtonRemoveVisibility = Visibility.Collapsed;
+                    item.ImageDoneVisibility = Visibility.Visible;
+
+                    Thread.Sleep(1000);
                 }
+
+                NotificationHelper.notifier.ShowCustomMessage(matchItems.Count().ToString() + " jogos registados com successo!");
+                UnlockAddMatchesUI();
 
                 UtilsNotification.StopLoadingAnimation();
 
@@ -295,6 +352,9 @@ namespace SpeedOdds.UserControls.Matches
 
         private void ButtonRemoveSingleMatch_Click(object sender, RoutedEventArgs e)
         {
+            if (IsUiTeamsLocked)
+                return;
+
             MatchesModel item = (sender as Button).DataContext as MatchesModel;
             if (item != null)
             {
@@ -328,6 +388,7 @@ namespace SpeedOdds.UserControls.Matches
                 }                           
             }
         }
+        
 
 
         //EVENT VALIDATIONS
@@ -488,6 +549,7 @@ namespace SpeedOdds.UserControls.Matches
 
             ButtonSaveVisibility = Visibility.Visible;
             ButtonRemoveVisibility = Visibility.Visible;
+            ImageDoneVisibility = Visibility.Collapsed;
         }
 
         private int matchViewId;
@@ -608,6 +670,17 @@ namespace SpeedOdds.UserControls.Matches
             {
                 buttonRemoveVisibility = value;
                 OnPropertyChanged("ButtonRemoveVisibility");
+            }
+        }
+
+        private Visibility imageDoneVisibility;
+        public Visibility ImageDoneVisibility
+        {
+            get { return imageDoneVisibility; }
+            set
+            {
+                imageDoneVisibility = value;
+                OnPropertyChanged("ImageDoneVisibility");
             }
         }
     }

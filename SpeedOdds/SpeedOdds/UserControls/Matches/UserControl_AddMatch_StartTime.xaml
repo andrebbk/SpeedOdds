@@ -98,7 +98,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="FTHG" CanUserResize="False">
+                <DataGridTemplateColumn Header="FTHG" CanUserResize="False" MaxWidth="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <wpfx:IntegerUpDown x:Name="TextBoxHomeGoals" FormatString="F0" Value="{Binding HomeGoals, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
@@ -107,7 +107,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="FTAG" CanUserResize="False">
+                <DataGridTemplateColumn Header="FTAG" CanUserResize="False" MaxWidth="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <wpfx:IntegerUpDown x:Name="TextBoxAwayGoals" FormatString="F0" Value="{Binding AwayGoals, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
@@ -116,7 +116,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="PSH" CanUserResize="False">
+                <DataGridTemplateColumn Header="PSH" CanUserResize="False" MaxWidth="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <wpfx:DecimalUpDown x:Name="TextBoxPSH" FormatString="F2" Value="{Binding OddsHome, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
@@ -125,7 +125,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="PSD" CanUserResize="False">
+                <DataGridTemplateColumn Header="PSD" CanUserResize="False" MaxWidth="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <wpfx:DecimalUpDown x:Name="TextBoxPSD" FormatString="F2" Value="{Binding OddsDraw, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
@@ -134,7 +134,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="PSA" CanUserResize="False">
+                <DataGridTemplateColumn Header="PSA" CanUserResize="False" MaxWidth="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <wpfx:DecimalUpDown x:Name="TextBoxPSA" FormatString="F2" Value="{Binding OddsAway, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
@@ -143,32 +143,34 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Opções" CanUserResize="False">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonSaveSingleMatch" TextElement.FontSize="22px" Padding="2, 0, 0, 0" VerticalAlignment="Top" 
-                                    Width="74" Height="36" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
-                                    Click="ButtonSaveSingleMatch_Click" Visibility="{Binding ButtonSaveVisibility}">
-                                <StackPanel Orientation="Horizontal" Width="69" Height="30" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="3, 0, 0, 0">
-                                    <TextBlock Text="Registar" VerticalAlignment="Center" Margin="7,0,7,0" FontWeight="Normal" FontSize="14" />
-                                </StackPanel>
-                            </Button>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
                 <DataGridTemplateColumn CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonRemoveSingleMatch" TextElement.FontSize="22px" Padding="2, 0, 0, 0" VerticalAlignment="Top" 
-                                    Width="74" Height="36" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
-                                    Click="ButtonRemoveSingleMatch_Click" Visibility="{Binding ButtonRemoveVisibility}">
-                                <StackPanel Orientation="Horizontal" Width="65" Height="44" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <TextBlock Text="Remover" VerticalAlignment="Center" Margin="7,0,7,0" FontWeight="Normal" FontSize="14" />
-                                </StackPanel>
-                            </Button>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonSaveSingleMatch" TextElement.FontSize="22px" Padding="2, 0, 0, 0" VerticalAlignment="Top" 
+                                        Width="74" Height="36" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
+                                        Click="ButtonSaveSingleMatch_Click" Visibility="{Binding ButtonSaveVisibility, UpdateSourceTrigger=PropertyChanged}"
+                                        Margin="10, 0, 0, 0">
+                                    <StackPanel Orientation="Horizontal" Width="69" Height="30" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="3, 0, 0, 0">
+                                        <TextBlock Text="Registar" VerticalAlignment="Center" Margin="7,0,7,0" FontWeight="Normal" FontSize="14" />
+                                    </StackPanel>
+                                </Button>
+                                
+                                <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonRemoveSingleMatch" TextElement.FontSize="22px" Padding="2, 0, 0, 0" VerticalAlignment="Top" 
+                                        Width="74" Height="36" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
+                                        Click="ButtonRemoveSingleMatch_Click" Visibility="{Binding ButtonRemoveVisibility, UpdateSourceTrigger=PropertyChanged}"
+                                        Margin="10, 0, 0, 0">
+                                    <StackPanel Orientation="Horizontal" Width="65" Height="44" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <TextBlock Text="Remover" VerticalAlignment="Center" Margin="7,0,7,0" FontWeight="Normal" FontSize="14" />
+                                    </StackPanel>
+                                </Button>
+
+                                <Image x:Name="ImageDoneRegistration" Width="36" Height="36"
+                                       Source="/SpeedOdds;component/Resources/ImageFiles/checked_dark_grey.png" Visibility="{Binding ImageDoneVisibility}" />
+                            </StackPanel>                           
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>                
             </DataGrid.Columns>
         </DataGrid>
         <!--DATA GRID-->
