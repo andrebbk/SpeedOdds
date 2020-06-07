@@ -163,6 +163,7 @@
     <Compile Include="Commons\Helpers\NotificationHelper.cs" />
     <Compile Include="Commons\Helpers\Utils.cs" />
     <Compile Include="Commons\Helpers\UtilsNotification.cs" />
+    <Compile Include="Commons\Helpers\UtilsOddOperations.cs" />
     <Compile Include="Commons\OperationTypeValues.cs" />
     <Compile Include="Data\SpeedOddsContext.cs" />
     <Compile Include="Models\Competition.cs" />
@@ -192,6 +193,9 @@
     </Compile>
     <Compile Include="UserControls\Competitions\UserControl_Seasons.xaml.cs">
       <DependentUpon>UserControl_Seasons.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\DrawableMenu\UserControl_DrawableMenuMatches.xaml.cs">
+      <DependentUpon>UserControl_DrawableMenuMatches.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Loading\UserControl_Loading.xaml.cs">
       <DependentUpon>UserControl_Loading.xaml</DependentUpon>
@@ -237,6 +241,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\Competitions\UserControl_Seasons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\DrawableMenu\UserControl_DrawableMenuMatches.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

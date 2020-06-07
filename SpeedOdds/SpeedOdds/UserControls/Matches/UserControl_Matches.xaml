@@ -4,9 +4,66 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SpeedOdds.UserControls.Matches"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
              Height="924" Width="1548">
+    <UserControl.Resources>
+        <Storyboard x:Key="CloseDrawableMenu">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="GridMenu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="-366"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="GridBackground">
+                <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="OpenDrawableMenu">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="GridMenu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-366"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="GridBackground">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </UserControl.Resources>
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonOpenDrawableMenu">
+            <BeginStoryboard Storyboard="{StaticResource OpenDrawableMenu}"/>
+        </EventTrigger>
+    </UserControl.Triggers>
     <Grid>
+        <!-- SLIDE MENU -->
+        <Grid x:Name="GridBackground" Background="#55313131" Opacity="0" MouseDown="GridBackground_MouseDown"/>
+
+        <Button x:Name="ButtonOpenDrawableMenu" HorizontalAlignment="Left" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Width="41" Height="41" Padding="0" Margin="1497,128,0,0" Click="ButtonOpenDrawableMenu_Click">
+            <materialDesign:PackIcon Kind="Menu" Foreground="#FF313131" Height="31" Width="31"/>
+        </Button>
+
+        <Grid x:Name="GridMenu" Width="366" HorizontalAlignment="Left" Margin="1553,128,-371,308" RenderTransformOrigin="0.5,0.5" Opacity="1" Background="#FF131313">
+            <Grid.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Grid.RenderTransform>
+
+            <materialDesign:Card Padding="5"   >
+                <materialDesign:Card.Background>
+                    <SolidColorBrush  Opacity="0"/>
+                </materialDesign:Card.Background>
+
+                <Controls:TransitioningContentControl x:Name="DrawableMenuContainer" Width="342" Height="458" Transition="Right" Margin="-19,-14,-21,-20" Padding="0, 0, 0, 0"/>
+
+            </materialDesign:Card>
+        </Grid>
+        <!--END  SLIDE MENU -->
+
         <!--TITULO-->
         <TextBlock TextElement.FontSize="55px" TextElement.FontWeight="Bold" Margin="142,42,1064,808" Foreground="#DD171717" Text="Jogos"/>
 
@@ -21,12 +78,11 @@
             </Border.RenderTransform>
         </Border>
 
+        <!--INFO-->
+        <Image x:Name="ImageLogo" HorizontalAlignment="Left" Height="130" Margin="670,262,0,0" VerticalAlignment="Top" Width="132" Source="/SpeedOdds;component/Resources/ImageFiles/Icon/red-icon.png"/>
+        <Label x:Name="LabelInfo" Content="Para visualizar informações de jogos é necessário proceder ao registo prévio dos dados" HorizontalAlignment="Left" Margin="235,432,0,0" VerticalAlignment="Top" Foreground="#DD171717" FontSize="24" FontWeight="Bold"/>
+        <Label x:Name="LabelExtraInfo" Content="(Utiliza o menu lateral, à tua direita, para selecionares os jogos que já registaste)" HorizontalAlignment="Left" Margin="372,472,0,0" VerticalAlignment="Top" Foreground="#DD171717" FontSize="20" Width="713" />
+        
         <!--BUTTONS-->
-        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonNewGame" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="1331,481,0,0" VerticalAlignment="Top" Width="164" Height="44" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonNewGame_Click">
-            <StackPanel Orientation="Horizontal" Width="145" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="Gerir Jogos" VerticalAlignment="Center" Margin="7,0,23,0" FontWeight="Normal" FontSize="14" />
-                <Image  Width="29" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/soccer-ball-icon.png"/>
-            </StackPanel>
-        </Button>
     </Grid>
 </UserControl>

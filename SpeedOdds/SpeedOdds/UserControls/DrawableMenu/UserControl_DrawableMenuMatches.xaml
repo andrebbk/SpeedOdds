@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="SpeedOdds.UserControls.DrawableMenu.UserControl_DrawableMenuMatches"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SpeedOdds.UserControls.DrawableMenu"
+             xmlns:wpfx="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" 
+             Width="342" Height="458">
+    <Grid>
+        <!--FILTERS-->
+        <ComboBox x:Name="ComboBoxCompetition" HorizontalAlignment="Left" Margin="31,80,0,0" VerticalAlignment="Top" Width="294" FontSize="18" Background="{x:Null}" Foreground="#FF1B1A1A"
+            ItemsSource="{Binding CompetitionComboModel}" DisplayMemberPath="CompetitionName" SelectionChanged="ComboBoxCompetition_SelectionChanged">
+            <ComboBox.Style>
+                <Style TargetType="{x:Type ComboBox}">
+                    <Style.Triggers>
+                        <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                            <Setter Property="IsDropDownOpen" Value="true" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ComboBox.Style>
+        </ComboBox>
+
+        <wpfx:IntegerUpDown x:Name="TextBoxFixture" FormatString="F0" Margin="31,145,253,280" Value="1"
+                            Increment="1" Maximum="40" Minimum="1" Background="{x:Null}" BorderBrush="{x:Null}" 
+                            Foreground="#FFA09F9F" FontWeight="Bold" FontSize="18"
+                            PreviewKeyDown="InputControlDigits_PreviewKeyDown"/>
+
+        <ComboBox x:Name="ComboBoxTeam" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="230" FontSize="18" Background="{x:Null}" 
+                  Foreground="#FF1B1A1A" DisplayMemberPath="TeamName" Margin="31,221,0,0">
+            <ComboBox.Style>
+                <Style TargetType="{x:Type ComboBox}">
+                    <Style.Triggers>
+                        <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                            <Setter Property="IsDropDownOpen" Value="true" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ComboBox.Style>
+        </ComboBox>
+
+        <!--BUTTONS-->
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonNewGame" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="31,384,0,0" VerticalAlignment="Top" Width="150" Height="44" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonNewGame_Click">
+            <StackPanel Orientation="Horizontal" Width="145" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Gerir Jogos" VerticalAlignment="Center" Margin="7,0,23,0" FontWeight="Normal" FontSize="14" />
+                <Image  Width="29" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/seasons_icon.png"/>
+            </StackPanel>
+        </Button>
+        <TextBlock x:Name="Label_Filter" HorizontalAlignment="Left" Margin="10,20,0,0" TextWrapping="Wrap" Text="Filtros" VerticalAlignment="Top" FontSize="18" Width="86" FontWeight="Bold" Foreground="#FFA09F9F" RenderTransformOrigin="0.529,0.773"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,348,0,0" TextWrapping="Wrap" Text="Opções" VerticalAlignment="Top" FontSize="18" Width="86" FontWeight="Bold" Foreground="#FFA09F9F"/>
+        <TextBlock x:Name="Label_Filter_Copy" HorizontalAlignment="Left" Margin="31,59,0,0" TextWrapping="Wrap" Text="Competição:" VerticalAlignment="Top" Width="86" Foreground="#FFA09F9F" RenderTransformOrigin="0.529,0.773"/>
+        <TextBlock x:Name="Label_Filter_Copy1" HorizontalAlignment="Left" Margin="31,124,0,0" TextWrapping="Wrap" Text="Jornada:" VerticalAlignment="Top" Width="86" Foreground="#FFA09F9F" RenderTransformOrigin="0.529,0.773"/>
+        <TextBlock x:Name="Label_Filter_Copy2" HorizontalAlignment="Left" Margin="31,198,0,0" TextWrapping="Wrap" Text="Equipa:" VerticalAlignment="Top" Width="86" Foreground="#FFA09F9F" RenderTransformOrigin="0.529,0.773"/>
+        
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonApplyFilters" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="31,272,0,0" VerticalAlignment="Top" Width="150" Height="44" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonApplyFilters_Click">
+            <StackPanel Orientation="Horizontal" Width="145" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Mostrar Jogos" VerticalAlignment="Center" Margin="7,0,12,0" FontWeight="Normal" FontSize="14" />
+                <Image  Width="29" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/whistle-grey.png"/>
+            </StackPanel>
+        </Button>
+    </Grid>
+</UserControl>
