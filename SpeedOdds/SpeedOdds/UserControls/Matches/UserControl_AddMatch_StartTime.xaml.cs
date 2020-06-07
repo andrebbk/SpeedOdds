@@ -146,7 +146,7 @@ namespace SpeedOdds.UserControls.Matches
             if (tList != null && tList.Count() > 0 && mList != null && mList.Count() > 0)
             {
                 int idx = 1;
-                foreach (var itemMatch in mList)
+                foreach (var itemMatch in mList.OrderBy(x => x.MatchId))
                 {
                     MatchesModel match = new MatchesModel()
                     {
@@ -161,7 +161,7 @@ namespace SpeedOdds.UserControls.Matches
                         OddsHome = itemMatch.HomeOdd,
                         OddsDraw = itemMatch.DrawOdd,
                         OddsAway = itemMatch.AwayOdd,
-                        ButtonRemoveVisibility = Visibility.Hidden
+                        ButtonRemoveVisibility = Visibility.Visible
                     };
 
                     //Fill Teams
@@ -512,6 +512,16 @@ namespace SpeedOdds.UserControls.Matches
 
                     new Thread(() =>
                     {
+                        if (item.MatchId.HasValue)
+                        {
+                            if (!matchService.RemoveMatch(item.MatchId.Value))
+                            {
+                                NotificationHelper.notifier.ShowCustomMessage("Erro ao remover jogo nº " + item.MatchViewId.ToString() + "!");
+                                UtilsNotification.StopLoadingAnimation();
+                                return;
+                            }
+                        }
+                        
                         Application.Current.Dispatcher.BeginInvoke((Action)(() => {
                             matchItems.Remove(item);
 

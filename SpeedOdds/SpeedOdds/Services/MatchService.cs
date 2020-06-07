@@ -97,8 +97,8 @@ namespace SpeedOdds.Services
             {
                 using (var db = new SpeedOddsContext())
                 {
-                    var query = db.Matches.OrderByDescending(x => x.CompetitionId == compId && x.FixtureId == fixId)
-                        .ThenByDescending(x => x.MatchId)
+                    var query = db.Matches.Where(x => x.CompetitionId == compId && x.FixtureId == fixId)
+                        .OrderBy(x => x.MatchId)
                         .ToList();
 
                     if (query != null)
@@ -114,6 +114,34 @@ namespace SpeedOdds.Services
                 Console.WriteLine(ex.Message);
 
                 return null;
+            }
+        }
+
+        public bool RemoveMatch(int matchId)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var match = db.Matches.Where(x => x.MatchId == matchId).FirstOrDefault();
+
+                    if (match != null)
+                    {
+                        db.Matches.Remove(match);
+                        db.SaveChanges();
+                        return true;
+                    }
+
+                    return false;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error removing match from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+
+                return false;
             }
         }
     }
