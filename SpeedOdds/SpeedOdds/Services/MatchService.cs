@@ -26,6 +26,9 @@ namespace SpeedOdds.Services
                         jogo = db.Matches.Where(x => x.MatchId == model.MatchId).FirstOrDefault();
                         if(jogo != null)
                         {
+                            jogo.Order = model.Order;
+                            jogo.HomeTeamId = model.HomeTeamId;
+                            jogo.AwayTeamId = model.AwayTeamId;
                             jogo.HomeGoals = model.HomeGoals;
                             jogo.AwayGoals = model.AwayGoals;
                             jogo.HomeOdd = model.OddsHome;
@@ -47,6 +50,7 @@ namespace SpeedOdds.Services
                         {
                             CompetitionId = model.CompetitionId,
                             FixtureId = model.FixtureId,
+                            Order = model.Order,
                             HomeTeamId = model.HomeTeamId,
                             AwayTeamId = model.AwayTeamId,
                             HomeGoals = model.HomeGoals,

@@ -60,7 +60,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Width="70" Binding="{Binding MatchViewId}" CanUserResize="False"/>
+                <DataGridTextColumn Header="ID" Width="70" Binding="{Binding Order}" CanUserResize="False"/>
                 <DataGridTextColumn Header="Equipa Casa" Width="250" Binding="{Binding HomeTeam}" CanUserResize="False"/>
                 <DataGridTextColumn Header="Equipa Fora" Width="250" Binding="{Binding AwayTeam}" CanUserResize="False"/>
 

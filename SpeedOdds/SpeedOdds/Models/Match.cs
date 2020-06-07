@@ -16,6 +16,8 @@ namespace SpeedOdds.Models
 
         public int FixtureId { get; set; }
 
+        public int Order { get; set; }
+
         public int HomeTeamId { get; set; }
 
         public int AwayTeamId { get; set; }

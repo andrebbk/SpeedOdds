@@ -68,14 +68,14 @@ namespace SpeedOdds.UserControls.Matches
             }
         }
 
-        private int matchViewId;
-        public int MatchViewId
+        private int order;
+        public int Order
         {
-            get { return matchViewId; }
+            get { return order; }
             set
             {
-                matchViewId = value;
-                OnPropertyChanged("MatchViewId");
+                order = value;
+                OnPropertyChanged("Order");
             }
         }
 

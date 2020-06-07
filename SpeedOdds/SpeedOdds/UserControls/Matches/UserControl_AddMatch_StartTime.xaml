@@ -60,13 +60,14 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Width="70" Binding="{Binding MatchViewId}" CanUserResize="False"/>
+                <DataGridTextColumn Header="ID" Width="70" Binding="{Binding Order}" CanUserResize="False"/>
 
                 <DataGridTemplateColumn Header="Equipa Casa" Width="250" CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ComboBox x:Name="ComboBoxHomeTeam" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="230" FontSize="18" Background="{x:Null}" Foreground="#FF1B1A1A"
-                                      ItemsSource="{Binding TeamsList}" DisplayMemberPath="TeamName" SelectedItem="{Binding HomeTeamId, UpdateSourceTrigger=PropertyChanged}" 
+                                      ItemsSource="{Binding TeamsList}" DisplayMemberPath="TeamName" 
+                                      SelectedItem="{Binding HomeTeamId, UpdateSourceTrigger=PropertyChanged}"
                                       SelectedIndex="{Binding HomeTeamId, UpdateSourceTrigger=PropertyChanged}">
                                 <ComboBox.Style>
                                     <Style TargetType="{x:Type ComboBox}">
@@ -85,7 +86,8 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ComboBox x:Name="ComboBoxAwayTeam" HorizontalAlignment="Left" VerticalAlignment="Top" Width="230" FontSize="18" Background="{x:Null}" Foreground="#FF1B1A1A"
-                                      ItemsSource="{Binding TeamsList}" DisplayMemberPath="TeamName" SelectedItem="{Binding AwayTeamId, UpdateSourceTrigger=PropertyChanged}" 
+                                      ItemsSource="{Binding TeamsList}" DisplayMemberPath="TeamName" 
+                                      SelectedItem="{Binding AwayTeamId, UpdateSourceTrigger=PropertyChanged}" 
                                       SelectedIndex="{Binding AwayTeamId, UpdateSourceTrigger=PropertyChanged}">
                                 <ComboBox.Style>
                                     <Style TargetType="{x:Type ComboBox}">

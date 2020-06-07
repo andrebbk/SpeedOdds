@@ -126,11 +126,11 @@ namespace SpeedOdds.UserControls.Matches
             if (tList != null && tList.Count() > 0 && mList != null && mList.Count() > 0)
             {
                 int idx = 1;
-                foreach (var itemMatch in mList.OrderBy(x => x.MatchId))
+                foreach (var itemMatch in mList.OrderBy(x => x.Order))
                 {
                     MatchesHFModel match = new MatchesHFModel()
                     {
-                        MatchViewId = idx,
+                        Order = idx,
                         MatchId = itemMatch.MatchId,
                         HomeTeamId = itemMatch.HomeTeamId,
                         HomeTeam = teamService.GetTeamName(itemMatch.HomeTeamId),
@@ -292,13 +292,13 @@ namespace SpeedOdds.UserControls.Matches
                 //VALIDATIONS
                 if (item.HomeTeamId == 0)
                 {
-                    NotificationHelper.notifier.ShowCustomMessage("No jogo nº " + item.MatchViewId.ToString() +
+                    NotificationHelper.notifier.ShowCustomMessage("No jogo nº " + item.Order.ToString() +
                                 " falta selecionar a equipa de casa");
                     return;
                 }
                 else if (item.AwayTeamId == 0)
                 {
-                    NotificationHelper.notifier.ShowCustomMessage("No jogo nº " + item.MatchViewId.ToString() +
+                    NotificationHelper.notifier.ShowCustomMessage("No jogo nº " + item.Order.ToString() +
                                 " falta selecionar a equipa de fora");
                     return;
                 }
@@ -319,10 +319,10 @@ namespace SpeedOdds.UserControls.Matches
 
                         string opType = resultado == Commons.OperationTypeValues.Create ? "registada" :
                             resultado == Commons.OperationTypeValues.Edit ? "editada" : "inalterada (erro)";
-                        NotificationHelper.notifier.ShowCustomMessage("2ª parte do jogo nº " + item.MatchViewId + " foi " + opType + " com sucesso!");
+                        NotificationHelper.notifier.ShowCustomMessage("2ª parte do jogo nº " + item.Order + " foi " + opType + " com sucesso!");
                     }
                     else
-                        NotificationHelper.notifier.ShowCustomMessage("Ocorreu um erro ao registar a 2ª parte do jogo nº " + item.MatchViewId);
+                        NotificationHelper.notifier.ShowCustomMessage("Ocorreu um erro ao registar a 2ª parte do jogo nº " + item.Order);
 
                     UnlockAddMatchesUI();
                     UtilsNotification.StopLoadingAnimation();
@@ -349,14 +349,14 @@ namespace SpeedOdds.UserControls.Matches
                 foreach (var item in DataGridTeams.ItemsSource)
                     if (((MatchesHFModel)item).HomeTeamId == 0)
                     {
-                        matchId = ((MatchesHFModel)item).MatchViewId;
+                        matchId = ((MatchesHFModel)item).Order;
                         teamSide = 0;
                         teamsValid = false;
                         break;
                     }
                     else if (((MatchesHFModel)item).AwayTeamId == 0)
                     {
-                        matchId = ((MatchesHFModel)item).MatchViewId;
+                        matchId = ((MatchesHFModel)item).Order;
                         teamSide = 1;
                         teamsValid = false;
                         break;
@@ -387,10 +387,10 @@ namespace SpeedOdds.UserControls.Matches
 
                             string opType = resultado == Commons.OperationTypeValues.Create ? "registada" :
                             resultado == Commons.OperationTypeValues.Edit ? "editada" : "inalterada (erro)";
-                            NotificationHelper.notifier.ShowCustomMessage("2ª parte do jogo nº " + item.MatchViewId + " foi " + opType + " com sucesso!");
+                            NotificationHelper.notifier.ShowCustomMessage("2ª parte do jogo nº " + item.Order + " foi " + opType + " com sucesso!");
                         }
                         else
-                            NotificationHelper.notifier.ShowCustomMessage("Ocorreu um erro ao registar a 2ª parte do jogo nº " + item.MatchViewId);
+                            NotificationHelper.notifier.ShowCustomMessage("Ocorreu um erro ao registar a 2ª parte do jogo nº " + item.Order);
 
                         Thread.Sleep(300);
                     }
@@ -550,14 +550,14 @@ namespace SpeedOdds.UserControls.Matches
             }
         }
 
-        private int matchViewId;
-        public int MatchViewId
+        private int order;
+        public int Order
         {
-            get { return matchViewId; }
+            get { return order; }
             set
             {
-                matchViewId = value;
-                OnPropertyChanged("MatchViewId");
+                order = value;
+                OnPropertyChanged("Order");
             }
         }
 

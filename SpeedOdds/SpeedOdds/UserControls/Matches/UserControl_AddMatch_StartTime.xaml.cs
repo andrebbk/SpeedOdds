@@ -118,7 +118,9 @@ namespace SpeedOdds.UserControls.Matches
                 {
                     MatchesModel newMatch = new MatchesModel()
                     {
-                        MatchViewId = i,
+                        Order = i,
+                        HomeTeamId = 0,
+                        AwayTeamId = 0,
                         HomeGoals = 0,
                         AwayGoals = 0,
                         OddsHome = (decimal)1.5,
@@ -146,17 +148,15 @@ namespace SpeedOdds.UserControls.Matches
             if (tList != null && tList.Count() > 0 && mList != null && mList.Count() > 0)
             {
                 int idx = 1;
-                foreach (var itemMatch in mList.OrderBy(x => x.MatchId))
+                foreach (var itemMatch in mList.OrderBy(x => x.Order))
                 {
                     MatchesModel match = new MatchesModel()
                     {
-                        MatchViewId = idx,
+                        Order = idx,
                         MatchId = itemMatch.MatchId,
                         CompetitionId = itemMatch.CompetitionId,
                         FixtureId = itemMatch.FixtureId,
-                        HomeTeamId = itemMatch.HomeTeamId,
                         HomeGoals = itemMatch.HomeGoals,
-                        AwayTeamId = itemMatch.AwayTeamId,
                         AwayGoals = itemMatch.AwayGoals,
                         OddsHome = itemMatch.HomeOdd,
                         OddsDraw = itemMatch.DrawOdd,
@@ -167,6 +167,10 @@ namespace SpeedOdds.UserControls.Matches
                     //Fill Teams
                     if (tList != null && tList.Count() > 0)
                         foreach (var item in tList) match.TeamsList.Add(new TeamComboModel() { TeamId = item.TeamId, TeamName = item.Name });
+
+                    //Select teams
+                    match.HomeTeamId = match.TeamsList.IndexOf(match.TeamsList.Where(x => x.TeamId == itemMatch.HomeTeamId).FirstOrDefault());
+                    match.AwayTeamId = match.TeamsList.IndexOf(match.TeamsList.Where(x => x.TeamId == itemMatch.AwayTeamId).FirstOrDefault());
 
                     matchItems.Add(match);
                     idx++;
@@ -327,13 +331,13 @@ namespace SpeedOdds.UserControls.Matches
                 //VALIDATIONS
                 if (item.HomeTeamId == 0)
                 {
-                    NotificationHelper.notifier.ShowCustomMessage("No jogo nº " + item.MatchViewId.ToString() +
+                    NotificationHelper.notifier.ShowCustomMessage("No jogo nº " + item.Order.ToString() +
                                 " falta selecionar a equipa de casa");
                     return;
                 }
                 else if (item.AwayTeamId == 0)
                 {
-                    NotificationHelper.notifier.ShowCustomMessage("No jogo nº " + item.MatchViewId.ToString() +
+                    NotificationHelper.notifier.ShowCustomMessage("No jogo nº " + item.Order.ToString() +
                                 " falta selecionar a equipa de fora");
                     return;
                 }
@@ -351,6 +355,8 @@ namespace SpeedOdds.UserControls.Matches
                 //Load necessary data
                 item.CompetitionId = comboBoxCompetionId;
                 item.FixtureId = numericBoxFixtureId;
+                item.HomeTeamId = item.TeamsList[item.HomeTeamId].TeamId;
+                item.AwayTeamId = item.TeamsList[item.AwayTeamId].TeamId;
 
                 new Thread(() =>
                 {
@@ -370,10 +376,10 @@ namespace SpeedOdds.UserControls.Matches
 
                         string opType = resultado.Item2 == Commons.OperationTypeValues.Create ? "registado" :
                             resultado.Item2 == Commons.OperationTypeValues.Edit ? "editado" : "inalterado (erro)";
-                        NotificationHelper.notifier.ShowCustomMessage("O jogo nº " + item.MatchViewId + " foi " + opType + " com sucesso!");
+                        NotificationHelper.notifier.ShowCustomMessage("O jogo nº " + item.Order + " foi " + opType + " com sucesso!");
                     }
                     else
-                        NotificationHelper.notifier.ShowCustomMessage("Ocorreu um erro ao registar o jogo nº " + item.MatchViewId);
+                        NotificationHelper.notifier.ShowCustomMessage("Ocorreu um erro ao registar o jogo nº " + item.Order);
 
                     UnlockAddMatchesUI();
                     UtilsNotification.StopLoadingAnimation();
@@ -386,7 +392,7 @@ namespace SpeedOdds.UserControls.Matches
         {
             //hold temp values
             int nRows = 0;
-            int matchId = 0;
+            int order = 0;
             int teamSide = 0;
             bool teamsValid = true;
 
@@ -400,14 +406,14 @@ namespace SpeedOdds.UserControls.Matches
                 foreach (var item in DataGridTeams.ItemsSource)
                     if (((MatchesModel)item).HomeTeamId == 0)
                     {
-                        matchId = ((MatchesModel)item).MatchViewId;
+                        order = ((MatchesModel)item).Order;
                         teamSide = 0;
                         teamsValid = false;
                         break;
                     }
                     else if (((MatchesModel)item).AwayTeamId == 0)
                     {
-                        matchId = ((MatchesModel)item).MatchViewId;
+                        order = ((MatchesModel)item).Order;
                         teamSide = 1;
                         teamsValid = false;
                         break;
@@ -419,7 +425,7 @@ namespace SpeedOdds.UserControls.Matches
 
             new Thread(() =>
             {
-                if (IsMatchesListValid(nRows, teamsValid, teamSide, matchId))
+                if (IsMatchesListValid(nRows, teamsValid, teamSide, order))
                 {
                     LockAddMatchesUI();
                     UIRestartProcess();
@@ -430,6 +436,8 @@ namespace SpeedOdds.UserControls.Matches
                         //Load necessary data
                         item.CompetitionId = comboBoxCompetionId;
                         item.FixtureId = numericBoxFixtureId;
+                        item.HomeTeamId = item.TeamsList[item.HomeTeamId].TeamId;
+                        item.AwayTeamId = item.TeamsList[item.AwayTeamId].TeamId;
 
                         //save data
                         var resultado = matchService.CreateOrUpdateMatch(item);
@@ -444,10 +452,10 @@ namespace SpeedOdds.UserControls.Matches
 
                             string opType = resultado.Item2 == Commons.OperationTypeValues.Create ? "registado" :
                                 resultado.Item2 == Commons.OperationTypeValues.Edit ? "editado" : "inalterado (erro)";
-                            NotificationHelper.notifier.ShowCustomMessage("O jogo nº " + item.MatchViewId + " foi " + opType + " com sucesso!");
+                            NotificationHelper.notifier.ShowCustomMessage("O jogo nº " + item.Order + " foi " + opType + " com sucesso!");
                         }
                         else
-                            NotificationHelper.notifier.ShowCustomMessage("Ocorreu um erro ao registar o jogo nº " + item.MatchViewId);                        
+                            NotificationHelper.notifier.ShowCustomMessage("Ocorreu um erro ao registar o jogo nº " + item.Order);                        
 
                         Thread.Sleep(300);
                     }
@@ -472,7 +480,9 @@ namespace SpeedOdds.UserControls.Matches
 
                 MatchesModel newMatch = new MatchesModel()
                 {
-                    MatchViewId = matchItems.Count() + 1,
+                    Order = matchItems.Count() + 1,
+                    HomeTeamId = 0,
+                    AwayTeamId = 0,
                     HomeGoals = 0,
                     AwayGoals = 0,
                     OddsHome = (decimal)1.5,
@@ -507,7 +517,7 @@ namespace SpeedOdds.UserControls.Matches
             if (item != null)
             {
                 ConfirmationWindow _popupConfirmation = new ConfirmationWindow("Tens a certeza que pretendes remover o jogo nº "
-                    + item.MatchViewId.ToString());
+                    + item.Order.ToString());
                 if (_popupConfirmation.ShowDialog() == true)
                 {
                     int nRows = 0;
@@ -525,7 +535,7 @@ namespace SpeedOdds.UserControls.Matches
                         {
                             if (!matchService.RemoveMatch(item.MatchId.Value))
                             {
-                                NotificationHelper.notifier.ShowCustomMessage("Erro ao remover jogo nº " + item.MatchViewId.ToString() + "!");
+                                NotificationHelper.notifier.ShowCustomMessage("Erro ao remover jogo nº " + item.Order.ToString() + "!");
                                 UtilsNotification.StopLoadingAnimation();
                                 return;
                             }
@@ -535,10 +545,10 @@ namespace SpeedOdds.UserControls.Matches
                             matchItems.Remove(item);
 
                             for (int i = 0; i < (nRows - 1); i++)
-                                matchItems[i].MatchViewId = i + 1;
+                                matchItems[i].Order = i + 1;
                         }));                        
 
-                        NotificationHelper.notifier.ShowCustomMessage("Jogo nº " + item.MatchViewId.ToString() + " removido com sucesso!");
+                        NotificationHelper.notifier.ShowCustomMessage("Jogo nº " + item.Order.ToString() + " removido com sucesso!");
 
                         UtilsNotification.StopLoadingAnimation();
 
@@ -666,8 +676,7 @@ namespace SpeedOdds.UserControls.Matches
                     e.Handled = true;
                     break;
             }
-        }      
-        
+        }
     }   
     
 }
