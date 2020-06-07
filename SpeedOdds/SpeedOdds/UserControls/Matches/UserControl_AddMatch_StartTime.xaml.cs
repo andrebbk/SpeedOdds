@@ -206,6 +206,14 @@ namespace SpeedOdds.UserControls.Matches
             IsUiTeamsLocked = false;
         }
 
+        private void UIRestartProcess()
+        {
+            foreach (var item in matchItems)
+            {
+                if (item.ImageDoneVisibility == Visibility.Visible)
+                    item.ImageDoneVisibility = Visibility.Collapsed;
+            }
+        }
 
 
         //BUTTONS
@@ -414,6 +422,7 @@ namespace SpeedOdds.UserControls.Matches
                 if (IsMatchesListValid(nRows, teamsValid, teamSide, matchId))
                 {
                     LockAddMatchesUI();
+                    UIRestartProcess();
 
                     //Save
                     foreach (var item in matchItems)

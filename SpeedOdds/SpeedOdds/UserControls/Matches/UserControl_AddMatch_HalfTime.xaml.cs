@@ -30,6 +30,7 @@ namespace SpeedOdds.UserControls.Matches
         private UserControl_AddMatches _matchesParent;
         private CompetitionService competitionService;
         private TeamService teamService;
+        private MatchService matchService;
 
         //model
         private ObservableCollection<MatchesHFModel> matchItems;
@@ -47,6 +48,7 @@ namespace SpeedOdds.UserControls.Matches
             _matchesParent = matchesParent;
             competitionService = new CompetitionService();
             teamService = new TeamService();
+            matchService = new MatchService();
             matchItems = new ObservableCollection<MatchesHFModel>();
 
             IniForm();
@@ -113,30 +115,33 @@ namespace SpeedOdds.UserControls.Matches
 
         }
 
-        private void LoadCompetitionDataToGrid()
+        private void LoadMatchesToGrid()
         {
             //GetCompTeams
             var tList = teamService.GetCompetitionTeams(comboBoxCompetionId);
 
-            if (tList != null && tList.Count() > 0)
+            //GetMatches
+            var mList = matchService.GetMatchesByCompetitionFixture(comboBoxCompetionId, numericBoxFixtureId);
+
+            if (tList != null && tList.Count() > 0 && mList != null && mList.Count() > 0)
             {
-                for (int i = 1; i < ((tList.Count() / 2) + 1); i++)
+                int idx = 1;
+                foreach (var itemMatch in mList.OrderBy(x => x.MatchId))
                 {
-                    MatchesHFModel newMatch = new MatchesHFModel()
+                    MatchesHFModel match = new MatchesHFModel()
                     {
-                        MatchViewId = i,
-                        HomeGoals = 0,
-                        AwayGoals = 0,
-                        OddsHome = (decimal)1.5,
-                        OddsDraw = (decimal)1.5,
-                        OddsAway = (decimal)1.5
+                        MatchViewId = idx,
+                        MatchId = itemMatch.MatchId,
+                        HomeTeamId = itemMatch.HomeTeamId,
+                        HomeTeam = teamService.GetTeamName(itemMatch.HomeTeamId),
+                        HomeGoals = itemMatch.HalfHomeGoals.HasValue? itemMatch.HalfHomeGoals.Value : itemMatch.HomeGoals,                        
+                        AwayTeamId = itemMatch.AwayTeamId,
+                        AwayTeam = teamService.GetTeamName(itemMatch.AwayTeamId),
+                        AwayGoals = itemMatch.HalfAwayGoals.HasValue ? itemMatch.HalfAwayGoals.Value : itemMatch.AwayGoals,
                     };
 
-                    //Fill Teams
-                    if (tList != null && tList.Count() > 0)
-                        foreach (var item in tList) newMatch.TeamsList.Add(new TeamComboModel() { TeamId = item.TeamId, TeamName = item.Name });
-
-                    matchItems.Add(newMatch);
+                    matchItems.Add(match);
+                    idx++;
                 }
             }
         }
@@ -152,7 +157,6 @@ namespace SpeedOdds.UserControls.Matches
             }));
             ComboBoxCompetition.Dispatcher.BeginInvoke((Action)(() => ComboBoxCompetition.IsEnabled = false));
             TextBoxFixture.Dispatcher.BeginInvoke((Action)(() => TextBoxFixture.IsEnabled = false));
-            ButtonAddNewGame.Dispatcher.BeginInvoke((Action)(() => ButtonAddNewGame.IsEnabled = false));
             ButtonSaveAllMatches.Dispatcher.BeginInvoke((Action)(() => ButtonSaveAllMatches.IsEnabled = false));
             IsUiTeamsLocked = true;
         }
@@ -168,10 +172,19 @@ namespace SpeedOdds.UserControls.Matches
             }));
             ComboBoxCompetition.Dispatcher.BeginInvoke((Action)(() => ComboBoxCompetition.IsEnabled = true));
             TextBoxFixture.Dispatcher.BeginInvoke((Action)(() => TextBoxFixture.IsEnabled = true));
-            ButtonAddNewGame.Dispatcher.BeginInvoke((Action)(() => ButtonAddNewGame.IsEnabled = true));
             ButtonSaveAllMatches.Dispatcher.BeginInvoke((Action)(() => ButtonSaveAllMatches.IsEnabled = true));
             IsUiTeamsLocked = false;
         }
+
+        private void UIRestartProcess()
+        {
+            foreach (var item in matchItems)
+            {
+                if (item.ImageDoneVisibility == Visibility.Visible)
+                    item.ImageDoneVisibility = Visibility.Collapsed;
+            }
+        }
+
 
 
         //BUTTONS
@@ -181,6 +194,31 @@ namespace SpeedOdds.UserControls.Matches
             if (((CompetitionComboModel)ComboBoxCompetition.SelectedItem).CompetitionId == 0)
             {
                 NotificationHelper.notifier.ShowCustomMessage("Selecione uma competição!");
+                return;
+            }
+
+            int auxFixture = 0;
+            try
+            {
+
+                if (Int32.TryParse(TextBoxFixture.Text, out auxFixture))
+                {
+                    if (auxFixture < 1)
+                    {
+                        NotificationHelper.notifier.ShowCustomMessage("Selecione uma jornada!");
+                        return;
+                    }
+                }
+                else
+                {
+                    NotificationHelper.notifier.ShowCustomMessage("Ocorreu um erro com a jornada!");
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                NotificationHelper.notifier.ShowCustomMessage("Ocorreu um erro com a jornada!");
                 return;
             }
 
@@ -197,9 +235,11 @@ namespace SpeedOdds.UserControls.Matches
                 DataGridTeams.Dispatcher.BeginInvoke((Action)(() => DataGridTeams.ItemsSource = null));
                 matchItems = new ObservableCollection<MatchesHFModel>();
 
-
-                //Logic to fill data grid
-                LoadCompetitionDataToGrid();
+                if (matchService.HasInitialMatchesForCompetitionFixture(comboBoxCompetionId, numericBoxFixtureId))
+                {
+                    //fill data grid with registered matches
+                    LoadMatchesToGrid();
+                }
 
                 if (matchItems.Count() > 0)
                 {
@@ -219,7 +259,6 @@ namespace SpeedOdds.UserControls.Matches
                         //SHOW GRID
                         DataGridTeams.Dispatcher.BeginInvoke((Action)(() => DataGridTeams.Visibility = Visibility.Visible));
                         ButtonSaveAllMatches.Dispatcher.BeginInvoke((Action)(() => ButtonSaveAllMatches.Visibility = Visibility.Visible));
-                        ButtonAddNewGame.Dispatcher.BeginInvoke((Action)(() => ButtonAddNewGame.Visibility = Visibility.Visible));
                     }
 
                     ButtonLoadForm.Dispatcher.BeginInvoke((Action)(() => ButtonLoadForm.Visibility = Visibility.Hidden));
@@ -229,14 +268,13 @@ namespace SpeedOdds.UserControls.Matches
                     //HIDE GRID
                     DataGridTeams.Dispatcher.BeginInvoke((Action)(() => DataGridTeams.Visibility = Visibility.Collapsed));
                     ButtonSaveAllMatches.Dispatcher.BeginInvoke((Action)(() => ButtonSaveAllMatches.Visibility = Visibility.Hidden));
-                    ButtonAddNewGame.Dispatcher.BeginInvoke((Action)(() => ButtonAddNewGame.Visibility = Visibility.Hidden));
 
                     //SHOW INITIAL INFO 
                     ImageLogo.Dispatcher.BeginInvoke((Action)(() => ImageLogo.Visibility = Visibility.Visible));
                     LabelInfo.Dispatcher.BeginInvoke((Action)(() => LabelInfo.Visibility = Visibility.Visible));
                     LabelExtraInfo.Dispatcher.BeginInvoke((Action)(() => LabelExtraInfo.Visibility = Visibility.Visible));
 
-                    NotificationHelper.notifier.ShowCustomMessage("Não existem equipas participantes na competição selecionada!");
+                    NotificationHelper.notifier.ShowCustomMessage("Ainda não foram registados jogos para essa jornada!");
                 }
 
                 UtilsNotification.StopLoadingAnimation();
@@ -251,9 +289,45 @@ namespace SpeedOdds.UserControls.Matches
             MatchesHFModel item = (sender as Button).DataContext as MatchesHFModel;
             if (item != null)
             {
-                item.ButtonSaveVisibility = Visibility.Collapsed;
-                item.ButtonRemoveVisibility = Visibility.Collapsed;
-                item.ImageDoneVisibility = Visibility.Visible;
+                //VALIDATIONS
+                if (item.HomeTeamId == 0)
+                {
+                    NotificationHelper.notifier.ShowCustomMessage("No jogo nº " + item.MatchViewId.ToString() +
+                                " falta selecionar a equipa de casa");
+                    return;
+                }
+                else if (item.AwayTeamId == 0)
+                {
+                    NotificationHelper.notifier.ShowCustomMessage("No jogo nº " + item.MatchViewId.ToString() +
+                                " falta selecionar a equipa de fora");
+                    return;
+                }
+
+                new Thread(() =>
+                {
+                    UtilsNotification.StartLoadingAnimation();
+                    LockAddMatchesUI();
+
+                    //save data
+                    var resultado = matchService.UpdateMatchHalfTime(item.MatchId, item.HomeGoals, item.AwayGoals);
+
+                    if (resultado != Commons.OperationTypeValues.Error)
+                    {
+                        //update model
+                        item.ButtonSaveVisibility = Visibility.Collapsed;
+                        item.ImageDoneVisibility = Visibility.Visible;
+
+                        string opType = resultado == Commons.OperationTypeValues.Create ? "registada" :
+                            resultado == Commons.OperationTypeValues.Edit ? "editada" : "inalterada (erro)";
+                        NotificationHelper.notifier.ShowCustomMessage("2ª parte do jogo nº " + item.MatchViewId + " foi " + opType + " com sucesso!");
+                    }
+                    else
+                        NotificationHelper.notifier.ShowCustomMessage("Ocorreu um erro ao registar a 2ª parte do jogo nº " + item.MatchViewId);
+
+                    UnlockAddMatchesUI();
+                    UtilsNotification.StopLoadingAnimation();
+
+                }).Start();
             }
         }
 
@@ -294,107 +368,41 @@ namespace SpeedOdds.UserControls.Matches
 
             new Thread(() =>
             {
-                /*if (IsMatchesListValid(nRows, teamsValid, teamSide, matchId))
+                if (IsMatchesListValid(nRows, teamsValid, teamSide, matchId))
                 {
-                    
-                }*/
+                    LockAddMatchesUI();
+                    UIRestartProcess();
 
-                //Save
-                LockAddMatchesUI();
-                foreach (var item in matchItems)
-                {
-                    Thread.Sleep(2000);
+                    //Save
+                    foreach (var item in matchItems)
+                    {
+                        //save data
+                        var resultado = matchService.UpdateMatchHalfTime(item.MatchId, item.HomeGoals, item.AwayGoals);
 
-                    item.ButtonSaveVisibility = Visibility.Collapsed;
-                    item.ButtonRemoveVisibility = Visibility.Collapsed;
-                    item.ImageDoneVisibility = Visibility.Visible;
+                        if (resultado != Commons.OperationTypeValues.Error)
+                        {
+                            //update model
+                            item.ButtonSaveVisibility = Visibility.Collapsed;
+                            item.ImageDoneVisibility = Visibility.Visible;
 
-                    Thread.Sleep(1000);
+                            string opType = resultado == Commons.OperationTypeValues.Create ? "registada" :
+                            resultado == Commons.OperationTypeValues.Edit ? "editada" : "inalterada (erro)";
+                            NotificationHelper.notifier.ShowCustomMessage("2ª parte do jogo nº " + item.MatchViewId + " foi " + opType + " com sucesso!");
+                        }
+                        else
+                            NotificationHelper.notifier.ShowCustomMessage("Ocorreu um erro ao registar a 2ª parte do jogo nº " + item.MatchViewId);
+
+                        Thread.Sleep(300);
+                    }
+
+                    NotificationHelper.notifier.ShowCustomMessage("Operação concluída!");
+                    UnlockAddMatchesUI();
                 }
-
-                NotificationHelper.notifier.ShowCustomMessage(matchItems.Count().ToString() + " jogos registados com successo!");
-                UnlockAddMatchesUI();
 
                 UtilsNotification.StopLoadingAnimation();
 
             }).Start();
-        }
-
-        private void ButtonAddNewGame_Click(object sender, RoutedEventArgs e)
-        {
-            int compId = ((CompetitionComboModel)ComboBoxCompetition.SelectedItem).CompetitionId;
-
-            new Thread(() =>
-            {
-                //Get teams
-                var tList = teamService.GetCompetitionTeams(compId);
-
-                MatchesHFModel newMatch = new MatchesHFModel()
-                {
-                    MatchViewId = matchItems.Count() + 1,
-                    HomeGoals = 0,
-                    AwayGoals = 0,
-                    OddsHome = (decimal)1.5,
-                    OddsDraw = (decimal)1.5,
-                    OddsAway = (decimal)1.5
-                };
-
-                if (tList != null && tList.Count() > 0)
-                    foreach (var item in tList) newMatch.TeamsList.Add(new TeamComboModel() { TeamId = item.TeamId, TeamName = item.Name });
-
-                Application.Current.Dispatcher.BeginInvoke((Action)(() => { matchItems.Add(newMatch); }));
-
-                DataGridTeams.Dispatcher.BeginInvoke((Action)(() =>
-                {
-                    var border = VisualTreeHelper.GetChild(DataGridTeams, 0) as Decorator;
-                    if (border != null)
-                    {
-                        var scroll = border.Child as ScrollViewer;
-                        if (scroll != null) scroll.ScrollToEnd();
-                    }
-                }));
-
-            }).Start();
-        }
-
-        private void ButtonRemoveSingleMatch_Click(object sender, RoutedEventArgs e)
-        {
-            if (IsUiTeamsLocked)
-                return;
-
-            MatchesHFModel item = (sender as Button).DataContext as MatchesHFModel;
-            if (item != null)
-            {
-                ConfirmationWindow _popupConfirmation = new ConfirmationWindow("Tens a certeza que pretendes remover o jogo nº "
-                    + item.MatchViewId.ToString());
-                if (_popupConfirmation.ShowDialog() == true)
-                {
-                    int nRows = 0;
-                    UtilsNotification.StartLoadingAnimation();
-
-                    Thread thread = new System.Threading.Thread(() => {
-                        nRows = DataGridTeams.ItemsSource.OfType<object>().Count();
-                    });
-                    thread.Start();
-                    thread.Join();
-
-                    new Thread(() =>
-                    {
-                        Application.Current.Dispatcher.BeginInvoke((Action)(() => {
-                            matchItems.Remove(item);
-
-                            for (int i = 0; i < (nRows - 1); i++)
-                                matchItems[i].MatchViewId = i + 1;
-                        }));
-
-                        NotificationHelper.notifier.ShowCustomMessage("Jogo nº " + item.MatchViewId.ToString() + " removido com sucesso!");
-
-                        UtilsNotification.StopLoadingAnimation();
-
-                    }).Start();
-                }
-            }
-        }
+        }               
 
 
         //EVENT VALIDATIONS
@@ -524,23 +532,22 @@ namespace SpeedOdds.UserControls.Matches
             homeTeamId = 0;
             awayTeamId = 0;
 
-            teamsList = new ObservableCollection<TeamComboModel>();
-            teamsList.Add(new TeamComboModel()
-            {
-                TeamId = 0,
-                TeamName = "Selecionar Equipa"
-            });
-
             homeGoals = 0;
             awayGoals = 0;
 
-            oddsHome = 0;
-            oddsDraw = 0;
-            oddsAway = 0;
-
             ButtonSaveVisibility = Visibility.Visible;
-            ButtonRemoveVisibility = Visibility.Visible;
             ImageDoneVisibility = Visibility.Collapsed;
+        }
+
+        private int matchId;
+        public int MatchId
+        {
+            get { return matchId; }
+            set
+            {
+                matchId = value;
+                OnPropertyChanged("MatchId");
+            }
         }
 
         private int matchViewId;
@@ -565,6 +572,17 @@ namespace SpeedOdds.UserControls.Matches
             }
         }
 
+        private string homeTeam;
+        public string HomeTeam
+        {
+            get { return homeTeam; }
+            set
+            {
+                homeTeam = value;
+                OnPropertyChanged("HomeTeam");
+            }
+        }
+
         private int awayTeamId;
         public int AwayTeamId
         {
@@ -576,14 +594,14 @@ namespace SpeedOdds.UserControls.Matches
             }
         }
 
-        private ObservableCollection<TeamComboModel> teamsList;
-        public ObservableCollection<TeamComboModel> TeamsList
+        private string awayTeam;
+        public string AwayTeam
         {
-            get { return teamsList; }
+            get { return awayTeam; }
             set
             {
-                teamsList = value;
-                OnPropertyChanged("TeamsList");
+                awayTeam = value;
+                OnPropertyChanged("AwayTeam");
             }
         }
 
@@ -607,40 +625,7 @@ namespace SpeedOdds.UserControls.Matches
                 awayGoals = value;
                 OnPropertyChanged("AwayGoals");
             }
-        }
-
-        private decimal oddsHome;
-        public decimal OddsHome
-        {
-            get { return oddsHome; }
-            set
-            {
-                oddsHome = value;
-                OnPropertyChanged("OddsHome");
-            }
-        }
-
-        private decimal oddsDraw;
-        public decimal OddsDraw
-        {
-            get { return oddsDraw; }
-            set
-            {
-                oddsDraw = value;
-                OnPropertyChanged("OddsDraw");
-            }
-        }
-
-        private decimal oddsAway;
-        public decimal OddsAway
-        {
-            get { return oddsAway; }
-            set
-            {
-                oddsAway = value;
-                OnPropertyChanged("OddsAway");
-            }
-        }
+        } 
 
         private Visibility buttonSaveVisibility;
         public Visibility ButtonSaveVisibility
@@ -651,18 +636,7 @@ namespace SpeedOdds.UserControls.Matches
                 buttonSaveVisibility = value;
                 OnPropertyChanged("ButtonSaveVisibility");
             }
-        }
-
-        private Visibility buttonRemoveVisibility;
-        public Visibility ButtonRemoveVisibility
-        {
-            get { return buttonRemoveVisibility; }
-            set
-            {
-                buttonRemoveVisibility = value;
-                OnPropertyChanged("ButtonRemoveVisibility");
-            }
-        }
+        } 
 
         private Visibility imageDoneVisibility;
         public Visibility ImageDoneVisibility

@@ -72,6 +72,40 @@ namespace SpeedOdds.Services
             }
         }
 
+        public OperationTypeValues UpdateMatchHalfTime(int matchId, int homeGoals, int awayGoals)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    Match jogo = db.Matches.Where(x => x.MatchId == matchId).FirstOrDefault();
+
+                    if (jogo != null)
+                    {
+                        bool createdNow = jogo.HalfHomeGoals.HasValue ? false : true;
+
+                        jogo.HalfHomeGoals = homeGoals;
+                        jogo.HalfAwayGoals = awayGoals;
+                        jogo.UpdatedDate = DateTime.Now;
+                        db.SaveChanges();
+
+                        if (createdNow)
+                            return OperationTypeValues.Create;
+                        else
+                            return OperationTypeValues.Edit;
+                    }
+
+                    return OperationTypeValues.Error;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error updating match half time -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return OperationTypeValues.Error;
+            }
+        }
+
         public bool HasInitialMatchesForCompetitionFixture(int compId, int fixId)
         {
             try
