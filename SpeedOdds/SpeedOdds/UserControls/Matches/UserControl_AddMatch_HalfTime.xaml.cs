@@ -19,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Xceed.Wpf.Toolkit;
 
 namespace SpeedOdds.UserControls.Matches
 {
@@ -134,10 +135,12 @@ namespace SpeedOdds.UserControls.Matches
                         MatchId = itemMatch.MatchId,
                         HomeTeamId = itemMatch.HomeTeamId,
                         HomeTeam = teamService.GetTeamName(itemMatch.HomeTeamId),
-                        HomeGoals = itemMatch.HalfHomeGoals.HasValue? itemMatch.HalfHomeGoals.Value : itemMatch.HomeGoals,                        
+                        HomeGoals = itemMatch.HalfHomeGoals.HasValue? itemMatch.HalfHomeGoals.Value : itemMatch.HomeGoals,   
+                        MinHomeGoals = itemMatch.HomeGoals,
                         AwayTeamId = itemMatch.AwayTeamId,
                         AwayTeam = teamService.GetTeamName(itemMatch.AwayTeamId),
                         AwayGoals = itemMatch.HalfAwayGoals.HasValue ? itemMatch.HalfAwayGoals.Value : itemMatch.AwayGoals,
+                        MinAwayGoals = itemMatch.AwayGoals,
                     };
 
                     matchItems.Add(match);
@@ -523,6 +526,26 @@ namespace SpeedOdds.UserControls.Matches
                     break;
             }
         }
+
+        private void IntegerUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (((IntegerUpDown)sender).Tag != null)
+            {
+                int nOrder = 0;
+                if (Int32.TryParse(((IntegerUpDown)sender).Tag.ToString(), out nOrder))
+                {
+                    var item = matchItems.Where(x => x.Order == nOrder).FirstOrDefault();
+                    if (item != null)
+                    {
+                        if (item.ButtonSaveVisibility != Visibility.Visible)
+                            item.ButtonSaveVisibility = Visibility.Visible;
+
+                        if (item.ImageDoneVisibility != Visibility.Collapsed)
+                            item.ImageDoneVisibility = Visibility.Collapsed;
+                    }
+                }
+            }
+        }
     }
 
     public class MatchesHFModel : ObservableObject
@@ -616,6 +639,17 @@ namespace SpeedOdds.UserControls.Matches
             }
         }
 
+        private int minHomeGoals;
+        public int MinHomeGoals
+        {
+            get { return minHomeGoals; }
+            set
+            {
+                minHomeGoals = value;
+                OnPropertyChanged("MinHomeGoals");
+            }
+        }
+
         private int awayGoals;
         public int AwayGoals
         {
@@ -625,7 +659,18 @@ namespace SpeedOdds.UserControls.Matches
                 awayGoals = value;
                 OnPropertyChanged("AwayGoals");
             }
-        } 
+        }
+
+        private int minAwayGoals;
+        public int MinAwayGoals
+        {
+            get { return minAwayGoals; }
+            set
+            {
+                minAwayGoals = value;
+                OnPropertyChanged("MinAwayGoals");
+            }
+        }
 
         private Visibility buttonSaveVisibility;
         public Visibility ButtonSaveVisibility

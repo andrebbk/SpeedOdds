@@ -105,45 +105,45 @@
                 <DataGridTemplateColumn Header="FTHG" CanUserResize="False" MaxWidth="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <wpfx:IntegerUpDown x:Name="TextBoxHomeGoals" FormatString="F0" Value="{Binding HomeGoals, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
+                            <wpfx:IntegerUpDown x:Name="TextBoxHomeGoals" Tag="{Binding Order}" FormatString="F0" Value="{Binding HomeGoals, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
                                                 Increment="1" Maximum="50" Minimum="0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#DD171717" FontWeight="Bold" FontSize="18"
-                                                PreviewKeyDown="InputControlDigits_PreviewKeyDown"/>
+                                                PreviewKeyDown="InputControlDigits_PreviewKeyDown" ValueChanged="IntegerUpDown_ValueChanged"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="FTAG" CanUserResize="False" MaxWidth="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <wpfx:IntegerUpDown x:Name="TextBoxAwayGoals" FormatString="F0" Value="{Binding AwayGoals, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
+                            <wpfx:IntegerUpDown x:Name="TextBoxAwayGoals" Tag="{Binding Order}" FormatString="F0" Value="{Binding AwayGoals, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
                                                 Increment="1" Maximum="50" Minimum="0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#DD171717" FontWeight="Bold" FontSize="18"
-                                                PreviewKeyDown="InputControlDigits_PreviewKeyDown"/>
+                                                PreviewKeyDown="InputControlDigits_PreviewKeyDown" ValueChanged="IntegerUpDown_ValueChanged"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="PSH" CanUserResize="False" MaxWidth="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <wpfx:DecimalUpDown x:Name="TextBoxPSH" FormatString="F2" Value="{Binding OddsHome, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
+                            <wpfx:DecimalUpDown x:Name="TextBoxPSH" Tag="{Binding Order}" FormatString="F2" Value="{Binding OddsHome, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
                                 Increment="0.1" Maximum="1000" Minimum="0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#DD171717" FontWeight="Bold" FontSize="18"
-                                                PreviewKeyDown="InputControlDigitsType2_PreviewKeyDown"/>
+                                                PreviewKeyDown="InputControlDigitsType2_PreviewKeyDown" ValueChanged="DecimalUpDown_ValueChanged"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="PSD" CanUserResize="False" MaxWidth="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <wpfx:DecimalUpDown x:Name="TextBoxPSD" FormatString="F2" Value="{Binding OddsDraw, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
+                            <wpfx:DecimalUpDown x:Name="TextBoxPSD" Tag="{Binding Order}" FormatString="F2" Value="{Binding OddsDraw, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
                                 Increment="0.1" Maximum="1000" Minimum="0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#DD171717" FontWeight="Bold" FontSize="18"
-                                                PreviewKeyDown="InputControlDigitsType2_PreviewKeyDown"/>
+                                                PreviewKeyDown="InputControlDigitsType2_PreviewKeyDown" ValueChanged="DecimalUpDown_ValueChanged"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="PSA" CanUserResize="False" MaxWidth="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <wpfx:DecimalUpDown x:Name="TextBoxPSA" FormatString="F2" Value="{Binding OddsAway, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
+                            <wpfx:DecimalUpDown x:Name="TextBoxPSA" Tag="{Binding Order}" FormatString="F2" Value="{Binding OddsAway, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
                                 Increment="0.1" Maximum="1000" Minimum="0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#DD171717" FontWeight="Bold" FontSize="18"
-                                                PreviewKeyDown="InputControlDigitsType2_PreviewKeyDown"/>
+                                                PreviewKeyDown="InputControlDigitsType2_PreviewKeyDown" ValueChanged="DecimalUpDown_ValueChanged"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

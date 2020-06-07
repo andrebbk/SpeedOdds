@@ -67,18 +67,18 @@
                 <DataGridTemplateColumn Header="FTHG" CanUserResize="False" MaxWidth="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <wpfx:IntegerUpDown x:Name="TextBoxHomeGoals" FormatString="F0" Value="{Binding HomeGoals, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
-                                                Increment="1" Maximum="50" Minimum="0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#DD171717" FontWeight="Bold" FontSize="18"
-                                                PreviewKeyDown="InputControlDigits_PreviewKeyDown"/>
+                            <wpfx:IntegerUpDown x:Name="TextBoxHomeGoals" Tag="{Binding Order}" FormatString="F0" Value="{Binding HomeGoals, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
+                                                Increment="1" Maximum="50" Minimum="{Binding MinHomeGoals}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#DD171717" FontWeight="Bold" FontSize="18"
+                                                PreviewKeyDown="InputControlDigits_PreviewKeyDown" ValueChanged="IntegerUpDown_ValueChanged"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="FTAG" CanUserResize="False" MaxWidth="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <wpfx:IntegerUpDown x:Name="TextBoxAwayGoals" FormatString="F0" Value="{Binding AwayGoals, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
-                                                Increment="1" Maximum="50" Minimum="0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#DD171717" FontWeight="Bold" FontSize="18"
-                                                PreviewKeyDown="InputControlDigits_PreviewKeyDown"/>
+                            <wpfx:IntegerUpDown x:Name="TextBoxAwayGoals" Tag="{Binding Order}" FormatString="F0" Value="{Binding AwayGoals, UpdateSourceTrigger=PropertyChanged}" Margin="5, 0, 0, 0"
+                                                Increment="1" Maximum="50" Minimum="{Binding MinAwayGoals}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#DD171717" FontWeight="Bold" FontSize="18"
+                                                PreviewKeyDown="InputControlDigits_PreviewKeyDown" ValueChanged="IntegerUpDown_ValueChanged"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

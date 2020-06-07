@@ -11,6 +11,7 @@ using SpeedOdds.Models.Shared;
 using SpeedOdds.Notifications.CustomMessage;
 using SpeedOdds.Services;
 using SpeedOdds.Windows;
+using Xceed.Wpf.Toolkit;
 
 namespace SpeedOdds.UserControls.Matches
 {
@@ -355,8 +356,10 @@ namespace SpeedOdds.UserControls.Matches
                 //Load necessary data
                 item.CompetitionId = comboBoxCompetionId;
                 item.FixtureId = numericBoxFixtureId;
+                int homeTeamIdAux = item.HomeTeamId;
+                int awayTeamIdAux = item.AwayTeamId;
                 item.HomeTeamId = item.TeamsList[item.HomeTeamId].TeamId;
-                item.AwayTeamId = item.TeamsList[item.AwayTeamId].TeamId;
+                item.AwayTeamId = item.TeamsList[item.AwayTeamId].TeamId;                
 
                 new Thread(() =>
                 {
@@ -373,6 +376,8 @@ namespace SpeedOdds.UserControls.Matches
                         item.ButtonSaveVisibility = Visibility.Collapsed;
                         item.ButtonRemoveVisibility = Visibility.Collapsed;
                         item.ImageDoneVisibility = Visibility.Visible;
+                        item.HomeTeamId = homeTeamIdAux;
+                        item.AwayTeamId = awayTeamIdAux;
 
                         string opType = resultado.Item2 == Commons.OperationTypeValues.Create ? "registado" :
                             resultado.Item2 == Commons.OperationTypeValues.Edit ? "editado" : "inalterado (erro)";
@@ -436,6 +441,8 @@ namespace SpeedOdds.UserControls.Matches
                         //Load necessary data
                         item.CompetitionId = comboBoxCompetionId;
                         item.FixtureId = numericBoxFixtureId;
+                        int homeTeamIdAux = item.HomeTeamId;
+                        int awayTeamIdAux = item.AwayTeamId;
                         item.HomeTeamId = item.TeamsList[item.HomeTeamId].TeamId;
                         item.AwayTeamId = item.TeamsList[item.AwayTeamId].TeamId;
 
@@ -449,6 +456,8 @@ namespace SpeedOdds.UserControls.Matches
                             item.ButtonSaveVisibility = Visibility.Collapsed;
                             item.ButtonRemoveVisibility = Visibility.Collapsed;
                             item.ImageDoneVisibility = Visibility.Visible;
+                            item.HomeTeamId = homeTeamIdAux;
+                            item.AwayTeamId = awayTeamIdAux;
 
                             string opType = resultado.Item2 == Commons.OperationTypeValues.Create ? "registado" :
                                 resultado.Item2 == Commons.OperationTypeValues.Edit ? "editado" : "inalterado (erro)";
@@ -675,6 +684,46 @@ namespace SpeedOdds.UserControls.Matches
                 default:
                     e.Handled = true;
                     break;
+            }
+        }
+
+        private void IntegerUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if(((IntegerUpDown)sender).Tag != null)
+            {
+                int nOrder = 0;
+                if(Int32.TryParse(((IntegerUpDown)sender).Tag.ToString(), out nOrder))
+                {
+                    var item = matchItems.Where(x => x.Order == nOrder).FirstOrDefault();
+                    if(item != null)
+                    {
+                        if (item.ButtonSaveVisibility != Visibility.Visible)
+                            item.ButtonSaveVisibility = Visibility.Visible;
+
+                        if (item.ImageDoneVisibility != Visibility.Collapsed)
+                            item.ImageDoneVisibility = Visibility.Collapsed;
+                    }
+                }
+            }
+        }
+
+        private void DecimalUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (((DecimalUpDown)sender).Tag != null)
+            {
+                int nOrder = 0;
+                if (Int32.TryParse(((DecimalUpDown)sender).Tag.ToString(), out nOrder))
+                {
+                    var item = matchItems.Where(x => x.Order == nOrder).FirstOrDefault();
+                    if (item != null)
+                    {
+                        if (item.ButtonSaveVisibility != Visibility.Visible)
+                            item.ButtonSaveVisibility = Visibility.Visible;
+
+                        if (item.ImageDoneVisibility != Visibility.Collapsed)
+                            item.ImageDoneVisibility = Visibility.Collapsed;
+                    }
+                }
             }
         }
     }   
