@@ -26,7 +26,7 @@ namespace SpeedOdds.Commons.Helpers
 
         public static string GetTipoJogo (decimal psh, decimal psa)
         {
-            if (psh > (decimal)1.5)
+            if (psh < (decimal)1.5)
                 return "H_STRONG_FAV";
             else if (psh >= (decimal)1.5 && psh < (decimal)2)
                 return "H_MEDIUM_FAV";

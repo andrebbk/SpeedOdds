@@ -160,11 +160,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commons\Enums\MatchViewTypeValues.cs" />
     <Compile Include="Commons\Helpers\NotificationHelper.cs" />
     <Compile Include="Commons\Helpers\Utils.cs" />
     <Compile Include="Commons\Helpers\UtilsNotification.cs" />
     <Compile Include="Commons\Helpers\UtilsOddOperations.cs" />
-    <Compile Include="Commons\OperationTypeValues.cs" />
+    <Compile Include="Commons\Enums\OperationTypeValues.cs" />
     <Compile Include="Data\SpeedOddsContext.cs" />
     <Compile Include="Models\Competition.cs" />
     <Compile Include="Models\Match.cs" />
@@ -197,9 +198,6 @@
     <Compile Include="UserControls\DrawableMenu\UserControl_DrawableMenuMatches.xaml.cs">
       <DependentUpon>UserControl_DrawableMenuMatches.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Loading\UserControl_Loading.xaml.cs">
-      <DependentUpon>UserControl_Loading.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\MainContent\UserControl_ControlBox.xaml.cs">
       <DependentUpon>UserControl_ControlBox.xaml</DependentUpon>
     </Compile>
@@ -210,6 +208,7 @@
       <DependentUpon>UserControl_Menu.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Matches\MatchesModel.cs" />
+    <Compile Include="UserControls\Matches\MatchViewModel.cs" />
     <Compile Include="UserControls\Matches\UserControl_AddMatches.xaml.cs">
       <DependentUpon>UserControl_AddMatches.xaml</DependentUpon>
     </Compile>
@@ -245,10 +244,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\DrawableMenu\UserControl_DrawableMenuMatches.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\Loading\UserControl_Loading.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -7,6 +7,54 @@
              xmlns:wpfx="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              Width="342" Height="458">
+    <UserControl.Resources>
+        <ControlTemplate TargetType="CheckBox" x:Key="CbTemplate">
+            <Border Name="BorderCB" CornerRadius="10" BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    Background="Gray"
+                    Height="{TemplateBinding Height}"
+                    Width="{TemplateBinding Width}" MinWidth="40" MinHeight="20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="9*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="9*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" TextAlignment="Center" FontSize="9" VerticalAlignment="Center">✓</TextBlock>
+                    <TextBlock Grid.Column="2" TextAlignment="Center" FontSize="9" VerticalAlignment="Center">✘</TextBlock>
+                    <Ellipse Name="SliderCB" Grid.Column="0" Height="{TemplateBinding Height}" Fill="White" Margin="0 0 20 0" Grid.ColumnSpan="3"></Ellipse>
+                </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+                <EventTrigger RoutedEvent="CheckBox.Checked">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard >
+                                <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="SliderCB" Storyboard.TargetProperty="Margin" BeginTime="00:00:00">
+                                    <SplineThicknessKeyFrame KeyTime="00:00:00" Value="0, 0,20,0" />
+                                    <SplineThicknessKeyFrame KeyTime="00:00:00.4" Value="0, 0,5,0" />
+                                    <SplineThicknessKeyFrame KeyTime="00:00:00.6" Value="20, 0,0,0" />
+                                </ThicknessAnimationUsingKeyFrames>
+                                <ColorAnimation Storyboard.TargetName="BorderCB" Storyboard.TargetProperty="Background.Color" To="OrangeRed" Duration="0:0:0.6"></ColorAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="CheckBox.Unchecked">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="SliderCB" Storyboard.TargetProperty="Margin" BeginTime="00:00:00">
+                                <SplineThicknessKeyFrame KeyTime="00:00:00" Value="20, 0,0,0" />
+                                <SplineThicknessKeyFrame KeyTime="00:00:00.4" Value="0, 0,5,0" />
+                                <SplineThicknessKeyFrame KeyTime="00:00:00.6" Value="0, 0,20,0" />
+                            </ThicknessAnimationUsingKeyFrames>
+                            <ColorAnimation Storyboard.TargetName="BorderCB" Storyboard.TargetProperty="Background.Color" Duration="0:0:0.6"></ColorAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </UserControl.Resources>
     <Grid>
         <!--FILTERS-->
         <ComboBox x:Name="ComboBoxCompetition" HorizontalAlignment="Left" Margin="31,80,0,0" VerticalAlignment="Top" Width="294" FontSize="18" Background="{x:Null}" Foreground="#FF1B1A1A"
@@ -28,7 +76,7 @@
                             PreviewKeyDown="InputControlDigits_PreviewKeyDown"/>
 
         <ComboBox x:Name="ComboBoxTeam" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="230" FontSize="18" Background="{x:Null}" 
-                  Foreground="#FF1B1A1A" DisplayMemberPath="TeamName" Margin="31,221,0,0">
+                  Foreground="#FF1B1A1A" DisplayMemberPath="TeamName" Margin="31,221,0,0" SelectionChanged="ComboBoxTeam_SelectionChanged">
             <ComboBox.Style>
                 <Style TargetType="{x:Type ComboBox}">
                     <Style.Triggers>
@@ -40,6 +88,13 @@
             </ComboBox.Style>
         </ComboBox>
 
+        <TextBlock x:Name="Label_CheckBoxFixtures" HorizontalAlignment="Left" Visibility="Hidden" Margin="125,136,0,0" 
+                   TextWrapping="Wrap" Text="Todas as jornadas" VerticalAlignment="Top" Width="98" Foreground="#FFA09F9F" 
+                   RenderTransformOrigin="0.529,0.773" FontSize="11" />
+        
+        <CheckBox Template="{StaticResource CbTemplate}" x:Name="CheckBoxFilterAllFixtures" Content="Todas as jornadas" HorizontalAlignment="Left" Margin="134,155,0,0" VerticalAlignment="Top" 
+                  Height="20" Width="44" FontSize="14" Foreground="#FFA2A2A2" Visibility="Hidden" Click="CheckBoxFilterAllFixtures_Click" Background="#FF99A6AC" BorderBrush="#FFA1A2A2" RenderTransformOrigin="0.644,0.683"/>
+
         <!--BUTTONS-->
         <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonNewGame" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="31,384,0,0" VerticalAlignment="Top" Width="150" Height="44" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonNewGame_Click">
             <StackPanel Orientation="Horizontal" Width="145" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -47,17 +102,20 @@
                 <Image  Width="29" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/seasons_icon.png"/>
             </StackPanel>
         </Button>
+        
+        
         <TextBlock x:Name="Label_Filter" HorizontalAlignment="Left" Margin="10,20,0,0" TextWrapping="Wrap" Text="Filtros" VerticalAlignment="Top" FontSize="18" Width="86" FontWeight="Bold" Foreground="#FFA09F9F" RenderTransformOrigin="0.529,0.773"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,348,0,0" TextWrapping="Wrap" Text="Opções" VerticalAlignment="Top" FontSize="18" Width="86" FontWeight="Bold" Foreground="#FFA09F9F"/>
         <TextBlock x:Name="Label_Filter_Copy" HorizontalAlignment="Left" Margin="31,59,0,0" TextWrapping="Wrap" Text="Competição:" VerticalAlignment="Top" Width="86" Foreground="#FFA09F9F" RenderTransformOrigin="0.529,0.773"/>
         <TextBlock x:Name="Label_Filter_Copy1" HorizontalAlignment="Left" Margin="31,124,0,0" TextWrapping="Wrap" Text="Jornada:" VerticalAlignment="Top" Width="86" Foreground="#FFA09F9F" RenderTransformOrigin="0.529,0.773"/>
         <TextBlock x:Name="Label_Filter_Copy2" HorizontalAlignment="Left" Margin="31,198,0,0" TextWrapping="Wrap" Text="Equipa:" VerticalAlignment="Top" Width="86" Foreground="#FFA09F9F" RenderTransformOrigin="0.529,0.773"/>
-        
+
         <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonApplyFilters" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="31,272,0,0" VerticalAlignment="Top" Width="150" Height="44" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonApplyFilters_Click">
             <StackPanel Orientation="Horizontal" Width="145" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <TextBlock Text="Mostrar Jogos" VerticalAlignment="Center" Margin="7,0,12,0" FontWeight="Normal" FontSize="14" />
                 <Image  Width="29" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/whistle-grey.png"/>
             </StackPanel>
         </Button>
+                
     </Grid>
 </UserControl>

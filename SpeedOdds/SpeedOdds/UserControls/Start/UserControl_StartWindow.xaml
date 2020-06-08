@@ -14,6 +14,7 @@
                                          FileName="Assets/snap_loaderblack2.json" AutoPlay="True" 
                                          VerticalAlignment="Center" HorizontalAlignment="Center" Height="155" Margin="290,130,293,112" Width="159"/>
 
-        <Label x:Name="LabelWelcome" Content="Bem - Vindo" Margin="252,290,244,47" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="30" FontWeight="Normal" Background="{x:Null}" Foreground="#2c2c2c" Visibility="Hidden"/>
+        <Label x:Name="LabelWelcome" Content="Bem - Vindo" Margin="252,290,244,47" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
+               FontSize="30" FontWeight="Bold" Background="{x:Null}" Foreground="#2c2c2c" Visibility="Hidden"/>
     </Grid>
 </UserControl>

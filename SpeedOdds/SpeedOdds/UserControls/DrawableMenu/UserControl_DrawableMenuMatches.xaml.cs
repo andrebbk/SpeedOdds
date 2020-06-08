@@ -27,13 +27,17 @@ namespace SpeedOdds.UserControls.DrawableMenu
     public partial class UserControl_DrawableMenuMatches : UserControl
     {
         private UserControl_MainContent _mainContent;
+        private UserControl_Matches _parent;
         private CompetitionService competitionService;
         private TeamService teamService;
 
-        public UserControl_DrawableMenuMatches(UserControl_MainContent mainContent)
+        public UserControl_DrawableMenuMatches(UserControl_MainContent mainContent, UserControl_Matches parent)
         {
             InitializeComponent();
             _mainContent = mainContent;
+            _parent = parent;
+            _parent.child = this; //Important to connect both aways
+
             competitionService = new CompetitionService();
             teamService = new TeamService();
 
@@ -67,6 +71,45 @@ namespace SpeedOdds.UserControls.DrawableMenu
         }
 
 
+        //PUBLIC
+        public int? GetCompetitionValue()
+        {
+            if(((CompetitionComboModel)ComboBoxCompetition.SelectedItem) != null)
+            {
+                if(((CompetitionComboModel)ComboBoxCompetition.SelectedItem).CompetitionId != 0)
+                    return ((CompetitionComboModel)ComboBoxCompetition.SelectedItem).CompetitionId;
+            }
+
+            return null;
+        }
+
+        public int? GetFixtureValue()
+        {
+            if (!String.IsNullOrWhiteSpace(TextBoxFixture.Text))
+            {
+                int nFix = 0;
+                if(Int32.TryParse(TextBoxFixture.Text, out nFix))
+                {
+                    return nFix;
+                }
+                
+            }
+
+            return null;
+        }
+
+        public int? GetTeamValue()
+        {
+            if (((TeamComboModel)ComboBoxTeam.SelectedItem) != null)
+            {
+                if(((TeamComboModel)ComboBoxTeam.SelectedItem).TeamId != 0)
+                    return ((TeamComboModel)ComboBoxTeam.SelectedItem).TeamId;
+            }
+
+            return null;
+        }
+
+
         //BUTTONS
         private void ButtonNewGame_Click(object sender, RoutedEventArgs e)
         {
@@ -75,7 +118,7 @@ namespace SpeedOdds.UserControls.DrawableMenu
 
         private void ButtonApplyFilters_Click(object sender, RoutedEventArgs e)
         {
-
+            _parent.LoadGridWithCalculatedMatchesData(GetCompetitionValue(), GetFixtureValue(), GetTeamValue());
         }
 
 
@@ -113,6 +156,7 @@ namespace SpeedOdds.UserControls.DrawableMenu
                         {
                             ComboBoxTeam.Dispatcher.BeginInvoke((Action)(() => ComboBoxTeam.ItemsSource = null));
                             ComboBoxTeam.Dispatcher.BeginInvoke((Action)(() => ComboBoxTeam.IsEnabled = false));
+                            ComboBoxTeam.Dispatcher.BeginInvoke((Action)(() => CheckBoxFilterAllFixtures.Visibility = Visibility.Hidden));
                         }
 
                     }).Start();                    
@@ -157,5 +201,41 @@ namespace SpeedOdds.UserControls.DrawableMenu
                     break;
             }
         }
+
+        private void ComboBoxTeam_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (((TeamComboModel)ComboBoxTeam.SelectedItem) != null)
+            {
+                if (((TeamComboModel)ComboBoxTeam.SelectedItem).TeamId != 0)
+                {
+                    CheckBoxFilterAllFixtures.IsChecked = false;
+                    CheckBoxFilterAllFixtures.Visibility = Visibility.Visible;
+                    Label_CheckBoxFixtures.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    if (TextBoxFixture.Visibility != Visibility.Visible)
+                        TextBoxFixture.Visibility = Visibility.Visible;
+
+                    CheckBoxFilterAllFixtures.Visibility = Visibility.Hidden;
+                    Label_CheckBoxFixtures.Visibility = Visibility.Hidden;
+                    CheckBoxFilterAllFixtures.IsChecked = false;
+                }
+            }
+        }
+
+        private void CheckBoxFilterAllFixtures_Click(object sender, RoutedEventArgs e)
+        {
+            if (CheckBoxFilterAllFixtures.IsChecked.HasValue && CheckBoxFilterAllFixtures.IsChecked.Value)
+            {
+                TextBoxFixture.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                TextBoxFixture.Visibility = Visibility.Visible;
+            }
+        }
+
+        
     }
 }

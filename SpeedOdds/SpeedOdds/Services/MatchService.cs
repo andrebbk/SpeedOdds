@@ -155,6 +155,42 @@ namespace SpeedOdds.Services
             }
         }
 
+        public IEnumerable<Match> GetMatchesFiltered(int compId, int? fixId, int? tmId)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var query = db.Matches.Where(x => x.CompetitionId == compId)
+                        .OrderBy(x => x.MatchId)
+                        .ToList();
+
+                    if(fixId.HasValue)
+                        query = query.Where(x => x.FixtureId == fixId.Value)
+                             .OrderBy(x => x.MatchId)
+                             .ToList();
+
+                    if (tmId.HasValue)
+                        query = query.Where(x => x.HomeTeamId == tmId.Value || x.AwayTeamId == tmId.Value)
+                             .OrderBy(x => x.MatchId)
+                             .ToList();
+
+                    if (query != null)
+                        return query;
+                    else
+                        return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting Matches filtered from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+
+                return null;
+            }
+        }
+
         public bool RemoveMatch(int matchId)
         {
             try

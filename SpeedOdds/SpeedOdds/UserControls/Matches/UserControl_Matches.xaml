@@ -79,10 +79,68 @@
         </Border>
 
         <!--INFO-->
-        <Image x:Name="ImageLogo" HorizontalAlignment="Left" Height="130" Margin="670,262,0,0" VerticalAlignment="Top" Width="132" Source="/SpeedOdds;component/Resources/ImageFiles/Icon/red-icon.png"/>
-        <Label x:Name="LabelInfo" Content="Para visualizar informações de jogos é necessário proceder ao registo prévio dos dados" HorizontalAlignment="Left" Margin="235,432,0,0" VerticalAlignment="Top" Foreground="#DD171717" FontSize="24" FontWeight="Bold"/>
-        <Label x:Name="LabelExtraInfo" Content="(Utiliza o menu lateral, à tua direita, para selecionares os jogos que já registaste)" HorizontalAlignment="Left" Margin="372,472,0,0" VerticalAlignment="Top" Foreground="#DD171717" FontSize="20" Width="713" />
-        
+        <Image x:Name="ImageLogo" HorizontalAlignment="Left" Height="130" Margin="670,262,0,0" VerticalAlignment="Top" Width="132" 
+               Source="/SpeedOdds;component/Resources/ImageFiles/Icon/red-icon.png" Visibility="Collapsed"/>
+        <Label x:Name="LabelInfo" Content="Para visualizar informações de jogos é necessário proceder ao registo prévio dos dados" 
+               HorizontalAlignment="Left" Margin="235,432,0,0" VerticalAlignment="Top" Visibility="Collapsed" Foreground="#DD171717" FontSize="24" FontWeight="Bold"/>
+        <Label x:Name="LabelExtraInfo" Content="(Utiliza o menu lateral, à tua direita, para selecionares os jogos que já registaste)" 
+               HorizontalAlignment="Left" Margin="372,472,0,0" VerticalAlignment="Top" Visibility="Collapsed" Foreground="#DD171717" FontSize="20" Width="713" />
+
         <!--BUTTONS-->
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonAttackDefense" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="79,848,0,0" 
+                VerticalAlignment="Top" Width="181" Height="54" Background="#FFAA4A3B" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
+                Click="ButtonAttackDefense_Click">
+            <StackPanel Orientation="Horizontal" Width="166" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Ataque/ Defesa" VerticalAlignment="Center" Margin="7,0,23,0" FontWeight="Normal" FontSize="14" />
+                <Image  Width="29" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/whistle-grey.png"/>
+            </StackPanel>
+        </Button>
+
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonHalfTime" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="282,848,0,0" 
+                VerticalAlignment="Top" Width="181" Height="54" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
+                Click="ButtonHalfTime_Click">
+            <StackPanel Orientation="Horizontal" Width="166" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Intervalo" VerticalAlignment="Center" Margin="7,0,65,0" FontWeight="Normal" FontSize="14" />
+                <Image  Width="29" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/half_time_light_grey.png"/>
+            </StackPanel>
+        </Button>
+
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonSecondTime" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="485,848,0,0" 
+                VerticalAlignment="Top" Width="180" Height="54" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
+                Click="ButtonSecondTime_Click">
+            <StackPanel Orientation="Horizontal" Width="166" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Segundo Tempo" VerticalAlignment="Center" Margin="7,0,23,0" FontWeight="Normal" FontSize="14" />
+                <Image  Width="29" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/seasons_icon.png"/>
+            </StackPanel>
+        </Button>
+
+        <!--DATA GRID-->
+        <DataGrid x:Name="DataGridMatches" HorizontalAlignment="Left" Height="656" Margin="17,168,0,0" VerticalAlignment="Top" Width="1512" AutoGenerateColumns="False" FontSize="16"
+            IsReadOnly="true" CanUserAddRows="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" SelectionUnit="FullRow" SelectionMode="Single" Background="{x:Null}"
+            Visibility="Collapsed" ItemsSource="{Binding MatchViewModel}">
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background" Value="{Binding BackgroundColorSet}"/>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="50" Binding="{Binding Order}" CanUserResize="False"/>
+                <DataGridTextColumn Header="Equipa Casa" Width="200" Binding="{Binding HomeTeam}" CanUserResize="False"/>
+                <DataGridTextColumn Header="Equipa Fora" Width="200" Binding="{Binding AwayTeam}" CanUserResize="False"/>
+                <DataGridTextColumn Header="Golos Casa" Width="100" Binding="{Binding HomeGoals}" CanUserResize="False"/>
+                <DataGridTextColumn Header="Golos Casa" Width="100" Binding="{Binding AwayGoals}" CanUserResize="False"/>
+                <DataGridTextColumn Header="Resultado" Width="90" Binding="{Binding MatchResult}" CanUserResize="False"/>
+                <DataGridTextColumn Header="CS - FT" Width="70" Binding="{Binding MatchResultCSFT}" CanUserResize="False"/>
+                <DataGridTextColumn Header="PSH" Width="70" Binding="{Binding OddsHome}" CanUserResize="False"/>
+                <DataGridTextColumn Header="PSD" Width="70" Binding="{Binding OddsDraw}" CanUserResize="False"/>
+                <DataGridTextColumn Header="PSA" Width="70" Binding="{Binding OddsAway}" CanUserResize="False"/>
+                <DataGridTextColumn Header="Tipo Jogo" Width="150" Binding="{Binding MatchType}" CanUserResize="False"/>
+                <DataGridTextColumn Header="OVER/ UNDER 0,5" Width="150" Binding="{Binding Over05}" CanUserResize="False"/>
+                <DataGridTextColumn Header="OVER/ UNDER 1,5" Width="150" Binding="{Binding Over15}" CanUserResize="False"/>
+                <DataGridTextColumn Header="OVER/ UNDER 2,5" Width="150" Binding="{Binding Over25}"  CanUserResize="False"/>
+                <DataGridTextColumn Header="BTTS" Width="150" Binding="{Binding Btts}" CanUserResize="False"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <!--DATA GRID-->
     </Grid>
 </UserControl>
