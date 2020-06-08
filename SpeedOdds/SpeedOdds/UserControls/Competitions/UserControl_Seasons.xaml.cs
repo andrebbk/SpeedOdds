@@ -24,13 +24,19 @@ namespace SpeedOdds.UserControls.Competitions
         public UserControl_Seasons(UserControl_MainContent mainContent)
         {
             InitializeComponent();
-            ComboBoxStartYear.IsEnabled = false;
-            ComboBoxEndYear.IsEnabled = false;
-            ButtonSaveSeason.IsEnabled = false;
-            _mainContent = mainContent;
 
-            seasonService = new SeasonService();
-            LoadFormData();
+            new Thread(() =>
+            {
+                UtilsNotification.StartLoadingAnimation();
+
+                ComboBoxStartYear.Dispatcher.BeginInvoke((Action)(() => ComboBoxStartYear.IsEnabled = false));
+                ComboBoxEndYear.Dispatcher.BeginInvoke((Action)(() => ComboBoxEndYear.IsEnabled = false));
+                ButtonSaveSeason.Dispatcher.BeginInvoke((Action)(() => ButtonSaveSeason.IsEnabled = false));
+                _mainContent = mainContent;
+
+                seasonService = new SeasonService();
+                LoadFormData();
+            }).Start();            
         }
 
         private void LoadFormData()

@@ -189,6 +189,9 @@
     <Compile Include="Services\MatchService.cs" />
     <Compile Include="Services\SeasonService.cs" />
     <Compile Include="Services\TeamService.cs" />
+    <Compile Include="UserControls\Begin\UserControl_Begin.xaml.cs">
+      <DependentUpon>UserControl_Begin.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Competitions\UserControl_Competitions.xaml.cs">
       <DependentUpon>UserControl_Competitions.xaml</DependentUpon>
     </Compile>
@@ -234,6 +237,10 @@
     <Page Include="Resources\Buttons\ButtonStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\Begin\UserControl_Begin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\Competitions\UserControl_Competitions.xaml">
       <SubType>Designer</SubType>

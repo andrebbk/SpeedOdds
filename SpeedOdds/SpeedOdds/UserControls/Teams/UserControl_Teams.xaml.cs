@@ -30,15 +30,20 @@ namespace SpeedOdds.UserControls.Teams
         public UserControl_Teams(UserControl_MainContent mainContent)
         {
             InitializeComponent();
-            ComboBoxCompetition.IsEnabled = false;
-            _mainContent = mainContent;
+            new Thread(() =>
+            {
+                UtilsNotification.StartLoadingAnimation();
 
-            teamService = new TeamService();
-            competitionService = new CompetitionService();
+                ComboBoxCompetition.Dispatcher.BeginInvoke((Action)(() => ComboBoxCompetition.IsEnabled = false));
+                _mainContent = mainContent;
 
-            LoadConfigurationForPagination();
-            LoadFormTeams();
-            IniSearchControls();
+                teamService = new TeamService();
+                competitionService = new CompetitionService();
+
+                LoadConfigurationForPagination();
+                LoadFormTeams();
+                IniSearchControls();
+            }).Start();                
         }
 
         private void LoadFormTeams()

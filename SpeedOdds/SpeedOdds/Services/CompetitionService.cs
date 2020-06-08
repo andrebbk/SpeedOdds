@@ -154,6 +154,26 @@ namespace SpeedOdds.Services
             return output;
         }
 
+        public int GetCompetitionsNumber()
+        {
+            int nCompetitions = 0;
+
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    nCompetitions = db.Competitions.Count();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error counting competitions -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+            }
+
+            return nCompetitions;
+        }
+
         public bool RemoveCompetition(int competitionId)
         {
             try

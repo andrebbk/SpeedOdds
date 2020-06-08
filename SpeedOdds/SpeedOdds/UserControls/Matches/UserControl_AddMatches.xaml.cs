@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using SpeedOdds.Commons.Helpers;
 using SpeedOdds.UserControls.MainContent;
 
 namespace SpeedOdds.UserControls.Matches
@@ -20,10 +22,18 @@ namespace SpeedOdds.UserControls.Matches
         public UserControl_AddMatches(UserControl_MainContent mainContent)
         {
             InitializeComponent();
-            _mainContent = mainContent;
+            new Thread(() =>
+            {
+                UtilsNotification.StartLoadingAnimation();
 
-            this.MatchContainer.Content = new UserControl_AddMatch_StartTime(this);
-            ChangeSubTitle("(Ataque/ Defesa)");
+                _mainContent = mainContent;
+
+                MatchContainer.Dispatcher.BeginInvoke((Action)(() => MatchContainer.Content = new UserControl_AddMatch_StartTime(this)));                
+                ChangeSubTitle("(Ataque/ Defesa)");
+
+                UtilsNotification.StopLoadingAnimation();
+            }).Start();
+                
         }
 
         private void ButtonGoBack_MouseDown(object sender, MouseButtonEventArgs e)
@@ -48,7 +58,7 @@ namespace SpeedOdds.UserControls.Matches
 
         public void ChangeSubTitle(string subTitle)
         {
-            TextBoxSubTitle.Text = subTitle.Trim();
+            TextBoxSubTitle.Dispatcher.BeginInvoke((Action)(() => TextBoxSubTitle.Text = subTitle.Trim()));
         }
 
 

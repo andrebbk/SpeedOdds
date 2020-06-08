@@ -126,6 +126,26 @@ namespace SpeedOdds.Services
             return output;
         }
 
+        public int GetSeasonsNumber()
+        {
+            int nSeasons = 0;
+
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    nSeasons = db.Seasons.Count();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error counting season -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+            }
+
+            return nSeasons;
+        }
+
         public bool RemoveSeason(int seasonId)
         {
             try

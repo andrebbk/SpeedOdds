@@ -1,4 +1,5 @@
 ﻿using SpeedOdds.Commons.Helpers;
+using SpeedOdds.UserControls.Begin;
 using SpeedOdds.UserControls.Competitions;
 using SpeedOdds.UserControls.Matches;
 using SpeedOdds.UserControls.Teams;
@@ -39,7 +40,8 @@ namespace SpeedOdds.UserControls.MainContent
 
         private void ButtonHome_Click(object sender, RoutedEventArgs e)
         {
-
+            if (!(_mainContent.WFAPContentContainer.Content is UserControl_Begin))
+                _mainContent.WFAPContentContainer.Content = new UserControl_Begin(_mainContent);
         }
 
         private void ButtonCompetitions_Click(object sender, RoutedEventArgs e)

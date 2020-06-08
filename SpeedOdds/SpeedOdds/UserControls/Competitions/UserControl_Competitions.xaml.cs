@@ -34,14 +34,19 @@ namespace SpeedOdds.UserControls.Competitions
         public UserControl_Competitions(UserControl_MainContent mainContent)
         {
             InitializeComponent();
-            _mainContent = mainContent;
+            new Thread(() =>
+            {
+                UtilsNotification.StartLoadingAnimation();
 
-            ComboBoxSeason.IsEnabled = false;
+                _mainContent = mainContent;
 
-            competitionService = new CompetitionService();
-            seasonService = new SeasonService();
+                ComboBoxSeason.Dispatcher.BeginInvoke((Action)(() => ComboBoxSeason.IsEnabled = false));
 
-            LoadFormCompetitions();
+                competitionService = new CompetitionService();
+                seasonService = new SeasonService();
+
+                LoadFormCompetitions();
+            }).Start();            
         }
 
         private void LoadFormCompetitions()

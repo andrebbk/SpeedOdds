@@ -1,4 +1,5 @@
-﻿using SpeedOdds.Windows;
+﻿using SpeedOdds.UserControls.Begin;
+using SpeedOdds.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,10 @@ namespace SpeedOdds.UserControls.MainContent
 
             //SIDE MENU
             this.MenuContainer.Content = new UserControl_Menu(this);
+
+            //BEGIN
+            if (!(this.WFAPContentContainer.Content is UserControl_Begin))
+                this.WFAPContentContainer.Content = new UserControl_Begin(this);
         }
     }
 }

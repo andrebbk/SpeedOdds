@@ -191,6 +191,26 @@ namespace SpeedOdds.Services
             }
         }
 
+        public int GetMatchesNumber()
+        {
+            int nMatches = 0;
+
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    nMatches = db.Matches.Count();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error counting matches -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+            }
+
+            return nMatches;
+        }
+
         public bool RemoveMatch(int matchId)
         {
             try
