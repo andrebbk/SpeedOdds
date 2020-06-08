@@ -266,13 +266,18 @@ namespace SpeedOdds.UserControls.Teams
                     {
                         UtilsNotification.StartLoadingAnimation();
 
-                        if (teamService.RemoveTeam(item.TeamId))
+                        if (teamService.CanDeleteById(item.TeamId))
                         {
-                            NotificationHelper.notifier.ShowCustomMessage("Equipa removida com sucesso!");
-                            LoadTeamsGrid();
+                            if (teamService.RemoveTeam(item.TeamId))
+                            {
+                                NotificationHelper.notifier.ShowCustomMessage("Equipa removida com sucesso!");
+                                LoadTeamsGrid();
+                            }
+                            else
+                                NotificationHelper.notifier.ShowCustomMessage("Erro ao remover equipa!");
                         }
                         else
-                            NotificationHelper.notifier.ShowCustomMessage("Erro ao remover equipa!");
+                            NotificationHelper.notifier.ShowCustomMessage("Não é possivel eliminar esta equipa!\nContacte o Admin do sistema...");                        
 
                         UtilsNotification.StopLoadingAnimation();
                     }).Start();

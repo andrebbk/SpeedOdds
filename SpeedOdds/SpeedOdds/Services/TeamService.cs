@@ -27,7 +27,26 @@ namespace SpeedOdds.Services
                 return true;
             }
         }
-        
+
+        public bool CanDeleteById(int teamId)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    return !db.Matches.Where(m => m.HomeTeamId == teamId || m.AwayTeamId == teamId).Any();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error checking teams in matches from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+
+                return false;
+            }
+        }
+
         public bool CreateTeam(string name, int competitionId, bool isFavorite)
         {
             try
