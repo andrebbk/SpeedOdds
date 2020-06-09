@@ -219,7 +219,12 @@ namespace SpeedOdds.UserControls.Matches
                             DataGridMatches.Columns[5].Header = "Resultado";
 
                             //VISIBILITY
+                            DataGridMatches.Columns[6].Visibility = Visibility.Visible;
+                            DataGridMatches.Columns[7].Visibility = Visibility.Visible;
+                            DataGridMatches.Columns[8].Visibility = Visibility.Visible;
+                            DataGridMatches.Columns[9].Visibility = Visibility.Visible;
                             DataGridMatches.Columns[11].Visibility = Visibility.Collapsed;
+                            DataGridMatches.Columns[13].Visibility = Visibility.Visible;
                         }));                   
                     }
                     else if (typeMatchView == MatchViewTypeValues.HalfTime)
