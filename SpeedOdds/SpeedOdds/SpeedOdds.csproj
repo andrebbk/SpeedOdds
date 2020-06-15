@@ -201,6 +201,12 @@
     <Compile Include="UserControls\DrawableMenu\UserControl_DrawableMenuMatches.xaml.cs">
       <DependentUpon>UserControl_DrawableMenuMatches.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\DrawableMenu\UserControl_DrawableMenuTeams.xaml.cs">
+      <DependentUpon>UserControl_DrawableMenuTeams.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\HomeAwayTeams\UserControl_HomeAwayTeams.xaml.cs">
+      <DependentUpon>UserControl_HomeAwayTeams.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\MainContent\UserControl_ControlBox.xaml.cs">
       <DependentUpon>UserControl_ControlBox.xaml</DependentUpon>
     </Compile>
@@ -251,6 +257,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\DrawableMenu\UserControl_DrawableMenuMatches.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\DrawableMenu\UserControl_DrawableMenuTeams.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\HomeAwayTeams\UserControl_HomeAwayTeams.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

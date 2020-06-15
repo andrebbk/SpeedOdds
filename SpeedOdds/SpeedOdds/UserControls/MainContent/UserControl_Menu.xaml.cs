@@ -1,6 +1,7 @@
 ﻿using SpeedOdds.Commons.Helpers;
 using SpeedOdds.UserControls.Begin;
 using SpeedOdds.UserControls.Competitions;
+using SpeedOdds.UserControls.HomeAwayTeams;
 using SpeedOdds.UserControls.Matches;
 using SpeedOdds.UserControls.Teams;
 using SpeedOdds.Windows;
@@ -71,6 +72,7 @@ namespace SpeedOdds.UserControls.MainContent
             ButtonTeams.Dispatcher.BeginInvoke((Action)(() => ButtonTeams.IsEnabled = false));
             ButtonMatches.Dispatcher.BeginInvoke((Action)(() => ButtonMatches.IsEnabled = false));
             ButtonRegisterMatches.Dispatcher.BeginInvoke((Action)(() => ButtonRegisterMatches.IsEnabled = false));
+            ButtonHomeAwayTeams.Dispatcher.BeginInvoke((Action)(() => ButtonRegisterMatches.IsEnabled = false));
         }
 
         public void UnlockMenu()
@@ -80,12 +82,19 @@ namespace SpeedOdds.UserControls.MainContent
             ButtonTeams.Dispatcher.BeginInvoke((Action)(() => ButtonTeams.IsEnabled = true));
             ButtonMatches.Dispatcher.BeginInvoke((Action)(() => ButtonMatches.IsEnabled = true));
             ButtonRegisterMatches.Dispatcher.BeginInvoke((Action)(() => ButtonRegisterMatches.IsEnabled = true));
+            ButtonHomeAwayTeams.Dispatcher.BeginInvoke((Action)(() => ButtonRegisterMatches.IsEnabled = true));
         }
 
         private void ButtonRegisterMatches_Click(object sender, RoutedEventArgs e)
         {
             if (!(_mainContent.WFAPContentContainer.Content is UserControl_AddMatches))
                 _mainContent.WFAPContentContainer.Content = new UserControl_AddMatches(_mainContent);
+        }
+
+        private void ButtonHomeAwayTeams_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(_mainContent.WFAPContentContainer.Content is UserControl_HomeAwayTeams))
+                _mainContent.WFAPContentContainer.Content = new UserControl_HomeAwayTeams(_mainContent);
         }
     }
 }
