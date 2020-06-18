@@ -163,6 +163,7 @@
     <Compile Include="Commons\Enums\MatchViewTypeValues.cs" />
     <Compile Include="Commons\Helpers\NotificationHelper.cs" />
     <Compile Include="Commons\Helpers\Utils.cs" />
+    <Compile Include="Commons\Helpers\UtilsDataGrid.cs" />
     <Compile Include="Commons\Helpers\UtilsNotification.cs" />
     <Compile Include="Commons\Helpers\UtilsOddOperations.cs" />
     <Compile Include="Commons\Enums\OperationTypeValues.cs" />
@@ -204,6 +205,7 @@
     <Compile Include="UserControls\DrawableMenu\UserControl_DrawableMenuTeams.xaml.cs">
       <DependentUpon>UserControl_DrawableMenuTeams.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\HomeAwayTeams\HomeAwayTeamViewModel.cs" />
     <Compile Include="UserControls\HomeAwayTeams\UserControl_HomeAwayTeams.xaml.cs">
       <DependentUpon>UserControl_HomeAwayTeams.xaml</DependentUpon>
     </Compile>

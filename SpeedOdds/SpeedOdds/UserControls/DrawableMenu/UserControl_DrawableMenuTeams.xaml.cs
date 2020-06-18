@@ -37,6 +37,7 @@ namespace SpeedOdds.UserControls.DrawableMenu
             InitializeComponent();
             _mainContent = mainContent;
             _parent = parent;
+            _parent.child = this; //Important to connect both aways
             competitionService = new CompetitionService();
             teamService = new TeamService();
             InitFilterForm();
@@ -71,10 +72,34 @@ namespace SpeedOdds.UserControls.DrawableMenu
 
 
 
+        //PUBLIC
+        public int? GetCompetitionValue()
+        {
+            if (((CompetitionComboModel)ComboBoxCompetition.SelectedItem) != null)
+            {
+                if (((CompetitionComboModel)ComboBoxCompetition.SelectedItem).CompetitionId != 0)
+                    return ((CompetitionComboModel)ComboBoxCompetition.SelectedItem).CompetitionId;
+            }
+
+            return null;
+        }
+
+        public int? GetTeamValue()
+        {
+            if (((TeamComboModel)ComboBoxTeam.SelectedItem) != null)
+            {
+                if (((TeamComboModel)ComboBoxTeam.SelectedItem).TeamId != 0)
+                    return ((TeamComboModel)ComboBoxTeam.SelectedItem).TeamId;
+            }
+
+            return null;
+        }
+
+
         //BUTTONS
         private void ButtonApplyFilters_Click(object sender, RoutedEventArgs e)
         {
-            //_parent.LoadGridWithCalculatedMatchesData(GetCompetitionValue(), GetFixtureValue(), GetTeamValue());
+            _parent.LoadGridWithCalculatedMatchesData(GetCompetitionValue(), GetTeamValue());
         }
 
 

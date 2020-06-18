@@ -74,6 +74,42 @@ namespace SpeedOdds.Commons.Helpers
             else
                 return "UNDER 2,5";
         }
-        
+
+
+        //EQUIPAS
+
+        public static string GetPercentage(int n, int total)
+        {
+            return (n / total).ToString("0.0%");
+        }
+
+        public static string GetAverageNonPercentual(int n, int total)
+        {
+            return (n / total).ToString();
+        }
+
+        public static string GetGMGS(int gm, int gs, int total)
+        {
+            return ((gm / total) + (gs / total)).ToString();
+        }
+
+        public static string GetGM_GS(int gm, int gs, int total)
+        {
+            return ((gm / total) - (gs / total)).ToString();
+        }
+
+        public static string GetFatorCasa(int gm, int gs, int total)
+        {
+            return (((gm / total) - (gs / total))/total).ToString("0.0") + "%";
+        }
+
+        public static string GetOdd(int n, int total)
+        {
+            if (n == 0)
+                return "0";
+
+            return (1/((decimal)n / total)).ToString("0");
+        }
+
     }
 }
