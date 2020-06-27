@@ -44,6 +44,8 @@ namespace SpeedOdds.UserControls.Begin
                 teamService = new TeamService();
                 matchService = new MatchService();
 
+                Thread.Sleep(1000);
+
                 TextBoxNSeasons.Dispatcher.BeginInvoke((Action)(() => TextBoxNSeasons.Text = seasonService.GetSeasonsNumber().ToString()));
                 TextBoxNCompetitions.Dispatcher.BeginInvoke((Action)(() => TextBoxNCompetitions.Text = competitionService.GetCompetitionsNumber().ToString()));
                 TextBoxNTeams.Dispatcher.BeginInvoke((Action)(() => TextBoxNTeams.Text = teamService.GetTeamsNumber().ToString()));

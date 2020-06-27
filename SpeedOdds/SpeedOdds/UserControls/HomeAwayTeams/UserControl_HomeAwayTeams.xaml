@@ -163,5 +163,14 @@
                 <Image  Width="29" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/seasons_icon.png"/>
             </StackPanel>
         </Button>
+        
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonMatchType" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="486,848,0,0" 
+            VerticalAlignment="Top" Width="181" Height="54" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
+            Click="ButtonMatchType_Click">
+            <StackPanel Orientation="Horizontal" Width="166" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Tipo Jogo" VerticalAlignment="Center" Margin="7,0,55,0" FontWeight="Normal" FontSize="14" />
+                <Image  Width="29" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/half_time_light_grey.png"/>
+            </StackPanel>
+        </Button>
     </Grid>
 </UserControl>

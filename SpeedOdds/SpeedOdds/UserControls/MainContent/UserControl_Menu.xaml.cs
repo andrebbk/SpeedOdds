@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -37,6 +38,10 @@ namespace SpeedOdds.UserControls.MainContent
             UtilsNotification.MenuController = this;
             UtilsNotification.LoadingLottieAnimationView = LottieAnimationView;
             UtilsNotification.TextBoxLoading = TextBoxLoading;
+
+            //BEGIN
+            if (!(mainContent.WFAPContentContainer.Content is UserControl_Begin))
+                mainContent.WFAPContentContainer.Content = new UserControl_Begin(mainContent);
         }
 
         private void ButtonHome_Click(object sender, RoutedEventArgs e)
@@ -63,28 +68,6 @@ namespace SpeedOdds.UserControls.MainContent
                 _mainContent.WFAPContentContainer.Content = new UserControl_Matches(_mainContent);
         }
 
-
-        //Public Methods
-        public void LockMenu()
-        {
-            ButtonHome.Dispatcher.BeginInvoke((Action)(() => ButtonHome.IsEnabled = false));
-            ButtonCompetitions.Dispatcher.BeginInvoke((Action)(() => ButtonCompetitions.IsEnabled = false));
-            ButtonTeams.Dispatcher.BeginInvoke((Action)(() => ButtonTeams.IsEnabled = false));
-            ButtonMatches.Dispatcher.BeginInvoke((Action)(() => ButtonMatches.IsEnabled = false));
-            ButtonRegisterMatches.Dispatcher.BeginInvoke((Action)(() => ButtonRegisterMatches.IsEnabled = false));
-            ButtonHomeAwayTeams.Dispatcher.BeginInvoke((Action)(() => ButtonRegisterMatches.IsEnabled = false));
-        }
-
-        public void UnlockMenu()
-        {
-            ButtonHome.Dispatcher.BeginInvoke((Action)(() => ButtonHome.IsEnabled = true));
-            ButtonCompetitions.Dispatcher.BeginInvoke((Action)(() => ButtonCompetitions.IsEnabled = true));
-            ButtonTeams.Dispatcher.BeginInvoke((Action)(() => ButtonTeams.IsEnabled = true));
-            ButtonMatches.Dispatcher.BeginInvoke((Action)(() => ButtonMatches.IsEnabled = true));
-            ButtonRegisterMatches.Dispatcher.BeginInvoke((Action)(() => ButtonRegisterMatches.IsEnabled = true));
-            ButtonHomeAwayTeams.Dispatcher.BeginInvoke((Action)(() => ButtonRegisterMatches.IsEnabled = true));
-        }
-
         private void ButtonRegisterMatches_Click(object sender, RoutedEventArgs e)
         {
             if (!(_mainContent.WFAPContentContainer.Content is UserControl_AddMatches))
@@ -96,5 +79,29 @@ namespace SpeedOdds.UserControls.MainContent
             if (!(_mainContent.WFAPContentContainer.Content is UserControl_HomeAwayTeams))
                 _mainContent.WFAPContentContainer.Content = new UserControl_HomeAwayTeams(_mainContent);
         }
+
+
+
+        //Public Methods
+        public void LockMenu()
+        {
+            ButtonHome.Dispatcher.BeginInvoke((Action)(() => ButtonHome.IsEnabled = false));
+            ButtonCompetitions.Dispatcher.BeginInvoke((Action)(() => ButtonCompetitions.IsEnabled = false));
+            ButtonTeams.Dispatcher.BeginInvoke((Action)(() => ButtonTeams.IsEnabled = false));
+            ButtonMatches.Dispatcher.BeginInvoke((Action)(() => ButtonMatches.IsEnabled = false));
+            ButtonRegisterMatches.Dispatcher.BeginInvoke((Action)(() => ButtonRegisterMatches.IsEnabled = false));
+            ButtonHomeAwayTeams.Dispatcher.BeginInvoke((Action)(() => ButtonHomeAwayTeams.IsEnabled = false));
+        }
+
+        public void UnlockMenu()
+        {
+            ButtonHome.Dispatcher.BeginInvoke((Action)(() => ButtonHome.IsEnabled = true));
+            ButtonCompetitions.Dispatcher.BeginInvoke((Action)(() => ButtonCompetitions.IsEnabled = true));
+            ButtonTeams.Dispatcher.BeginInvoke((Action)(() => ButtonTeams.IsEnabled = true));
+            ButtonMatches.Dispatcher.BeginInvoke((Action)(() => ButtonMatches.IsEnabled = true));
+            ButtonRegisterMatches.Dispatcher.BeginInvoke((Action)(() => ButtonRegisterMatches.IsEnabled = true));
+            ButtonHomeAwayTeams.Dispatcher.BeginInvoke((Action)(() => ButtonHomeAwayTeams.IsEnabled = true));
+        }
+        
     }
 }

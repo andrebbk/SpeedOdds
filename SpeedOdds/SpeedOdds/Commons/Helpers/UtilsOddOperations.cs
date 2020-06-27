@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpeedOdds.Commons.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -80,7 +81,9 @@ namespace SpeedOdds.Commons.Helpers
 
         public static string GetPercentage(int n, int total)
         {
-            return (n / total).ToString("0.0%");
+            if (total == 0) return "0%";
+
+            return ((decimal)n / total).ToString("0.0%");
         }
 
         public static string GetAverageNonPercentual(int n, int total)
@@ -111,5 +114,46 @@ namespace SpeedOdds.Commons.Helpers
             return (1/((decimal)n / total)).ToString("0");
         }
 
+        //TIPOS DE JOGO
+        public static MatchTypeValues GetMatchType(decimal psh, decimal psa)
+        {
+            if (psh < (decimal)1.5)
+                return MatchTypeValues.H_STRONG_FAV;
+            else if (psh >= (decimal)1.5 && psh < (decimal)2)
+                return MatchTypeValues.H_MEDIUM_FAV;
+            else if (psh >= (decimal)2 && psa <= (decimal)3)
+                return MatchTypeValues.COMPETITIVE;
+            else if (psh >= (decimal)2 && psa > (decimal)3)
+                return MatchTypeValues.H_SMALL_FAV;
+            else if (psa >= (decimal)2 && psh > (decimal)3)
+                return MatchTypeValues.A_SMALL_FAV;
+            else if (psa >= (decimal)1.5 && psa < (decimal)2)
+                return MatchTypeValues.A_MEDIUM_FAV;
+            else
+                return MatchTypeValues.A_STRONG_FAV;
+        }
+
+        public static string GetMatchTypeString(MatchTypeValues tp)
+        {
+            switch (tp)
+            {
+                case MatchTypeValues.A_STRONG_FAV:
+                    return "A_STRONG_FAV";
+                case MatchTypeValues.A_MEDIUM_FAV:
+                    return "A_MEDIUM_FAV";
+                case MatchTypeValues.H_STRONG_FAV:
+                    return "H_STRONG_FAV";
+                case MatchTypeValues.H_MEDIUM_FAV:
+                    return "H_MEDIUM_FAV";
+                case MatchTypeValues.A_SMALL_FAV:
+                    return "A_SMALL_FAV";
+                case MatchTypeValues.H_SMALL_FAV:
+                    return "H_SMALL_FAV";
+                case MatchTypeValues.COMPETITIVE:
+                    return "COMPETITIVE";
+                default:
+                    return "";
+            }
+        }
     }
 }

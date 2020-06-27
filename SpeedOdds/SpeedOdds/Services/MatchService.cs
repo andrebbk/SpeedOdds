@@ -1,4 +1,6 @@
 ﻿using SpeedOdds.Commons;
+using SpeedOdds.Commons.Enums;
+using SpeedOdds.Commons.Helpers;
 using SpeedOdds.Data;
 using SpeedOdds.Models;
 using SpeedOdds.UserControls.Matches;
@@ -632,6 +634,157 @@ namespace SpeedOdds.Services
             catch (Exception ex)
             {
                 Console.WriteLine("Error getting team result occurences from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+        //ODDS OPERATIONS MATCH TYPES
+        public Tuple<int, int, int, int> GetMatchTypeResults(int competitionId, MatchTypeValues tp)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var matches = db.Matches.Where(x => x.CompetitionId == competitionId);
+
+                    if (matches != null && matches.Count() > 0)
+                    {
+                        int vics = 0, draws = 0, defts = 0, mCount = 0;
+                        
+                        foreach (var match in matches)
+                        {
+                            if(UtilsOddOperations.GetMatchType(match.HomeOdd, match.AwayOdd) == tp)
+                            {
+                                if (match.HomeGoals > match.AwayGoals)
+                                    vics++;
+                                else if (match.HomeGoals < match.AwayGoals)
+                                    defts++;
+                                else
+                                    draws++;
+
+                                mCount++;
+                            }                            
+                        }
+
+                        return new Tuple<int, int, int, int>(vics, draws, defts, mCount);
+                    }
+
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting match type results from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        public int GetMatchTypeOver15(int competitionId, MatchTypeValues tp)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var matches = db.Matches.Where(x => x.CompetitionId == competitionId);
+
+                    if (matches != null && matches.Count() > 0)
+                    {
+                        int occ = 0;
+
+                        foreach (var match in matches)
+                        {
+                            if (UtilsOddOperations.GetMatchType(match.HomeOdd, match.AwayOdd) == tp)
+                            {
+                                if ((match.HomeGoals + match.AwayGoals) > (decimal)1.5)
+                                    occ++;
+                            }                                
+                        }
+
+                        return occ;
+                    }
+
+                    return 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting match type over 1.5 from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+        public int GetMatchTypeOver25(int competitionId, MatchTypeValues tp)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var matches = db.Matches.Where(x => x.CompetitionId == competitionId);
+
+                    if (matches != null && matches.Count() > 0)
+                    {
+                        int occ = 0;
+
+                        foreach (var match in matches)
+                        {
+                            if (UtilsOddOperations.GetMatchType(match.HomeOdd, match.AwayOdd) == tp)
+                            {
+                                if ((match.HomeGoals + match.AwayGoals) > (decimal)2.5)
+                                    occ++;
+                            }                                
+                        }
+
+                        return occ;
+                    }
+
+                    return 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting match type over 2.5 from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+        public int GetMatchTypeBTTS(int competitionId, MatchTypeValues tp)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var matches = db.Matches.Where(x => x.CompetitionId == competitionId);
+
+                    if (matches != null && matches.Count() > 0)
+                    {
+                        int occ = 0;
+
+                        foreach (var match in matches)
+                        {
+                            if (UtilsOddOperations.GetMatchType(match.HomeOdd, match.AwayOdd) == tp)
+                            {
+                                if (match.HomeGoals > (decimal)0.5 && match.AwayGoals > (decimal)0.5)
+                                    occ++;
+                            }                                
+                        }
+
+                        return occ;
+                    }
+
+                    return 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting match type BTTS from BD -> " + ex.ToString());
                 Console.WriteLine(ex.Message);
                 return 0;
             }

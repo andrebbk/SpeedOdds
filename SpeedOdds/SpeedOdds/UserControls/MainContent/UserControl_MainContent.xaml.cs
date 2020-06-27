@@ -30,11 +30,7 @@ namespace SpeedOdds.UserControls.MainContent
             this.ControBoxContainer.Content = new UserControl_ControlBox(mainWindow);
 
             //SIDE MENU
-            this.MenuContainer.Content = new UserControl_Menu(this);
-
-            //BEGIN
-            if (!(this.WFAPContentContainer.Content is UserControl_Begin))
-                this.WFAPContentContainer.Content = new UserControl_Begin(this);
+            this.MenuContainer.Content = new UserControl_Menu(this);           
         }
     }
 }
