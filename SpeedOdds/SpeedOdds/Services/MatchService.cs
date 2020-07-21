@@ -259,9 +259,9 @@ namespace SpeedOdds.Services
 
                             foreach(var match in matches)
                             {
-                                if (match.HomeGoals > match.AwayGoals)
+                                if ((match.HomeGoals + match.HalfHomeGoals ?? 0) > (match.AwayGoals + match.HalfAwayGoals ?? 0))
                                     vics++;
-                                else if (match.HomeGoals < match.AwayGoals)
+                                else if ((match.HomeGoals + match.HalfHomeGoals ?? 0) < (match.AwayGoals + match.HalfAwayGoals ?? 0))
                                     defts++;
                                 else
                                     draws++;
@@ -281,9 +281,9 @@ namespace SpeedOdds.Services
 
                             foreach (var match in matches)
                             {
-                                if (match.HomeGoals > match.AwayGoals)
+                                if ((match.HomeGoals + match.HalfHomeGoals ?? 0) > (match.AwayGoals + match.HalfAwayGoals ?? 0))
                                     defts++;
-                                else if (match.HomeGoals < match.AwayGoals)
+                                else if ((match.HomeGoals + match.HalfHomeGoals ?? 0) < (match.AwayGoals + match.HalfAwayGoals ?? 0))
                                     vics++;
                                 else
                                     draws++;
@@ -370,16 +370,16 @@ namespace SpeedOdds.Services
                         {
                             if(match.AwayTeamId == teamId)
                             {
-                                if (match.HomeGoals > match.AwayGoals)
+                                if ((match.HomeGoals + match.HalfHomeGoals ?? 0) > (match.AwayGoals + match.HalfAwayGoals ?? 0))
                                     forma -= 1;
-                                else if (match.HomeGoals < match.AwayGoals)
+                                else if ((match.HomeGoals + match.HalfHomeGoals ?? 0) < (match.AwayGoals + match.HalfAwayGoals ?? 0))
                                     forma += 1;
                             }
                             else
                             {
-                                if (match.HomeGoals > match.AwayGoals)
+                                if ((match.HomeGoals + match.HalfHomeGoals ?? 0) > (match.AwayGoals + match.HalfAwayGoals ?? 0))
                                     forma += 1;
-                                else if (match.HomeGoals < match.AwayGoals)
+                                else if ((match.HomeGoals + match.HalfHomeGoals ?? 0) < (match.AwayGoals + match.HalfAwayGoals ?? 0))
                                     forma -= 1;
                             }
                             
@@ -416,8 +416,8 @@ namespace SpeedOdds.Services
 
                             foreach (var match in matches)
                             {
-                                goalsScored += match.HomeGoals;
-                                goalsSuffered += match.AwayGoals;
+                                goalsScored += match.HomeGoals + match.HalfHomeGoals ?? 0;
+                                goalsSuffered += match.AwayGoals + match.HalfAwayGoals ?? 0;
                             }
 
                             return new Tuple<int, int>(goalsScored, goalsSuffered);
@@ -434,8 +434,8 @@ namespace SpeedOdds.Services
 
                             foreach (var match in matches)
                             {
-                                goalsScored += match.AwayGoals;
-                                goalsSuffered += match.HomeGoals;
+                                goalsScored += match.AwayGoals + match.HalfAwayGoals ?? 0;
+                                goalsSuffered += match.HomeGoals + match.HalfHomeGoals ?? 0;
                             }
 
                             return new Tuple<int, int>(goalsScored, goalsSuffered);
@@ -470,7 +470,7 @@ namespace SpeedOdds.Services
 
                             foreach (var match in matches)
                             {
-                                if ((match.HomeGoals + match.AwayGoals) > (decimal)1.5)
+                                if ((match.HomeGoals + match.HalfHomeGoals ?? 0 + match.AwayGoals + match.HalfAwayGoals ?? 0) > (decimal)1.5)
                                     occ++;
                             }
 
@@ -488,7 +488,7 @@ namespace SpeedOdds.Services
 
                             foreach (var match in matches)
                             {
-                                if ((match.HomeGoals + match.AwayGoals) > (decimal)1.5)
+                                if ((match.HomeGoals + match.HalfHomeGoals ?? 0 + match.AwayGoals + match.HalfAwayGoals ?? 0) > (decimal)1.5)
                                     occ++;
                             }
 
@@ -524,7 +524,7 @@ namespace SpeedOdds.Services
 
                             foreach (var match in matches)
                             {
-                                if ((match.HomeGoals + match.AwayGoals) > (decimal)2.5)
+                                if ((match.HomeGoals + match.HalfHomeGoals ?? 0 + match.AwayGoals + match.HalfAwayGoals ?? 0) > (decimal)2.5)
                                     occ++;
                             }
 
@@ -542,7 +542,7 @@ namespace SpeedOdds.Services
 
                             foreach (var match in matches)
                             {
-                                if ((match.HomeGoals + match.AwayGoals) > (decimal)2.5)
+                                if ((match.HomeGoals + match.HalfHomeGoals ?? 0 + match.AwayGoals + match.HalfAwayGoals ?? 0) > (decimal)2.5)
                                     occ++;
                             }
 
@@ -578,7 +578,7 @@ namespace SpeedOdds.Services
 
                             foreach (var match in matches)
                             {
-                                if (match.HomeGoals > (decimal)0.5 && match.AwayGoals > (decimal)0.5)
+                                if ((match.HomeGoals + match.HalfHomeGoals ?? 0) > (decimal)0.5 && (match.AwayGoals + match.HalfAwayGoals ?? 0) > (decimal)0.5)
                                     occ++;
                             }
 
@@ -596,7 +596,7 @@ namespace SpeedOdds.Services
 
                             foreach (var match in matches)
                             {
-                                if (match.HomeGoals > (decimal)0.5 && match.AwayGoals > (decimal)0.5)
+                                if ((match.HomeGoals + match.HalfHomeGoals) > (decimal)0.5 && (match.AwayGoals + match.HalfAwayGoals) > (decimal)0.5)
                                     occ++;
                             }
 
@@ -632,7 +632,8 @@ namespace SpeedOdds.Services
 
                             foreach (var match in matches)
                             {
-                                if (match.HomeGoals == homeGoals && match.AwayGoals == awayGoals)
+                                if ((match.HomeGoals + (match.HalfHomeGoals.HasValue ? match.HalfHomeGoals.Value : 0)) == homeGoals 
+                                    && (match.AwayGoals + (match.HalfHomeGoals.HasValue ? match.HalfAwayGoals.Value : 0)) == awayGoals)
                                     occ++;
                             }
 
@@ -650,7 +651,8 @@ namespace SpeedOdds.Services
 
                             foreach (var match in matches)
                             {
-                                if (match.HomeGoals == homeGoals && match.AwayGoals == awayGoals)
+                                if ((match.HomeGoals + (match.HalfHomeGoals.HasValue? match.HalfHomeGoals.Value : 0)) == homeGoals 
+                                    && (match.AwayGoals + (match.HalfHomeGoals.HasValue ? match.HalfAwayGoals.Value : 0)) == awayGoals)
                                     occ++;
                             }
 
@@ -669,6 +671,7 @@ namespace SpeedOdds.Services
                 return 0;
             }
         }
+
 
         //ODDS OPERATIONS MATCH TYPES
         public Tuple<int, int, int, int> GetMatchTypeResults(int competitionId, MatchTypeValues tp)
@@ -820,5 +823,966 @@ namespace SpeedOdds.Services
                 return 0;
             }
         }
+
+
+        //1st PART
+        public Tuple<int, int, int, int> GetTeamResults1st(int competitionId, int teamId, bool IsHomeTeam)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    if (IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.HomeTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int vics = 0, draws = 0, defts = 0;
+
+                            foreach (var match in matches)
+                            {
+                                if (match.HomeGoals > match.AwayGoals)
+                                    vics++;
+                                else if (match.HomeGoals < match.AwayGoals)
+                                    defts++;
+                                else
+                                    draws++;
+                            }
+
+                            return new Tuple<int, int, int, int>(vics, draws, defts, matches.Count());
+                        }
+                    }
+
+                    if (!IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.AwayTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int vics = 0, draws = 0, defts = 0;
+
+                            foreach (var match in matches)
+                            {
+                                if (match.HomeGoals > match.AwayGoals)
+                                    defts++;
+                                else if (match.HomeGoals < match.AwayGoals)
+                                    vics++;
+                                else
+                                    draws++;
+                            }
+
+                            return new Tuple<int, int, int, int>(vics, draws, defts, matches.Count());
+                        }
+                    }
+
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting team results 1st from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        public int GetTeamForma1st(int competitionId, int teamId, bool IsHomeTeam)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {    
+                    var matches = db.Matches
+                            .Where(x => x.CompetitionId == competitionId && (x.HomeTeamId == teamId || x.AwayTeamId == teamId))
+                            .OrderByDescending(x => x.FixtureId)
+                            .Take(5);
+
+                    if (matches != null && matches.Count() > 0)
+                    {
+                        int forma = 0;
+
+                        foreach (var match in matches)
+                        {
+                            if (match.AwayTeamId == teamId)
+                            {
+                                if (match.HomeGoals > match.AwayGoals)
+                                    forma -= 1;
+                                else if (match.HomeGoals < match.AwayGoals)
+                                    forma += 1;
+                            }
+                            else
+                            {
+                                if (match.HomeGoals > match.AwayGoals)
+                                    forma += 1;
+                                else if (match.HomeGoals < match.AwayGoals)
+                                    forma -= 1;
+                            }
+
+                        }
+
+                        return forma;
+                    }
+
+                    return 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting team forma 1st from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+        public Tuple<int, int> GetTeamGoals1st(int competitionId, int teamId, bool IsHomeTeam)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    if (IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.HomeTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int goalsScored = 0, goalsSuffered = 0;
+
+                            foreach (var match in matches)
+                            {
+                                goalsScored += match.HomeGoals;
+                                goalsSuffered += match.AwayGoals;
+                            }
+
+                            return new Tuple<int, int>(goalsScored, goalsSuffered);
+                        }
+                    }
+
+                    if (!IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.AwayTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int goalsScored = 0, goalsSuffered = 0;
+
+                            foreach (var match in matches)
+                            {
+                                goalsScored += match.AwayGoals;
+                                goalsSuffered += match.HomeGoals;
+                            }
+
+                            return new Tuple<int, int>(goalsScored, goalsSuffered);
+                        }
+                    }
+
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting team goals 1st from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        public int GetTeamOver15_1st(int competitionId, int teamId, bool IsHomeTeam)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    if (IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.HomeTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int occ = 0;
+
+                            foreach (var match in matches)
+                            {
+                                if ((match.HomeGoals + match.AwayGoals) > (decimal)1.5)
+                                    occ++;
+                            }
+
+                            return occ;
+                        }
+                    }
+
+                    if (!IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.AwayTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int occ = 0;
+
+                            foreach (var match in matches)
+                            {
+                                if ((match.HomeGoals + match.AwayGoals) > (decimal)1.5)
+                                    occ++;
+                            }
+
+                            return occ;
+                        }
+                    }
+
+                    return 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting team over 1.5 from 1st BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+        public int GetTeamOver25_1st(int competitionId, int teamId, bool IsHomeTeam)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    if (IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.HomeTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int occ = 0;
+
+                            foreach (var match in matches)
+                            {
+                                if ((match.HomeGoals + match.AwayGoals) > (decimal)2.5)
+                                    occ++;
+                            }
+
+                            return occ;
+                        }
+                    }
+
+                    if (!IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.AwayTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int occ = 0;
+
+                            foreach (var match in matches)
+                            {
+                                if ((match.HomeGoals + match.AwayGoals) > (decimal)2.5)
+                                    occ++;
+                            }
+
+                            return occ;
+                        }
+                    }
+
+                    return 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting team over 2.5 1st from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+        public int GetTeamBTTS_1st(int competitionId, int teamId, bool IsHomeTeam)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    if (IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.HomeTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int occ = 0;
+
+                            foreach (var match in matches)
+                            {
+                                if (match.HomeGoals > (decimal)0.5 && match.AwayGoals > (decimal)0.5)
+                                    occ++;
+                            }
+
+                            return occ;
+                        }
+                    }
+
+                    if (!IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.AwayTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int occ = 0;
+
+                            foreach (var match in matches)
+                            {
+                                if (match.HomeGoals > (decimal)0.5 && match.AwayGoals > (decimal)0.5)
+                                    occ++;
+                            }
+
+                            return occ;
+                        }
+                    }
+
+                    return 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting team BTTS 1st from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+
+        public Tuple<int, int, int, int> GetMatchTypeResults1st(int competitionId, MatchTypeValues tp)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var matches = db.Matches.Where(x => x.CompetitionId == competitionId);
+
+                    if (matches != null && matches.Count() > 0)
+                    {
+                        int vics = 0, draws = 0, defts = 0, mCount = 0;
+
+                        foreach (var match in matches)
+                        {
+                            if (UtilsOddOperations.GetMatchType(match.HomeOdd, match.AwayOdd) == tp)
+                            {
+                                if (match.HomeGoals > match.AwayGoals)
+                                    vics++;
+                                else if (match.HomeGoals < match.AwayGoals)
+                                    defts++;
+                                else
+                                    draws++;
+
+                                mCount++;
+                            }
+                        }
+
+                        return new Tuple<int, int, int, int>(vics, draws, defts, mCount);
+                    }
+
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting match type results 1st from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        public int GetMatchTypeOver15_1st(int competitionId, MatchTypeValues tp)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var matches = db.Matches.Where(x => x.CompetitionId == competitionId);
+
+                    if (matches != null && matches.Count() > 0)
+                    {
+                        int occ = 0;
+
+                        foreach (var match in matches)
+                        {
+                            if (UtilsOddOperations.GetMatchType(match.HomeOdd, match.AwayOdd) == tp)
+                            {
+                                if ((match.HomeGoals + match.AwayGoals) > (decimal)1.5)
+                                    occ++;
+                            }
+                        }
+
+                        return occ;
+                    }
+
+                    return 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting match type over 1.5 1st from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+        public int GetMatchTypeOver25_1st(int competitionId, MatchTypeValues tp)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var matches = db.Matches.Where(x => x.CompetitionId == competitionId);
+
+                    if (matches != null && matches.Count() > 0)
+                    {
+                        int occ = 0;
+
+                        foreach (var match in matches)
+                        {
+                            if (UtilsOddOperations.GetMatchType(match.HomeOdd, match.AwayOdd) == tp)
+                            {
+                                if ((match.HomeGoals + match.AwayGoals) > (decimal)2.5)
+                                    occ++;
+                            }
+                        }
+
+                        return occ;
+                    }
+
+                    return 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting match type over 2.5 1st from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+        public int GetMatchTypeBTTS_1st(int competitionId, MatchTypeValues tp)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var matches = db.Matches.Where(x => x.CompetitionId == competitionId);
+
+                    if (matches != null && matches.Count() > 0)
+                    {
+                        int occ = 0;
+
+                        foreach (var match in matches)
+                        {
+                            if (UtilsOddOperations.GetMatchType(match.HomeOdd, match.AwayOdd) == tp)
+                            {
+                                if (match.HomeGoals > (decimal)0.5 && match.AwayGoals > (decimal)0.5)
+                                    occ++;
+                            }
+                        }
+
+                        return occ;
+                    }
+
+                    return 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting match type BTTS 1st from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+
+        //2nd PART
+        public Tuple<int, int, int, int> GetTeamResults2nd(int competitionId, int teamId, bool IsHomeTeam)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    if (IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.HomeTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int vics = 0, draws = 0, defts = 0;
+
+                            foreach (var match in matches)
+                            {
+                                if ((match.HalfHomeGoals ?? 0) > (match.HalfAwayGoals ?? 0))
+                                    vics++;
+                                else if ((match.HalfHomeGoals ?? 0) < (match.HalfAwayGoals ?? 0))
+                                    defts++;
+                                else
+                                    draws++;
+                            }
+
+                            return new Tuple<int, int, int, int>(vics, draws, defts, matches.Count());
+                        }
+                    }
+
+                    if (!IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.AwayTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int vics = 0, draws = 0, defts = 0;
+
+                            foreach (var match in matches)
+                            {
+                                if ((match.HalfHomeGoals ?? 0) > (match.HalfAwayGoals ?? 0))
+                                    defts++;
+                                else if ((match.HalfHomeGoals ?? 0) < (match.HalfAwayGoals ?? 0))
+                                    vics++;
+                                else
+                                    draws++;
+                            }
+
+                            return new Tuple<int, int, int, int>(vics, draws, defts, matches.Count());
+                        }
+                    }
+
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting team results 2nd from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        public int GetTeamForma2nd(int competitionId, int teamId, bool IsHomeTeam)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var matches = db.Matches
+                            .Where(x => x.CompetitionId == competitionId && (x.HomeTeamId == teamId || x.AwayTeamId == teamId))
+                            .OrderByDescending(x => x.FixtureId)
+                            .Take(5);
+
+                    if (matches != null && matches.Count() > 0)
+                    {
+                        int forma = 0;
+
+                        foreach (var match in matches)
+                        {
+                            if (match.AwayTeamId == teamId)
+                            {
+                                if ((match.HalfHomeGoals ?? 0) > (match.HalfAwayGoals ?? 0))
+                                    forma -= 1;
+                                else if ((match.HalfHomeGoals ?? 0) < (match.HalfAwayGoals ?? 0))
+                                    forma += 1;
+                            }
+                            else
+                            {
+                                if ((match.HalfHomeGoals ?? 0) > (match.HalfAwayGoals ?? 0))
+                                    forma += 1;
+                                else if ((match.HalfHomeGoals ?? 0) < (match.HalfAwayGoals ?? 0))
+                                    forma -= 1;
+                            }
+
+                        }
+
+                        return forma;
+                    }
+
+                    return 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting team forma 2nd from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+        public Tuple<int, int> GetTeamGoals2nd(int competitionId, int teamId, bool IsHomeTeam)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    if (IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.HomeTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int goalsScored = 0, goalsSuffered = 0;
+
+                            foreach (var match in matches)
+                            {
+                                goalsScored += (match.HalfHomeGoals ?? 0);
+                                goalsSuffered += (match.HalfAwayGoals ?? 0);
+                            }
+
+                            return new Tuple<int, int>(goalsScored, goalsSuffered);
+                        }
+                    }
+
+                    if (!IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.AwayTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int goalsScored = 0, goalsSuffered = 0;
+
+                            foreach (var match in matches)
+                            {
+                                goalsScored += (match.HalfAwayGoals ?? 0);
+                                goalsSuffered += (match.HalfHomeGoals ?? 0);
+                            }
+
+                            return new Tuple<int, int>(goalsScored, goalsSuffered);
+                        }
+                    }
+
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting team goals 2nd from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        public int GetTeamOver15_2nd(int competitionId, int teamId, bool IsHomeTeam)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    if (IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.HomeTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int occ = 0;
+
+                            foreach (var match in matches)
+                            {
+                                if (((match.HalfHomeGoals ?? 0) + (match.HalfAwayGoals ?? 0)) > (decimal)1.5)
+                                    occ++;
+                            }
+
+                            return occ;
+                        }
+                    }
+
+                    if (!IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.AwayTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int occ = 0;
+
+                            foreach (var match in matches)
+                            {
+                                if (((match.HalfHomeGoals ?? 0) + (match.HalfAwayGoals ?? 0)) > (decimal)1.5)
+                                    occ++;
+                            }
+
+                            return occ;
+                        }
+                    }
+
+                    return 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting team over 1.5 from 2nd BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+        public int GetTeamOver25_2nd(int competitionId, int teamId, bool IsHomeTeam)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    if (IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.HomeTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int occ = 0;
+
+                            foreach (var match in matches)
+                            {
+                                if (((match.HalfHomeGoals ?? 0) + (match.HalfAwayGoals ?? 0)) > (decimal)2.5)
+                                    occ++;
+                            }
+
+                            return occ;
+                        }
+                    }
+
+                    if (!IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.AwayTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int occ = 0;
+
+                            foreach (var match in matches)
+                            {
+                                if (((match.HalfHomeGoals ?? 0) + (match.HalfAwayGoals ?? 0)) > (decimal)2.5)
+                                    occ++;
+                            }
+
+                            return occ;
+                        }
+                    }
+
+                    return 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting team over 2.5 2nd from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+        public int GetTeamBTTS_2nd(int competitionId, int teamId, bool IsHomeTeam)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    if (IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.HomeTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int occ = 0;
+
+                            foreach (var match in matches)
+                            {
+                                if ((match.HalfHomeGoals ?? 0) > (decimal)0.5 && (match.HalfAwayGoals ?? 0) > (decimal)0.5)
+                                    occ++;
+                            }
+
+                            return occ;
+                        }
+                    }
+
+                    if (!IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.AwayTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int occ = 0;
+
+                            foreach (var match in matches)
+                            {
+                                if ((match.HalfHomeGoals ?? 0) > (decimal)0.5 && (match.HalfAwayGoals ?? 0) > (decimal)0.5)
+                                    occ++;
+                            }
+
+                            return occ;
+                        }
+                    }
+
+                    return 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting team BTTS 2nd from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+
+        public Tuple<int, int, int, int> GetMatchTypeResults2nd(int competitionId, MatchTypeValues tp)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var matches = db.Matches.Where(x => x.CompetitionId == competitionId);
+
+                    if (matches != null && matches.Count() > 0)
+                    {
+                        int vics = 0, draws = 0, defts = 0, mCount = 0;
+
+                        foreach (var match in matches)
+                        {
+                            if (UtilsOddOperations.GetMatchType(match.HomeOdd, match.AwayOdd) == tp)
+                            {
+                                if ((match.HalfHomeGoals ?? 0) > (match.HalfAwayGoals ?? 0))
+                                    vics++;
+                                else if ((match.HalfHomeGoals ?? 0) < (match.HalfAwayGoals ?? 0))
+                                    defts++;
+                                else
+                                    draws++;
+
+                                mCount++;
+                            }
+                        }
+
+                        return new Tuple<int, int, int, int>(vics, draws, defts, mCount);
+                    }
+
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting match type results 2nd from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        public int GetMatchTypeOver15_2nd(int competitionId, MatchTypeValues tp)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var matches = db.Matches.Where(x => x.CompetitionId == competitionId);
+
+                    if (matches != null && matches.Count() > 0)
+                    {
+                        int occ = 0;
+
+                        foreach (var match in matches)
+                        {
+                            if (UtilsOddOperations.GetMatchType(match.HomeOdd, match.AwayOdd) == tp)
+                            {
+                                if (((match.HalfHomeGoals ?? 0) + (match.HalfAwayGoals ?? 0)) > (decimal)1.5)
+                                    occ++;
+                            }
+                        }
+
+                        return occ;
+                    }
+
+                    return 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting match type over 1.5 2nd from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+        public int GetMatchTypeOver25_2nd(int competitionId, MatchTypeValues tp)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var matches = db.Matches.Where(x => x.CompetitionId == competitionId);
+
+                    if (matches != null && matches.Count() > 0)
+                    {
+                        int occ = 0;
+
+                        foreach (var match in matches)
+                        {
+                            if (UtilsOddOperations.GetMatchType(match.HomeOdd, match.AwayOdd) == tp)
+                            {
+                                if (((match.HalfHomeGoals ?? 0) + (match.HalfAwayGoals ?? 0)) > (decimal)2.5)
+                                    occ++;
+                            }
+                        }
+
+                        return occ;
+                    }
+
+                    return 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting match type over 2.5 2nd from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+        public int GetMatchTypeBTTS_2nd(int competitionId, MatchTypeValues tp)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var matches = db.Matches.Where(x => x.CompetitionId == competitionId);
+
+                    if (matches != null && matches.Count() > 0)
+                    {
+                        int occ = 0;
+
+                        foreach (var match in matches)
+                        {
+                            if (UtilsOddOperations.GetMatchType(match.HomeOdd, match.AwayOdd) == tp)
+                            {
+                                if ((match.HalfHomeGoals ?? 0) > (decimal)0.5 && (match.HalfAwayGoals ?? 0) > (decimal)0.5)
+                                    occ++;
+                            }
+                        }
+
+                        return occ;
+                    }
+
+                    return 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting match type BTTS 2nd from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
     }
 }
