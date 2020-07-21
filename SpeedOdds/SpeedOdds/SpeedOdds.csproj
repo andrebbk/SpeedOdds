@@ -160,6 +160,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commons\Enums\MatchPeriodTypeValues.cs" />
     <Compile Include="Commons\Enums\MatchTypeValues.cs" />
     <Compile Include="Commons\Enums\MatchViewTypeValues.cs" />
     <Compile Include="Commons\Helpers\NotificationHelper.cs" />

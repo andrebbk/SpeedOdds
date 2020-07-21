@@ -991,6 +991,60 @@ namespace SpeedOdds.Services
             }
         }
 
+        public int GetTeamOver05_1st(int competitionId, int teamId, bool IsHomeTeam)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    if (IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.HomeTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int occ = 0;
+
+                            foreach (var match in matches)
+                            {
+                                if ((match.HomeGoals + match.AwayGoals) > (decimal)0.5)
+                                    occ++;
+                            }
+
+                            return occ;
+                        }
+                    }
+
+                    if (!IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.AwayTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int occ = 0;
+
+                            foreach (var match in matches)
+                            {
+                                if ((match.HomeGoals + match.AwayGoals) > (decimal)0.5)
+                                    occ++;
+                            }
+
+                            return occ;
+                        }
+                    }
+
+                    return 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting team over 0.5 from 1st BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
         public int GetTeamOver15_1st(int competitionId, int teamId, bool IsHomeTeam)
         {
             try
@@ -1468,6 +1522,60 @@ namespace SpeedOdds.Services
                 Console.WriteLine("Error getting team goals 2nd from BD -> " + ex.ToString());
                 Console.WriteLine(ex.Message);
                 return null;
+            }
+        }
+
+        public int GetTeamOver05_2nd(int competitionId, int teamId, bool IsHomeTeam)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    if (IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.HomeTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int occ = 0;
+
+                            foreach (var match in matches)
+                            {
+                                if (((match.HalfHomeGoals ?? 0) + (match.HalfAwayGoals ?? 0)) > (decimal)0.5)
+                                    occ++;
+                            }
+
+                            return occ;
+                        }
+                    }
+
+                    if (!IsHomeTeam)
+                    {
+                        var matches = db.Matches.Where(x => x.CompetitionId == competitionId && x.AwayTeamId == teamId);
+
+                        if (matches != null && matches.Count() > 0)
+                        {
+                            int occ = 0;
+
+                            foreach (var match in matches)
+                            {
+                                if (((match.HalfHomeGoals ?? 0) + (match.HalfAwayGoals ?? 0)) > (decimal)0.5)
+                                    occ++;
+                            }
+
+                            return occ;
+                        }
+                    }
+
+                    return 0;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting team over 0.5 from 2nd BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+                return 0;
             }
         }
 

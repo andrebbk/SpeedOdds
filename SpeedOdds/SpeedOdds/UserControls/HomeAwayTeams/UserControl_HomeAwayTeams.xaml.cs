@@ -37,6 +37,8 @@ namespace SpeedOdds.UserControls.HomeAwayTeams
         private bool IsMatchType;
         private bool IsDrawableMenuOpen;
 
+        private MatchPeriodTypeValues matchPeriod;
+
         public UserControl_DrawableMenuTeams child;
 
         public UserControl_HomeAwayTeams(UserControl_MainContent mainContent)
@@ -51,6 +53,7 @@ namespace SpeedOdds.UserControls.HomeAwayTeams
 
                 IsMatchType = false;
                 IsHomeTeam = true;
+                matchPeriod = MatchPeriodTypeValues.FullTime;
                 ImageLogo.Dispatcher.BeginInvoke((Action)(() => ImageLogo.Visibility = Visibility.Visible));
                 LabelInfo.Dispatcher.BeginInvoke((Action)(() => LabelInfo.Visibility = Visibility.Visible));
                 LabelExtraInfo.Dispatcher.BeginInvoke((Action)(() => LabelExtraInfo.Visibility = Visibility.Visible));
@@ -72,63 +75,109 @@ namespace SpeedOdds.UserControls.HomeAwayTeams
             {
                 foreach (var item in equipas.OrderBy(x => x.Name))
                 {
-                    var teamResults = matchService.GetTeamResults(compId, item.TeamId, IsHomeTeam);
-                    var teamGoals = matchService.GetTeamGoals(compId, item.TeamId, IsHomeTeam);
-
-                    if (teamResults != null && teamGoals != null)
+                    if (matchPeriod == MatchPeriodTypeValues.FullTime)
                     {
-                        matchItems.Add(new HomeAwayTeamViewModel()
-                        {
-                            Team = teamService.GetTeamName(item.TeamId),
-                            Matches = teamResults.Item4.ToString(),
-                            Wins = teamResults.Item1.ToString(),
-                            WinsP = UtilsOddOperations.GetPercentage(teamResults.Item1, teamResults.Item4),
-                            WinsO = UtilsOddOperations.GetOdd(teamResults.Item1, teamResults.Item4),
-                            Draws = teamResults.Item2.ToString(),
-                            DrawsP = UtilsOddOperations.GetPercentage(teamResults.Item2, teamResults.Item4),
-                            DrawsO = UtilsOddOperations.GetOdd(teamResults.Item2, teamResults.Item4),
-                            Defeats = teamResults.Item3.ToString(),
-                            DefeatsP = UtilsOddOperations.GetPercentage(teamResults.Item3, teamResults.Item4),
-                            DefeatsO = UtilsOddOperations.GetOdd(teamResults.Item3, teamResults.Item4),
-                            Forma = matchService.GetTeamForma(compId, item.TeamId, IsHomeTeam).ToString(),
-                            GM = UtilsOddOperations.GetAverageNonPercentual(teamGoals.Item1, teamResults.Item4),
-                            GS = UtilsOddOperations.GetAverageNonPercentual(teamGoals.Item2, teamResults.Item4),
-                            GmGs = UtilsOddOperations.GetGMGS(teamGoals.Item1, teamGoals.Item2, teamResults.Item4),
-                            Gm_Gs = UtilsOddOperations.GetGM_GS(teamGoals.Item1, teamGoals.Item2, teamResults.Item4),
-                            FatorCasa = UtilsOddOperations.GetFatorCasa(teamGoals.Item1, teamGoals.Item2, teamResults.Item4),
-                            Over25 = matchService.GetTeamOver25(compId, item.TeamId, IsHomeTeam).ToString(),
-                            Over25P = UtilsOddOperations.GetPercentage(matchService.GetTeamOver25(compId, item.TeamId, IsHomeTeam), teamResults.Item4),
-                            Over25O = UtilsOddOperations.GetOdd(matchService.GetTeamOver25(compId, item.TeamId, IsHomeTeam), teamResults.Item4),
-                            Over15 = matchService.GetTeamOver15(compId, item.TeamId, IsHomeTeam).ToString(),
-                            Over15P = UtilsOddOperations.GetPercentage(matchService.GetTeamOver15(compId, item.TeamId, IsHomeTeam), teamResults.Item4),
-                            Over15O = UtilsOddOperations.GetOdd(matchService.GetTeamOver15(compId, item.TeamId, IsHomeTeam), teamResults.Item4),
-                            Btts = matchService.GetTeamBTTS(compId, item.TeamId, IsHomeTeam).ToString(),
-                            BttsP = UtilsOddOperations.GetPercentage(matchService.GetTeamBTTS(compId, item.TeamId, IsHomeTeam), teamResults.Item4),
-                            BttsO = UtilsOddOperations.GetOdd(matchService.GetTeamBTTS(compId, item.TeamId, IsHomeTeam), teamResults.Item4),
-                            P00 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 0, 0), teamResults.Item4),
-                            P01 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 1, 0), teamResults.Item4),
-                            P10 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 0, 1), teamResults.Item4),
-                            P11 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 1, 1), teamResults.Item4),
-                            P20 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 2, 0), teamResults.Item4),
-                            P02 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 0, 2), teamResults.Item4),
-                            P21 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 2, 1), teamResults.Item4),
-                            P12 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 1, 2), teamResults.Item4),
-                            P22 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 2, 2), teamResults.Item4),
-                            P30 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 3, 0), teamResults.Item4),
-                            P03 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 0, 3), teamResults.Item4),
-                            P31 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 3, 1), teamResults.Item4),
-                            P13 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 1, 3), teamResults.Item4),
-                            P32 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 3, 2), teamResults.Item4),
-                            P23 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 2, 3), teamResults.Item4),
-                            P33 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 3, 3), teamResults.Item4)
-                        });
+                        var teamResults = matchService.GetTeamResults(compId, item.TeamId, IsHomeTeam);
+                        var teamGoals = matchService.GetTeamGoals(compId, item.TeamId, IsHomeTeam);
 
-                        //TODO: Remove this 4 lines (used for testing colors)
-                        //matchItems[matchItems.Count() - 1].P01 = "0,3%";
-                        //matchItems[matchItems.Count() - 1].P30 = "10,0%";
-                        //matchItems[matchItems.Count() - 1].P13 = "64,4%";
-                        //matchItems[matchItems.Count() - 1].P20 = "15,4%";
+                        if (teamResults != null && teamGoals != null)
+                        {
+                            matchItems.Add(new HomeAwayTeamViewModel()
+                            {
+                                Team = teamService.GetTeamName(item.TeamId),
+                                Matches = teamResults.Item4.ToString(),
+                                Wins = teamResults.Item1.ToString(),
+                                WinsP = UtilsOddOperations.GetPercentage(teamResults.Item1, teamResults.Item4),
+                                WinsO = UtilsOddOperations.GetOdd(teamResults.Item1, teamResults.Item4),
+                                Draws = teamResults.Item2.ToString(),
+                                DrawsP = UtilsOddOperations.GetPercentage(teamResults.Item2, teamResults.Item4),
+                                DrawsO = UtilsOddOperations.GetOdd(teamResults.Item2, teamResults.Item4),
+                                Defeats = teamResults.Item3.ToString(),
+                                DefeatsP = UtilsOddOperations.GetPercentage(teamResults.Item3, teamResults.Item4),
+                                DefeatsO = UtilsOddOperations.GetOdd(teamResults.Item3, teamResults.Item4),
+                                Forma = matchService.GetTeamForma(compId, item.TeamId, IsHomeTeam).ToString(),
+                                GM = UtilsOddOperations.GetAverageNonPercentual(teamGoals.Item1, teamResults.Item4),
+                                GS = UtilsOddOperations.GetAverageNonPercentual(teamGoals.Item2, teamResults.Item4),
+                                GmGs = UtilsOddOperations.GetGMGS(teamGoals.Item1, teamGoals.Item2, teamResults.Item4),
+                                Gm_Gs = UtilsOddOperations.GetGM_GS(teamGoals.Item1, teamGoals.Item2, teamResults.Item4),
+                                FatorCasa = UtilsOddOperations.GetFatorCasa(teamGoals.Item1, teamGoals.Item2, teamResults.Item4),
+                                Over25 = matchService.GetTeamOver25(compId, item.TeamId, IsHomeTeam).ToString(),
+                                Over25P = UtilsOddOperations.GetPercentage(matchService.GetTeamOver25(compId, item.TeamId, IsHomeTeam), teamResults.Item4),
+                                Over25O = UtilsOddOperations.GetOdd(matchService.GetTeamOver25(compId, item.TeamId, IsHomeTeam), teamResults.Item4),
+                                Over15 = matchService.GetTeamOver15(compId, item.TeamId, IsHomeTeam).ToString(),
+                                Over15P = UtilsOddOperations.GetPercentage(matchService.GetTeamOver15(compId, item.TeamId, IsHomeTeam), teamResults.Item4),
+                                Over15O = UtilsOddOperations.GetOdd(matchService.GetTeamOver15(compId, item.TeamId, IsHomeTeam), teamResults.Item4),
+                                Btts = matchService.GetTeamBTTS(compId, item.TeamId, IsHomeTeam).ToString(),
+                                BttsP = UtilsOddOperations.GetPercentage(matchService.GetTeamBTTS(compId, item.TeamId, IsHomeTeam), teamResults.Item4),
+                                BttsO = UtilsOddOperations.GetOdd(matchService.GetTeamBTTS(compId, item.TeamId, IsHomeTeam), teamResults.Item4),
+                                P00 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 0, 0), teamResults.Item4),
+                                P01 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 1, 0), teamResults.Item4),
+                                P10 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 0, 1), teamResults.Item4),
+                                P11 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 1, 1), teamResults.Item4),
+                                P20 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 2, 0), teamResults.Item4),
+                                P02 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 0, 2), teamResults.Item4),
+                                P21 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 2, 1), teamResults.Item4),
+                                P12 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 1, 2), teamResults.Item4),
+                                P22 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 2, 2), teamResults.Item4),
+                                P30 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 3, 0), teamResults.Item4),
+                                P03 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 0, 3), teamResults.Item4),
+                                P31 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 3, 1), teamResults.Item4),
+                                P13 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 1, 3), teamResults.Item4),
+                                P32 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 3, 2), teamResults.Item4),
+                                P23 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 2, 3), teamResults.Item4),
+                                P33 = UtilsOddOperations.GetPercentage(matchService.GetTeamResultsOccurrences(compId, item.TeamId, IsHomeTeam, 3, 3), teamResults.Item4)
+                            });
+
+                            //TODO: Remove this 4 lines (used for testing colors)
+                            //matchItems[matchItems.Count() - 1].P01 = "0,3%";
+                            //matchItems[matchItems.Count() - 1].P30 = "10,0%";
+                            //matchItems[matchItems.Count() - 1].P13 = "64,4%";
+                            //matchItems[matchItems.Count() - 1].P20 = "15,4%";
+                        }
                     }
+                    else if (matchPeriod == MatchPeriodTypeValues.FirstHalf)
+                    {
+                        var teamResults = matchService.GetTeamResults1st(compId, item.TeamId, IsHomeTeam);
+                        var teamGoals = matchService.GetTeamGoals1st(compId, item.TeamId, IsHomeTeam);
+
+                        if (teamResults != null && teamGoals != null)
+                        {
+                            matchItems.Add(new HomeAwayTeamViewModel()
+                            {
+                                Team = teamService.GetTeamName(item.TeamId),
+                                Matches = teamResults.Item4.ToString(),
+                                Wins = teamResults.Item1.ToString(),
+                                Draws = teamResults.Item2.ToString(),
+                                Defeats = teamResults.Item3.ToString(),
+                                Over05 = matchService.GetTeamOver05_1st(compId, item.TeamId, IsHomeTeam).ToString(),
+                                Over25 = matchService.GetTeamOver25_1st(compId, item.TeamId, IsHomeTeam).ToString(),
+                                Over15 = matchService.GetTeamOver15_1st(compId, item.TeamId, IsHomeTeam).ToString(),
+                                Btts = matchService.GetTeamBTTS_1st(compId, item.TeamId, IsHomeTeam).ToString(),
+                            });
+                        }
+                    }
+                    else if (matchPeriod == MatchPeriodTypeValues.SecondHalf)
+                    {
+                        var teamResults = matchService.GetTeamResults2nd(compId, item.TeamId, IsHomeTeam);
+                        var teamGoals = matchService.GetTeamGoals2nd(compId, item.TeamId, IsHomeTeam);
+
+                        if (teamResults != null && teamGoals != null)
+                        {
+                            matchItems.Add(new HomeAwayTeamViewModel()
+                            {
+                                Team = teamService.GetTeamName(item.TeamId),
+                                Matches = teamResults.Item4.ToString(),
+                                Wins = teamResults.Item1.ToString(),
+                                Draws = teamResults.Item2.ToString(),
+                                Defeats = teamResults.Item3.ToString(),    
+                                Over05 = matchService.GetTeamOver05_2nd(compId, item.TeamId, IsHomeTeam).ToString(),
+                                Over25 = matchService.GetTeamOver25_2nd(compId, item.TeamId, IsHomeTeam).ToString(),
+                                Over15 = matchService.GetTeamOver15_2nd(compId, item.TeamId, IsHomeTeam).ToString(),
+                                Btts = matchService.GetTeamBTTS_2nd(compId, item.TeamId, IsHomeTeam).ToString(),
+                            });
+                        }
+                    }
+                        
                 }
             }
             else
@@ -136,34 +185,100 @@ namespace SpeedOdds.UserControls.HomeAwayTeams
                 //Match types
                 foreach (MatchTypeValues mt in Enum.GetValues(typeof(MatchTypeValues)))
                 {
-                    var matchTypeResults = matchService.GetMatchTypeResults(compId, mt);
-
-                    if (matchTypeResults != null)
+                    if(matchPeriod == MatchPeriodTypeValues.FullTime)
                     {
-                        matchItems.Add(new HomeAwayTeamViewModel()
+                        var matchTypeResults = matchService.GetMatchTypeResults(compId, mt);
+
+                        if (matchTypeResults != null)
                         {
-                            Team = UtilsOddOperations.GetMatchTypeString(mt),
-                            Matches = matchTypeResults.Item4.ToString(),
-                            Wins = matchTypeResults.Item1.ToString(),
-                            WinsP = UtilsOddOperations.GetPercentage(matchTypeResults.Item1, matchTypeResults.Item4),
-                            WinsO = UtilsOddOperations.GetOdd(matchTypeResults.Item1, matchTypeResults.Item4),
-                            Draws = matchTypeResults.Item2.ToString(),
-                            DrawsP = UtilsOddOperations.GetPercentage(matchTypeResults.Item2, matchTypeResults.Item4),
-                            DrawsO = UtilsOddOperations.GetOdd(matchTypeResults.Item2, matchTypeResults.Item4),
-                            Defeats = matchTypeResults.Item3.ToString(),
-                            DefeatsP = UtilsOddOperations.GetPercentage(matchTypeResults.Item3, matchTypeResults.Item4),
-                            DefeatsO = UtilsOddOperations.GetOdd(matchTypeResults.Item3, matchTypeResults.Item4),                           
-                            Over25 = matchService.GetMatchTypeOver25(compId, mt).ToString(),
-                            Over25P = UtilsOddOperations.GetPercentage(matchService.GetMatchTypeOver25(compId, mt), matchTypeResults.Item4),
-                            Over25O = UtilsOddOperations.GetOdd(matchService.GetMatchTypeOver25(compId, mt), matchTypeResults.Item4),
-                            Over15 = matchService.GetMatchTypeOver15(compId, mt).ToString(),
-                            Over15P = UtilsOddOperations.GetPercentage(matchService.GetMatchTypeOver15(compId, mt), matchTypeResults.Item4),
-                            Over15O = UtilsOddOperations.GetOdd(matchService.GetMatchTypeOver15(compId, mt), matchTypeResults.Item4),
-                            Btts = matchService.GetMatchTypeBTTS(compId, mt).ToString(),
-                            BttsP = UtilsOddOperations.GetPercentage(matchService.GetMatchTypeBTTS(compId, mt), matchTypeResults.Item4),
-                            BttsO = UtilsOddOperations.GetOdd(matchService.GetMatchTypeBTTS(compId, mt), matchTypeResults.Item4),                            
-                        });
+                            matchItems.Add(new HomeAwayTeamViewModel()
+                            {
+                                Team = UtilsOddOperations.GetMatchTypeString(mt),
+                                Matches = matchTypeResults.Item4.ToString(),
+                                Wins = matchTypeResults.Item1.ToString(),
+                                WinsP = UtilsOddOperations.GetPercentage(matchTypeResults.Item1, matchTypeResults.Item4),
+                                WinsO = UtilsOddOperations.GetOdd(matchTypeResults.Item1, matchTypeResults.Item4),
+                                Draws = matchTypeResults.Item2.ToString(),
+                                DrawsP = UtilsOddOperations.GetPercentage(matchTypeResults.Item2, matchTypeResults.Item4),
+                                DrawsO = UtilsOddOperations.GetOdd(matchTypeResults.Item2, matchTypeResults.Item4),
+                                Defeats = matchTypeResults.Item3.ToString(),
+                                DefeatsP = UtilsOddOperations.GetPercentage(matchTypeResults.Item3, matchTypeResults.Item4),
+                                DefeatsO = UtilsOddOperations.GetOdd(matchTypeResults.Item3, matchTypeResults.Item4),
+                                Over25 = matchService.GetMatchTypeOver25(compId, mt).ToString(),
+                                Over25P = UtilsOddOperations.GetPercentage(matchService.GetMatchTypeOver25(compId, mt), matchTypeResults.Item4),
+                                Over25O = UtilsOddOperations.GetOdd(matchService.GetMatchTypeOver25(compId, mt), matchTypeResults.Item4),
+                                Over15 = matchService.GetMatchTypeOver15(compId, mt).ToString(),
+                                Over15P = UtilsOddOperations.GetPercentage(matchService.GetMatchTypeOver15(compId, mt), matchTypeResults.Item4),
+                                Over15O = UtilsOddOperations.GetOdd(matchService.GetMatchTypeOver15(compId, mt), matchTypeResults.Item4),
+                                Btts = matchService.GetMatchTypeBTTS(compId, mt).ToString(),
+                                BttsP = UtilsOddOperations.GetPercentage(matchService.GetMatchTypeBTTS(compId, mt), matchTypeResults.Item4),
+                                BttsO = UtilsOddOperations.GetOdd(matchService.GetMatchTypeBTTS(compId, mt), matchTypeResults.Item4),
+                            });
+                        }
                     }
+                    else if (matchPeriod == MatchPeriodTypeValues.FirstHalf)
+                    {
+                        var matchTypeResults = matchService.GetMatchTypeResults1st(compId, mt);
+
+                        if (matchTypeResults != null)
+                        {
+                            matchItems.Add(new HomeAwayTeamViewModel()
+                            {
+                                Team = UtilsOddOperations.GetMatchTypeString(mt),
+                                Matches = matchTypeResults.Item4.ToString(),
+                                Wins = matchTypeResults.Item1.ToString(),
+                                WinsP = UtilsOddOperations.GetPercentage(matchTypeResults.Item1, matchTypeResults.Item4),
+                                WinsO = UtilsOddOperations.GetOdd(matchTypeResults.Item1, matchTypeResults.Item4),
+                                Draws = matchTypeResults.Item2.ToString(),
+                                DrawsP = UtilsOddOperations.GetPercentage(matchTypeResults.Item2, matchTypeResults.Item4),
+                                DrawsO = UtilsOddOperations.GetOdd(matchTypeResults.Item2, matchTypeResults.Item4),
+                                Defeats = matchTypeResults.Item3.ToString(),
+                                DefeatsP = UtilsOddOperations.GetPercentage(matchTypeResults.Item3, matchTypeResults.Item4),
+                                DefeatsO = UtilsOddOperations.GetOdd(matchTypeResults.Item3, matchTypeResults.Item4),
+                                Over25 = matchService.GetMatchTypeOver25_1st(compId, mt).ToString(),
+                                Over25P = UtilsOddOperations.GetPercentage(matchService.GetMatchTypeOver25_1st(compId, mt), matchTypeResults.Item4),
+                                Over25O = UtilsOddOperations.GetOdd(matchService.GetMatchTypeOver25_1st(compId, mt), matchTypeResults.Item4),
+                                Over15 = matchService.GetMatchTypeOver15_1st(compId, mt).ToString(),
+                                Over15P = UtilsOddOperations.GetPercentage(matchService.GetMatchTypeOver15_1st(compId, mt), matchTypeResults.Item4),
+                                Over15O = UtilsOddOperations.GetOdd(matchService.GetMatchTypeOver15_1st(compId, mt), matchTypeResults.Item4),
+                                Btts = matchService.GetMatchTypeBTTS_1st(compId, mt).ToString(),
+                                BttsP = UtilsOddOperations.GetPercentage(matchService.GetMatchTypeBTTS_1st(compId, mt), matchTypeResults.Item4),
+                                BttsO = UtilsOddOperations.GetOdd(matchService.GetMatchTypeBTTS_1st(compId, mt), matchTypeResults.Item4),
+                            });
+                        }
+                    }
+                    else if (matchPeriod == MatchPeriodTypeValues.SecondHalf)
+                    {
+                        var matchTypeResults = matchService.GetMatchTypeResults2nd(compId, mt);
+
+                        if (matchTypeResults != null)
+                        {
+                            matchItems.Add(new HomeAwayTeamViewModel()
+                            {
+                                Team = UtilsOddOperations.GetMatchTypeString(mt),
+                                Matches = matchTypeResults.Item4.ToString(),
+                                Wins = matchTypeResults.Item1.ToString(),
+                                WinsP = UtilsOddOperations.GetPercentage(matchTypeResults.Item1, matchTypeResults.Item4),
+                                WinsO = UtilsOddOperations.GetOdd(matchTypeResults.Item1, matchTypeResults.Item4),
+                                Draws = matchTypeResults.Item2.ToString(),
+                                DrawsP = UtilsOddOperations.GetPercentage(matchTypeResults.Item2, matchTypeResults.Item4),
+                                DrawsO = UtilsOddOperations.GetOdd(matchTypeResults.Item2, matchTypeResults.Item4),
+                                Defeats = matchTypeResults.Item3.ToString(),
+                                DefeatsP = UtilsOddOperations.GetPercentage(matchTypeResults.Item3, matchTypeResults.Item4),
+                                DefeatsO = UtilsOddOperations.GetOdd(matchTypeResults.Item3, matchTypeResults.Item4),
+                                Over25 = matchService.GetMatchTypeOver25_2nd(compId, mt).ToString(),
+                                Over25P = UtilsOddOperations.GetPercentage(matchService.GetMatchTypeOver25_2nd(compId, mt), matchTypeResults.Item4),
+                                Over25O = UtilsOddOperations.GetOdd(matchService.GetMatchTypeOver25_2nd(compId, mt), matchTypeResults.Item4),
+                                Over15 = matchService.GetMatchTypeOver15_2nd(compId, mt).ToString(),
+                                Over15P = UtilsOddOperations.GetPercentage(matchService.GetMatchTypeOver15_2nd(compId, mt), matchTypeResults.Item4),
+                                Over15O = UtilsOddOperations.GetOdd(matchService.GetMatchTypeOver15_2nd(compId, mt), matchTypeResults.Item4),
+                                Btts = matchService.GetMatchTypeBTTS_2nd(compId, mt).ToString(),
+                                BttsP = UtilsOddOperations.GetPercentage(matchService.GetMatchTypeBTTS_2nd(compId, mt), matchTypeResults.Item4),
+                                BttsO = UtilsOddOperations.GetOdd(matchService.GetMatchTypeBTTS_2nd(compId, mt), matchTypeResults.Item4),
+                            });
+                        }
+                    }
+                   
                 }
             }
             
@@ -241,59 +356,136 @@ namespace SpeedOdds.UserControls.HomeAwayTeams
         {
             DataGridTeams.Dispatcher.BeginInvoke((Action)(() => {
 
-                if (IsMatchType)
+                if (matchPeriod == MatchPeriodTypeValues.FullTime)
                 {
-                    //VISIBILITY
-                    DataGridTeams.Columns[11].Visibility = Visibility.Collapsed;
-                    DataGridTeams.Columns[12].Visibility = Visibility.Collapsed;
-                    DataGridTeams.Columns[13].Visibility = Visibility.Collapsed;
-                    DataGridTeams.Columns[14].Visibility = Visibility.Collapsed;
-                    DataGridTeams.Columns[15].Visibility = Visibility.Collapsed;
-                    DataGridTeams.Columns[16].Visibility = Visibility.Collapsed;
+                    if (IsMatchType)
+                    {
+                        //VISIBILITY
+                        DataGridTeams.Columns[11].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[12].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[13].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[14].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[15].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[16].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[17].Visibility = Visibility.Collapsed;
 
-                    DataGridTeams.Columns[26].Visibility = Visibility.Collapsed;
-                    DataGridTeams.Columns[27].Visibility = Visibility.Collapsed;
-                    DataGridTeams.Columns[28].Visibility = Visibility.Collapsed;
-                    DataGridTeams.Columns[29].Visibility = Visibility.Collapsed;
-                    DataGridTeams.Columns[30].Visibility = Visibility.Collapsed;
-                    DataGridTeams.Columns[31].Visibility = Visibility.Collapsed;
-                    DataGridTeams.Columns[32].Visibility = Visibility.Collapsed;
-                    DataGridTeams.Columns[33].Visibility = Visibility.Collapsed;
-                    DataGridTeams.Columns[34].Visibility = Visibility.Collapsed;
-                    DataGridTeams.Columns[35].Visibility = Visibility.Collapsed;
-                    DataGridTeams.Columns[36].Visibility = Visibility.Collapsed;
-                    DataGridTeams.Columns[37].Visibility = Visibility.Collapsed;
-                    DataGridTeams.Columns[38].Visibility = Visibility.Collapsed;
-                    DataGridTeams.Columns[39].Visibility = Visibility.Collapsed;
-                    DataGridTeams.Columns[40].Visibility = Visibility.Collapsed;
-                    DataGridTeams.Columns[41].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[27].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[28].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[29].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[30].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[31].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[32].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[33].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[34].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[35].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[36].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[37].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[38].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[39].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[40].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[41].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[42].Visibility = Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        //VISIBILITY
+                        DataGridTeams.Columns[11].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[12].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[13].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[14].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[15].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[16].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[17].Visibility = Visibility.Collapsed;
+
+                        DataGridTeams.Columns[27].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[28].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[29].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[30].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[31].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[32].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[33].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[34].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[35].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[36].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[37].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[38].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[39].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[40].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[41].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[42].Visibility = Visibility.Visible;
+                    }
                 }
                 else
                 {
-                    //VISIBILITY
-                    DataGridTeams.Columns[11].Visibility = Visibility.Visible;
-                    DataGridTeams.Columns[12].Visibility = Visibility.Visible;
-                    DataGridTeams.Columns[13].Visibility = Visibility.Visible;
-                    DataGridTeams.Columns[14].Visibility = Visibility.Visible;
-                    DataGridTeams.Columns[15].Visibility = Visibility.Visible;
-                    DataGridTeams.Columns[16].Visibility = Visibility.Visible;
+                    if (IsMatchType)
+                    {
+                        //VISIBILITY
+                        DataGridTeams.Columns[11].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[12].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[13].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[14].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[15].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[16].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[17].Visibility = Visibility.Collapsed;
 
-                    DataGridTeams.Columns[26].Visibility = Visibility.Visible;
-                    DataGridTeams.Columns[27].Visibility = Visibility.Visible;
-                    DataGridTeams.Columns[28].Visibility = Visibility.Visible;
-                    DataGridTeams.Columns[29].Visibility = Visibility.Visible;
-                    DataGridTeams.Columns[30].Visibility = Visibility.Visible;
-                    DataGridTeams.Columns[31].Visibility = Visibility.Visible;
-                    DataGridTeams.Columns[32].Visibility = Visibility.Visible;
-                    DataGridTeams.Columns[33].Visibility = Visibility.Visible;
-                    DataGridTeams.Columns[34].Visibility = Visibility.Visible;
-                    DataGridTeams.Columns[35].Visibility = Visibility.Visible;
-                    DataGridTeams.Columns[36].Visibility = Visibility.Visible;
-                    DataGridTeams.Columns[37].Visibility = Visibility.Visible;
-                    DataGridTeams.Columns[38].Visibility = Visibility.Visible;
-                    DataGridTeams.Columns[39].Visibility = Visibility.Visible;
-                    DataGridTeams.Columns[40].Visibility = Visibility.Visible;
-                    DataGridTeams.Columns[41].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[27].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[28].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[29].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[30].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[31].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[32].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[33].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[34].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[35].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[36].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[37].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[38].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[39].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[40].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[41].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[42].Visibility = Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        //VISIBILITY
+                        DataGridTeams.Columns[5].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[6].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[7].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[8].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[9].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[10].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[11].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[12].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[13].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[14].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[15].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[16].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[17].Visibility = Visibility.Visible;
+
+                        DataGridTeams.Columns[19].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[20].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[22].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[23].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[25].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[26].Visibility = Visibility.Collapsed;
+
+                        DataGridTeams.Columns[27].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[28].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[29].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[30].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[31].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[32].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[33].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[34].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[35].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[36].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[37].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[38].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[39].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[40].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[41].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[42].Visibility = Visibility.Collapsed;
+                    }
                 }
                 
             }));
@@ -378,15 +570,24 @@ namespace SpeedOdds.UserControls.HomeAwayTeams
 
         private void ButtonHomeTeams_Click(object sender, RoutedEventArgs e)
         {
-            if (!IsHomeTeam || IsMatchType)
+            if (matchPeriod != MatchPeriodTypeValues.FullTime || (matchPeriod is MatchPeriodTypeValues.FullTime && (!IsHomeTeam || IsMatchType)))
             {
                 //Selection colors
                 ButtonHomeTeams.Background = new SolidColorBrush(Color.FromRgb(170, 74, 59));
                 ButtonAwayTeams.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
                 ButtonMatchType.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
 
+                ButtonHomeTeams_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
+                ButtonHomeTeams_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
                 IsHomeTeam = true;
                 IsMatchType = false;
+                matchPeriod = MatchPeriodTypeValues.FullTime;
 
                 ReloadGridMatches();
             }
@@ -394,15 +595,24 @@ namespace SpeedOdds.UserControls.HomeAwayTeams
 
         private void ButtonAwayTeams_Click(object sender, RoutedEventArgs e)
         {
-            if (IsHomeTeam || IsMatchType)
+            if (matchPeriod != MatchPeriodTypeValues.FullTime || (matchPeriod is MatchPeriodTypeValues.FullTime && (IsHomeTeam || IsMatchType)))
             {
                 //Selection colors
                 ButtonAwayTeams.Background = new SolidColorBrush(Color.FromRgb(170, 74, 59));
                 ButtonHomeTeams.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
                 ButtonMatchType.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
 
+                ButtonHomeTeams_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
+                ButtonHomeTeams_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
                 IsHomeTeam = false;
                 IsMatchType = false;
+                matchPeriod = MatchPeriodTypeValues.FullTime;
 
                 ReloadGridMatches();
             }
@@ -410,14 +620,172 @@ namespace SpeedOdds.UserControls.HomeAwayTeams
 
         private void ButtonMatchType_Click(object sender, RoutedEventArgs e)
         {
-            if (!IsMatchType)
+            if (matchPeriod != MatchPeriodTypeValues.FullTime || (matchPeriod is MatchPeriodTypeValues.FullTime && !IsMatchType))
             {
                 //Selection colors
                 ButtonHomeTeams.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
                 ButtonAwayTeams.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
                 ButtonMatchType.Background = new SolidColorBrush(Color.FromRgb(170, 74, 59));
 
+                ButtonHomeTeams_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
+                ButtonHomeTeams_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
                 IsMatchType = true;
+                matchPeriod = MatchPeriodTypeValues.FullTime;
+
+                ReloadGridMatches();
+            }
+        }
+
+        private void ButtonHomeTeams_1st_Click(object sender, RoutedEventArgs e)
+        {
+            if (matchPeriod != MatchPeriodTypeValues.FirstHalf || (matchPeriod is MatchPeriodTypeValues.FirstHalf && (!IsHomeTeam || IsMatchType)))
+            {
+                //Selection colors
+                ButtonHomeTeams.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
+                ButtonHomeTeams_1st.Background = new SolidColorBrush(Color.FromRgb(170, 74, 59));
+                ButtonAwayTeams_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
+                ButtonHomeTeams_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
+                IsHomeTeam = true;
+                IsMatchType = false;
+                matchPeriod = MatchPeriodTypeValues.FirstHalf;
+
+                ReloadGridMatches();
+            }
+        }
+
+        private void ButtonAwayTeams_1st_Click(object sender, RoutedEventArgs e)
+        {
+            if (matchPeriod != MatchPeriodTypeValues.FirstHalf || (matchPeriod is MatchPeriodTypeValues.FirstHalf && (IsHomeTeam || IsMatchType)))
+            {
+                //Selection colors
+                ButtonHomeTeams.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
+                ButtonHomeTeams_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams_1st.Background = new SolidColorBrush(Color.FromRgb(170, 74, 59));
+                ButtonMatchType_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
+                ButtonHomeTeams_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
+                IsHomeTeam = false;
+                IsMatchType = false;
+                matchPeriod = MatchPeriodTypeValues.FirstHalf;
+
+                ReloadGridMatches();
+            }
+        }
+
+        private void ButtonMatchType_1st_Click(object sender, RoutedEventArgs e)
+        {
+            if (matchPeriod != MatchPeriodTypeValues.FirstHalf || (matchPeriod is MatchPeriodTypeValues.FirstHalf && !IsMatchType))
+            {
+                //Selection colors
+                ButtonHomeTeams.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
+                ButtonHomeTeams_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType_1st.Background = new SolidColorBrush(Color.FromRgb(170, 74, 59));
+
+                ButtonHomeTeams_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
+                IsMatchType = true;
+                matchPeriod = MatchPeriodTypeValues.FirstHalf;
+
+                ReloadGridMatches();
+            }
+        }
+
+        private void ButtonHomeTeams_2nd_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (matchPeriod != MatchPeriodTypeValues.SecondHalf || (matchPeriod is MatchPeriodTypeValues.SecondHalf && (!IsHomeTeam || IsMatchType)))
+            {
+                //Selection colors
+                ButtonHomeTeams.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
+                ButtonHomeTeams_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
+                ButtonHomeTeams_2nd.Background = new SolidColorBrush(Color.FromRgb(170, 74, 59));
+                ButtonAwayTeams_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
+                IsHomeTeam = true;
+                IsMatchType = false;
+                matchPeriod = MatchPeriodTypeValues.SecondHalf;
+
+                ReloadGridMatches();
+            }
+        }
+
+        private void ButtonAwayTeams_2nd_Click(object sender, RoutedEventArgs e)
+        {
+            if (matchPeriod != MatchPeriodTypeValues.SecondHalf || (matchPeriod is MatchPeriodTypeValues.SecondHalf && (IsHomeTeam || IsMatchType)))
+            {
+                //Selection colors
+                ButtonHomeTeams.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
+                ButtonHomeTeams_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
+                ButtonHomeTeams_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams_2nd.Background = new SolidColorBrush(Color.FromRgb(170, 74, 59));
+                ButtonMatchType_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
+                IsHomeTeam = false;
+                IsMatchType = false;
+                matchPeriod = MatchPeriodTypeValues.SecondHalf;
+
+                ReloadGridMatches();
+            }
+        }
+
+        private void ButtonMatchType_2nd_Click(object sender, RoutedEventArgs e)
+        {
+            if (matchPeriod != MatchPeriodTypeValues.SecondHalf || (matchPeriod is MatchPeriodTypeValues.SecondHalf && !IsMatchType))
+            {
+                //Selection colors
+                ButtonHomeTeams.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
+                ButtonHomeTeams_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType_1st.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+
+                ButtonHomeTeams_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonAwayTeams_2nd.Background = new SolidColorBrush(Color.FromRgb(55, 54, 56));
+                ButtonMatchType_2nd.Background = new SolidColorBrush(Color.FromRgb(170, 74, 59));
+
+                IsMatchType = true;
+                matchPeriod = MatchPeriodTypeValues.SecondHalf;
 
                 ReloadGridMatches();
             }
@@ -439,7 +807,6 @@ namespace SpeedOdds.UserControls.HomeAwayTeams
 
                 Canvas.SetZIndex(DataGridTeams, 0);
             }
-        }
-
+        }        
     }
 }

@@ -115,12 +115,13 @@
                 <DataGridTextColumn Header="GM+GS" Width="100" Binding="{Binding GmGs}" CanUserResize="False"/>
                 <DataGridTextColumn Header="GM-GS" Width="100" Binding="{Binding Gm_Gs}" CanUserResize="False"/>
                 <DataGridTextColumn Header="Fator Casa(%)" Width="120" Binding="{Binding FatorCasa}" CanUserResize="False"/>
-                <DataGridTextColumn Header="Over 2.5" Width="100" Binding="{Binding Over25}" CanUserResize="False"/>
-                <DataGridTextColumn Header="Over 2.5(%)" Width="100" Binding="{Binding Over25P}" CanUserResize="False"/>
-                <DataGridTextColumn Header="Over 2.5(odd)" Width="130" Binding="{Binding Over25O}" CanUserResize="False"/>
+                <DataGridTextColumn Header="Over 0.5" Width="100" Binding="{Binding Over05}" CanUserResize="False"/>
                 <DataGridTextColumn Header="Over 1.5" Width="100" Binding="{Binding Over15}" CanUserResize="False"/>
                 <DataGridTextColumn Header="Over 1.5(%)" Width="100" Binding="{Binding Over15P}" CanUserResize="False"/>
                 <DataGridTextColumn Header="Over 1.5(odd)" Width="130" Binding="{Binding Over15O}" CanUserResize="False"/>
+                <DataGridTextColumn Header="Over 2.5" Width="100" Binding="{Binding Over25}" CanUserResize="False"/>
+                <DataGridTextColumn Header="Over 2.5(%)" Width="100" Binding="{Binding Over25P}" CanUserResize="False"/>
+                <DataGridTextColumn Header="Over 2.5(odd)" Width="130" Binding="{Binding Over25O}" CanUserResize="False"/>
                 <DataGridTextColumn Header="BTTS" Width="100" Binding="{Binding Btts}" CanUserResize="False"/>
                 <DataGridTextColumn Header="BTTS(%)" Width="100" Binding="{Binding BttsP}" CanUserResize="False"/>
                 <DataGridTextColumn Header="BTTS(odd)" Width="100" Binding="{Binding BttsO}" CanUserResize="False"/>
@@ -146,31 +147,84 @@
 
 
         <!--BUTTONS-->
-        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonHomeTeams" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="79,848,0,0" 
-                VerticalAlignment="Top" Width="181" Height="54" Background="#FFAA4A3B" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonHomeTeams" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="535,846,0,0" 
+                VerticalAlignment="Top" Width="138" Height="54" Background="#FFAA4A3B" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
                 Click="ButtonHomeTeams_Click">
-            <StackPanel Orientation="Horizontal" Width="166" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="Casa" VerticalAlignment="Center" Margin="7,0,80,0" FontWeight="Normal" FontSize="14" />
-                <Image  Width="40" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,12,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/sneaker_skystalker.png"/>
+            <StackPanel Orientation="Horizontal" Width="134" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Casa" VerticalAlignment="Center" Margin="10,0,40,0" FontWeight="Normal" FontSize="14" />
+                <Image  Width="40" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,12,0,8" Source="/SpeedOdds;component/Resources/ImageFiles/sneaker_skystalker.png"/>
             </StackPanel>
         </Button>
 
-        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonAwayTeams" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="282,848,0,0" 
-                VerticalAlignment="Top" Width="181" Height="54" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonAwayTeams" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="698,846,0,0" 
+                VerticalAlignment="Top" Width="138" Height="54" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
                 Click="ButtonAwayTeams_Click">
-            <StackPanel Orientation="Horizontal" Width="166" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="Fora" VerticalAlignment="Center" Margin="7,0,80,0" FontWeight="Normal" FontSize="14" />
+            <StackPanel Orientation="Horizontal" Width="130" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Fora" VerticalAlignment="Center" Margin="7,0,50,0" FontWeight="Normal" FontSize="14" />
                 <Image  Width="29" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/seasons_icon.png"/>
             </StackPanel>
         </Button>
-        
-        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonMatchType" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="486,848,0,0" 
-            VerticalAlignment="Top" Width="181" Height="54" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
+
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonMatchType" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="858,846,0,0" 
+            VerticalAlignment="Top" Width="138" Height="54" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
             Click="ButtonMatchType_Click">
-            <StackPanel Orientation="Horizontal" Width="166" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="Tipo Jogo" VerticalAlignment="Center" Margin="7,0,55,0" FontWeight="Normal" FontSize="14" />
+            <StackPanel Orientation="Horizontal" Width="135" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Tipo Jogo" VerticalAlignment="Center" Margin="7,0,20,0" FontWeight="Normal" FontSize="14" />
                 <Image  Width="29" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/half_time_light_grey.png"/>
             </StackPanel>
         </Button>
+
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonHomeTeams_1st" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="25,846,0,0" 
+            VerticalAlignment="Top" Width="138" Height="54" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
+            Click="ButtonHomeTeams_1st_Click">
+            <StackPanel Orientation="Horizontal" Width="141" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Casa 1st" VerticalAlignment="Center" Margin="10,0,20,0" FontWeight="Normal" FontSize="14" />
+                <Image  Width="40" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,12,0,8" Source="/SpeedOdds;component/Resources/ImageFiles/sneaker_skystalker.png"/>
+            </StackPanel>
+        </Button>
+
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonAwayTeams_1st" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="180,846,0,0" 
+            VerticalAlignment="Top" Width="138" Height="54" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
+            Click="ButtonAwayTeams_1st_Click">
+            <StackPanel Orientation="Horizontal" Width="138" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Fora 1st" VerticalAlignment="Center" Margin="7,0,30,0" FontWeight="Normal" FontSize="14" />
+                <Image  Width="29" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/seasons_icon.png"/>
+            </StackPanel>
+        </Button>
+
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonMatchType_1st" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="336,846,0,0" 
+            VerticalAlignment="Top" Width="138" Height="54" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
+            Click="ButtonMatchType_1st_Click">
+            <StackPanel Orientation="Horizontal" Width="140" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Tipo Jogo 1st" VerticalAlignment="Center" Margin="7,0,10,0" FontWeight="Normal" FontSize="14" />
+                <Image  Width="29" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/half_time_light_grey.png"/>
+            </StackPanel>
+        </Button>
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonHomeTeams_2nd" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="1059,846,0,0" 
+            VerticalAlignment="Top" Width="138" Height="54" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
+            Click="ButtonHomeTeams_2nd_Click">
+            <StackPanel Orientation="Horizontal" Width="141" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Casa 2nd" VerticalAlignment="Center" Margin="10,0,20,0" FontWeight="Normal" FontSize="14" />
+                <Image  Width="40" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,12,0,8" Source="/SpeedOdds;component/Resources/ImageFiles/sneaker_skystalker.png"/>
+            </StackPanel>
+        </Button>
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonAwayTeams_2nd" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="1218,846,0,0" 
+            VerticalAlignment="Top" Width="138" Height="54" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
+            Click="ButtonAwayTeams_2nd_Click">
+            <StackPanel Orientation="Horizontal" Width="138" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Fora 2nd" VerticalAlignment="Center" Margin="7,0,30,0" FontWeight="Normal" FontSize="14" />
+                <Image  Width="29" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/seasons_icon.png"/>
+            </StackPanel>
+        </Button>
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonMatchType_2nd" TextElement.FontSize="22px" Padding="5, 0, 0, 0" Margin="1377,846,0,0" 
+            VerticalAlignment="Top" Width="138" Height="54" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" 
+            Click="ButtonMatchType_2nd_Click">
+            <StackPanel Orientation="Horizontal" Width="140" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Tipo Jogo 2nd" VerticalAlignment="Center" Margin="7,0,8,0" FontWeight="Normal" FontSize="14" />
+                <Image  Width="29" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/half_time_light_grey.png"/>
+            </StackPanel>
+        </Button>
+
+
     </Grid>
 </UserControl>

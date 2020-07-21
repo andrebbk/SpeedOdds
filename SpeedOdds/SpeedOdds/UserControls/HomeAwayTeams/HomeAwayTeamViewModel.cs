@@ -196,6 +196,17 @@ namespace SpeedOdds.UserControls.HomeAwayTeams
             }
         }
 
+        private string over05;
+        public string Over05
+        {
+            get { return over05; }
+            set
+            {
+                over05 = value;
+                OnPropertyChanged("Over05");
+            }
+        }
+
         private string over25;
         public string Over25
         {
