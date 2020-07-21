@@ -311,7 +311,7 @@ namespace SpeedOdds.Services
             {
                 using (var db = new SpeedOddsContext())
                 {
-                    if (IsHomeTeam)
+                    /*if (IsHomeTeam)
                     {
                         var matches = db.Matches
                             .Where(x => x.CompetitionId == competitionId && x.HomeTeamId == teamId)
@@ -355,6 +355,37 @@ namespace SpeedOdds.Services
 
                             return forma;
                         }
+                    }*/
+
+                    var matches = db.Matches
+                            .Where(x => x.CompetitionId == competitionId && (x.HomeTeamId == teamId || x.AwayTeamId == teamId))
+                            .OrderByDescending(x => x.FixtureId)
+                            .Take(5);
+
+                    if (matches != null && matches.Count() > 0)
+                    {
+                        int forma = 0;
+
+                        foreach (var match in matches)
+                        {
+                            if(match.AwayTeamId == teamId)
+                            {
+                                if (match.HomeGoals > match.AwayGoals)
+                                    forma -= 1;
+                                else if (match.HomeGoals < match.AwayGoals)
+                                    forma += 1;
+                            }
+                            else
+                            {
+                                if (match.HomeGoals > match.AwayGoals)
+                                    forma += 1;
+                                else if (match.HomeGoals < match.AwayGoals)
+                                    forma -= 1;
+                            }
+                            
+                        }
+
+                        return forma;
                     }
 
                     return 0;
