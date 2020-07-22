@@ -147,8 +147,14 @@ namespace SpeedOdds.UserControls.HomeAwayTeams
                                 Team = teamService.GetTeamName(item.TeamId),
                                 Matches = teamResults.Item4.ToString(),
                                 Wins = teamResults.Item1.ToString(),
+                                WinsP = UtilsOddOperations.GetPercentage(teamResults.Item1, teamResults.Item4),
+                                WinsO = UtilsOddOperations.GetOdd(teamResults.Item1, teamResults.Item4),
                                 Draws = teamResults.Item2.ToString(),
+                                DrawsP = UtilsOddOperations.GetPercentage(teamResults.Item2, teamResults.Item4),
+                                DrawsO = UtilsOddOperations.GetOdd(teamResults.Item2, teamResults.Item4),
                                 Defeats = teamResults.Item3.ToString(),
+                                DefeatsP = UtilsOddOperations.GetPercentage(teamResults.Item3, teamResults.Item4),
+                                DefeatsO = UtilsOddOperations.GetOdd(teamResults.Item3, teamResults.Item4),
                                 Over05 = matchService.GetTeamOver05_1st(compId, item.TeamId, IsHomeTeam).ToString(),
                                 Over25 = matchService.GetTeamOver25_1st(compId, item.TeamId, IsHomeTeam).ToString(),
                                 Over15 = matchService.GetTeamOver15_1st(compId, item.TeamId, IsHomeTeam).ToString(),
@@ -168,8 +174,14 @@ namespace SpeedOdds.UserControls.HomeAwayTeams
                                 Team = teamService.GetTeamName(item.TeamId),
                                 Matches = teamResults.Item4.ToString(),
                                 Wins = teamResults.Item1.ToString(),
+                                WinsP = UtilsOddOperations.GetPercentage(teamResults.Item1, teamResults.Item4),
+                                WinsO = UtilsOddOperations.GetOdd(teamResults.Item1, teamResults.Item4),
                                 Draws = teamResults.Item2.ToString(),
-                                Defeats = teamResults.Item3.ToString(),    
+                                DrawsP = UtilsOddOperations.GetPercentage(teamResults.Item2, teamResults.Item4),
+                                DrawsO = UtilsOddOperations.GetOdd(teamResults.Item2, teamResults.Item4),
+                                Defeats = teamResults.Item3.ToString(),
+                                DefeatsP = UtilsOddOperations.GetPercentage(teamResults.Item3, teamResults.Item4),
+                                DefeatsO = UtilsOddOperations.GetOdd(teamResults.Item3, teamResults.Item4),
                                 Over05 = matchService.GetTeamOver05_2nd(compId, item.TeamId, IsHomeTeam).ToString(),
                                 Over25 = matchService.GetTeamOver25_2nd(compId, item.TeamId, IsHomeTeam).ToString(),
                                 Over15 = matchService.GetTeamOver15_2nd(compId, item.TeamId, IsHomeTeam).ToString(),
@@ -448,12 +460,12 @@ namespace SpeedOdds.UserControls.HomeAwayTeams
                     else
                     {
                         //VISIBILITY
-                        DataGridTeams.Columns[5].Visibility = Visibility.Collapsed;
-                        DataGridTeams.Columns[6].Visibility = Visibility.Collapsed;
-                        DataGridTeams.Columns[7].Visibility = Visibility.Collapsed;
-                        DataGridTeams.Columns[8].Visibility = Visibility.Collapsed;
-                        DataGridTeams.Columns[9].Visibility = Visibility.Collapsed;
-                        DataGridTeams.Columns[10].Visibility = Visibility.Collapsed;
+                        DataGridTeams.Columns[5].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[6].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[7].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[8].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[9].Visibility = Visibility.Visible;
+                        DataGridTeams.Columns[10].Visibility = Visibility.Visible;
                         DataGridTeams.Columns[11].Visibility = Visibility.Collapsed;
                         DataGridTeams.Columns[12].Visibility = Visibility.Collapsed;
                         DataGridTeams.Columns[13].Visibility = Visibility.Collapsed;
