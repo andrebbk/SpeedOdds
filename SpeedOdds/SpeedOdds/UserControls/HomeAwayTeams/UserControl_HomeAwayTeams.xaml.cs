@@ -520,7 +520,7 @@ namespace SpeedOdds.UserControls.HomeAwayTeams
                 UtilsNotification.StartLoadingAnimation();
 
                 //get team(s)
-                List<Team> tList = null;
+                List<Team> tList = new List<Team>();
                 if (teamId.HasValue)
                 {
                     tList.Add(new Team()
