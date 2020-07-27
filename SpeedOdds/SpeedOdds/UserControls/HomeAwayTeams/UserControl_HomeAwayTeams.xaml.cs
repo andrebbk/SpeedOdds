@@ -336,7 +336,7 @@ namespace SpeedOdds.UserControls.HomeAwayTeams
             for (int linha=0; linha < nRows; linha++)
             {
                 //Começa na coluna 26
-                for (int coluna = 26; coluna < 42; coluna++)
+                for (int coluna = 27; coluna < 43; coluna++)
                 {
                     var celula = UtilsDataGrid.GetCell(DataGridTeams, linha, coluna);
                     if (celula != null)
