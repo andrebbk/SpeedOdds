@@ -157,7 +157,7 @@ namespace SpeedOdds.Services
             }
         }
 
-        public IEnumerable<Match> GetMatchesFiltered(int compId, int? fixId, int? tmId)
+        public IEnumerable<Match> GetMatchesFiltered(int compId, int? fixId, List<int> tmId)
         {
             try
             {
@@ -172,8 +172,8 @@ namespace SpeedOdds.Services
                              .OrderBy(x => x.MatchId)
                              .ToList();
 
-                    if (tmId.HasValue)
-                        query = query.Where(x => x.HomeTeamId == tmId.Value || x.AwayTeamId == tmId.Value)
+                    if (tmId != null && tmId != null? tmId.Count() > 0 : false)
+                        query = query.Where(x => tmId.Contains(x.HomeTeamId) || tmId.Contains(x.AwayTeamId))
                              .OrderBy(x => x.MatchId)
                              .ToList();
 

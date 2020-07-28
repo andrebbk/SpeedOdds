@@ -1,0 +1,36 @@
+﻿<Window x:Class="SpeedOdds.Windows.ChooseTeamsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SpeedOdds.Windows"
+        mc:Ignorable="d" WindowStyle="None"
+        Title="SpeedOdds" Height="395.612" Width="432.342" Icon="/SpeedOdds;component/Resources/ImageFiles/Icon/red-icon.png" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Background="#FF373638">
+    <Grid>
+        <Image HorizontalAlignment="Left" Height="46" Margin="15,10,0,0" VerticalAlignment="Top" Width="46" Source="/SpeedOdds;component/Resources/ImageFiles/Icon/red-icon.png"/>
+        <TextBlock HorizontalAlignment="Left" Margin="82,22,0,0" TextWrapping="Wrap" Text="SpeedOdds" VerticalAlignment="Top" Height="34" Width="129" FontSize="24" Foreground="White"/>
+
+        <TextBlock x:Name="TextBlockMsg"  HorizontalAlignment="Center" Margin="32,79,23,0" TextWrapping="Wrap" Text="Selecione as equipas que pretende filtrar:" VerticalAlignment="Top" Height="45" Width="377" TextElement.FontSize="22" Foreground="#FFFFFBFB" FontSize="20"/>
+
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonYes" TextElement.FontSize="22px" Padding="36, 0, 0, 0" Margin="41,320,0,0" VerticalAlignment="Top" Width="133" Height="54" Background="#FF454446" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Click="ButtonYes_Click">
+            <StackPanel Orientation="Horizontal" Width="61" Height="44" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Image  Width="24" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,13,0,10" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/checkwhite.png"/>
+            </StackPanel>
+        </Button>
+
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonNo" TextElement.FontSize="22px" Padding="33, 0, 20, 0" Margin="261,320,0,0" VerticalAlignment="Top" Width="133" Height="54" Background="#FF454446" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Click="ButtonNo_Click">
+            <StackPanel Orientation="Horizontal" Width="35" Height="44" HorizontalAlignment="Right">
+                <Image  Width="23" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,12,0,10" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/iconclose.png"/>
+            </StackPanel>
+        </Button>
+        <ListBox x:Name="ListBoxTeams" HorizontalAlignment="Left" Height="173" Margin="48,136,0,0" VerticalAlignment="Top" Width="328"
+                 SelectionMode="Multiple" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <ListBox.ItemTemplate>
+            <DataTemplate>
+                    <TextBlock Text="{Binding TeamName}" Foreground="White"/>
+            </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Window>

@@ -160,6 +160,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commons\Enums\DrawableMenuTypeValues.cs" />
     <Compile Include="Commons\Enums\MatchPeriodTypeValues.cs" />
     <Compile Include="Commons\Enums\MatchTypeValues.cs" />
     <Compile Include="Commons\Enums\MatchViewTypeValues.cs" />
@@ -304,6 +305,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\ChooseTeamsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Windows\ConfirmationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -323,6 +328,9 @@
     <Compile Include="UserControls\Teams\TeamDataModel.cs" />
     <Compile Include="UserControls\Teams\UserControl_Teams.xaml.cs">
       <DependentUpon>UserControl_Teams.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ChooseTeamsWindow.xaml.cs">
+      <DependentUpon>ChooseTeamsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ConfirmationWindow.xaml.cs">
       <DependentUpon>ConfirmationWindow.xaml</DependentUpon>

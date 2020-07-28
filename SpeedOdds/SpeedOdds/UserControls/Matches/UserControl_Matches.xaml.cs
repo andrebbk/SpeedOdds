@@ -177,7 +177,7 @@ namespace SpeedOdds.UserControls.Matches
         }
 
         //PUBLIC
-        public void LoadGridWithCalculatedMatchesData(int? compId, int? fixId, int? teamId)
+        public void LoadGridWithCalculatedMatchesData(int? compId, int? fixId, List<int> teamId)
         {
             if (!compId.HasValue || compId.Value == 0)
             {

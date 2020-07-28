@@ -91,7 +91,7 @@
         <TextBlock x:Name="Label_CheckBoxFixtures" HorizontalAlignment="Left" Visibility="Hidden" Margin="125,136,0,0" 
                    TextWrapping="Wrap" Text="Todas as jornadas" VerticalAlignment="Top" Width="98" Foreground="#FFA09F9F" 
                    RenderTransformOrigin="0.529,0.773" FontSize="11" />
-        
+
         <CheckBox Template="{StaticResource CbTemplate}" x:Name="CheckBoxFilterAllFixtures" Content="Todas as jornadas" HorizontalAlignment="Left" Margin="134,155,0,0" VerticalAlignment="Top" 
                   Height="20" Width="44" FontSize="14" Foreground="#FFA2A2A2" Visibility="Hidden" Click="CheckBoxFilterAllFixtures_Click" Background="#FF99A6AC" BorderBrush="#FFA1A2A2" RenderTransformOrigin="0.644,0.683"/>
 
@@ -102,8 +102,8 @@
                 <Image  Width="29" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/seasons_icon.png"/>
             </StackPanel>
         </Button>
-        
-        
+
+
         <TextBlock x:Name="Label_Filter" HorizontalAlignment="Left" Margin="10,20,0,0" TextWrapping="Wrap" Text="Filtros" VerticalAlignment="Top" FontSize="18" Width="86" FontWeight="Bold" Foreground="#FFA09F9F" RenderTransformOrigin="0.529,0.773"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,348,0,0" TextWrapping="Wrap" Text="Opções" VerticalAlignment="Top" FontSize="18" Width="86" FontWeight="Bold" Foreground="#FFA09F9F"/>
         <TextBlock x:Name="Label_Filter_Copy" HorizontalAlignment="Left" Margin="31,59,0,0" TextWrapping="Wrap" Text="Competição:" VerticalAlignment="Top" Width="86" Foreground="#FFA09F9F" RenderTransformOrigin="0.529,0.773"/>
@@ -113,9 +113,16 @@
         <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonApplyFilters" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="31,272,0,0" VerticalAlignment="Top" Width="150" Height="44" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonApplyFilters_Click">
             <StackPanel Orientation="Horizontal" Width="145" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <TextBlock Text="Mostrar Jogos" VerticalAlignment="Center" Margin="7,0,12,0" FontWeight="Normal" FontSize="14" />
-                <Image  Width="29" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,8,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/whistle-grey.png"/>
+                <Image  Width="28" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,10,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/whistle-grey.png"/>
             </StackPanel>
         </Button>
-                
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonTeamsFilter" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="192,272,0,0" VerticalAlignment="Top" 
+                Width="133" Height="44" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonTeamsFilter_Click">
+            <StackPanel Orientation="Horizontal" Width="138" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Equipas" VerticalAlignment="Center" Margin="7,12,1,12" FontWeight="Normal" FontSize="14" Width="88" />
+                <Image  Width="24" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,10,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/teams_icon.png"/>
+            </StackPanel>
+        </Button>
+
     </Grid>
 </UserControl>
