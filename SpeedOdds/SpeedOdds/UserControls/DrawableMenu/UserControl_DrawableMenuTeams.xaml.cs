@@ -1,8 +1,10 @@
-﻿using SpeedOdds.Models.Shared;
+﻿using SpeedOdds.Commons.Enums;
+using SpeedOdds.Models.Shared;
 using SpeedOdds.Services;
 using SpeedOdds.UserControls.HomeAwayTeams;
 using SpeedOdds.UserControls.MainContent;
 using SpeedOdds.UserControls.Matches;
+using SpeedOdds.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -32,6 +34,8 @@ namespace SpeedOdds.UserControls.DrawableMenu
         private CompetitionService competitionService;
         private TeamService teamService;
 
+        public List<int> teamsListToFilter;
+
         public UserControl_DrawableMenuTeams(UserControl_MainContent mainContent, UserControl_HomeAwayTeams parent)
         {
             InitializeComponent();
@@ -40,6 +44,7 @@ namespace SpeedOdds.UserControls.DrawableMenu
             _parent.child = this; //Important to connect both aways
             competitionService = new CompetitionService();
             teamService = new TeamService();
+            teamsListToFilter = null;
             InitFilterForm();
 
         }
@@ -68,6 +73,7 @@ namespace SpeedOdds.UserControls.DrawableMenu
             ComboBoxCompetition.SelectedValue = compsBox.FirstOrDefault();
 
             ComboBoxTeam.IsEnabled = false;
+            ButtonTeamsFilter.Visibility = Visibility.Hidden;
         }
 
 
@@ -84,13 +90,16 @@ namespace SpeedOdds.UserControls.DrawableMenu
             return null;
         }
 
-        public int? GetTeamValue()
+        public List<int> GetTeamValue()
         {
             if (((TeamComboModel)ComboBoxTeam.SelectedItem) != null)
             {
                 if (((TeamComboModel)ComboBoxTeam.SelectedItem).TeamId != 0)
-                    return ((TeamComboModel)ComboBoxTeam.SelectedItem).TeamId;
+                    return new List<int>() { ((TeamComboModel)ComboBoxTeam.SelectedItem).TeamId };
             }
+
+            if (teamsListToFilter != null && teamsListToFilter != null ? teamsListToFilter.Count() > 0 : false)
+                return teamsListToFilter;
 
             return null;
         }
@@ -100,6 +109,25 @@ namespace SpeedOdds.UserControls.DrawableMenu
         private void ButtonApplyFilters_Click(object sender, RoutedEventArgs e)
         {
             _parent.LoadGridWithCalculatedMatchesData(GetCompetitionValue(), GetTeamValue());
+        }
+
+        private void ButtonTeamsFilter_Click(object sender, RoutedEventArgs e)
+        {
+            if (((CompetitionComboModel)ComboBoxCompetition.SelectedItem) != null)
+            {
+                if (((CompetitionComboModel)ComboBoxCompetition.SelectedItem).CompetitionId != 0)
+                {
+                    int compId = ((CompetitionComboModel)ComboBoxCompetition.SelectedItem).CompetitionId;
+
+                    var teamList = teamService.GetCompetitionTeams(compId);
+                    if (teamList != null && teamList.Count() > 0)
+                    {
+                        ChooseTeamsWindow popupTeams = new ChooseTeamsWindow(this, DrawableMenuTypeValues.Teams, teamList);
+                        popupTeams.ShowDialog();
+                    }
+
+                }
+            }
         }
 
 
@@ -132,18 +160,28 @@ namespace SpeedOdds.UserControls.DrawableMenu
 
                             //Active combobox
                             ComboBoxTeam.Dispatcher.BeginInvoke((Action)(() => ComboBoxTeam.IsEnabled = true));
+
+                            //Active button "Teams"
+                            ButtonTeamsFilter.Dispatcher.BeginInvoke((Action)(() => ButtonTeamsFilter.Visibility = Visibility.Visible));
                         }
                         else
                         {
                             ComboBoxTeam.Dispatcher.BeginInvoke((Action)(() => ComboBoxTeam.ItemsSource = null));
                             ComboBoxTeam.Dispatcher.BeginInvoke((Action)(() => ComboBoxTeam.IsEnabled = false));
+                            ButtonTeamsFilter.Dispatcher.BeginInvoke((Action)(() => ButtonTeamsFilter.Visibility = Visibility.Hidden));
+                            teamsListToFilter = null;
                         }
 
                     }).Start();
                 }
                 else
+                {
                     ComboBoxTeam.IsEnabled = false;
+                    ButtonTeamsFilter.Visibility = Visibility.Hidden;
+                    teamsListToFilter = null;
+                }
             }
         }
+
     }
 }

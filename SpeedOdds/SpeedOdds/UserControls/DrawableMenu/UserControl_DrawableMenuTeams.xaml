@@ -95,6 +95,14 @@
                 <Image  Width="25" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,12,0,14" Source="/SpeedOdds;component/Resources/ImageFiles/sneaker_skystalker.png"/>
             </StackPanel>
         </Button>
+        
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonTeamsFilter" TextElement.FontSize="22px" Padding="10, 0, 0, 0" Margin="192,223,0,0" VerticalAlignment="Top" 
+            Width="133" Height="44" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Click="ButtonTeamsFilter_Click">
+            <StackPanel Orientation="Horizontal" Width="138" Height="43" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Equipas" VerticalAlignment="Center" Margin="7,12,1,12" FontWeight="Normal" FontSize="14" Width="88" />
+                <Image  Width="24" Stretch="Fill" RenderTransformOrigin="2.75,0.65"  Margin="0,10,0,7" Source="/SpeedOdds;component/Resources/ImageFiles/Buttons/teams_icon.png"/>
+            </StackPanel>
+        </Button>
 
     </Grid>
 </UserControl>

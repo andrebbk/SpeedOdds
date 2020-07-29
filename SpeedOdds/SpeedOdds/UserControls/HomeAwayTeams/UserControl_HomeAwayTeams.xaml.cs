@@ -504,7 +504,7 @@ namespace SpeedOdds.UserControls.HomeAwayTeams
         }
 
         //PUBLIC
-        public void LoadGridWithCalculatedMatchesData(int? compId, int? teamId)
+        public void LoadGridWithCalculatedMatchesData(int? compId, List<int> teamIds)
         {
             if (!compId.HasValue || compId.Value == 0)
             {
@@ -521,12 +521,13 @@ namespace SpeedOdds.UserControls.HomeAwayTeams
 
                 //get team(s)
                 List<Team> tList = new List<Team>();
-                if (teamId.HasValue)
+                if (teamIds != null && teamIds != null? teamIds.Count() > 0 : false)
                 {
-                    tList.Add(new Team()
-                    {
-                        TeamId = teamId.Value
-                    });
+                    foreach(int tId in teamIds)
+                        tList.Add(new Team()
+                        {
+                            TeamId = tId
+                        });
                 }
                 else
                     tList = teamService.GetCompetitionTeams(compId.Value).ToList();

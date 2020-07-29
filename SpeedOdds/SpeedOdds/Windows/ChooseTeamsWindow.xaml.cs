@@ -64,14 +64,14 @@ namespace SpeedOdds.Windows
                 }
                 else if (typeDrawable == DrawableMenuTypeValues.Teams)
                 {
-                    /*if (_parentTeams.teamsListToFilter != null &&
+                    if (_parentTeams.teamsListToFilter != null &&
                         _parentTeams.teamsListToFilter != null ? _parentTeams.teamsListToFilter.Count() > 0 : false)
                     {
                         foreach (var boundObject in teamsBox.Where(t => _parentTeams.teamsListToFilter.Contains(t.TeamId)))
                         {
                             ListBoxTeams.SelectedItems.Add(boundObject);
                         }
-                    }*/
+                    }
                 }                
             }           
         }
@@ -89,8 +89,8 @@ namespace SpeedOdds.Windows
                     }
                     else if (_typeDrawable == DrawableMenuTypeValues.Teams)
                     {
-                        //if (_parentTeams.teamsListToFilter == null) _parentTeams.teamsListToFilter = new List<int>();
-                        //_parentTeams.teamsListToFilter.Add(((TeamComboModel)item).TeamId);
+                        if (_parentTeams.teamsListToFilter == null) _parentTeams.teamsListToFilter = new List<int>();
+                        _parentTeams.teamsListToFilter.Add(((TeamComboModel)item).TeamId);
                     }                    
                 }
             }
@@ -107,7 +107,7 @@ namespace SpeedOdds.Windows
             }
             else if (_typeDrawable == DrawableMenuTypeValues.Teams)
             {
-                //_parentTeams.teamsListToFilter = null
+                _parentTeams.teamsListToFilter = null;
             }
             this.DialogResult = false;
             this.Close();

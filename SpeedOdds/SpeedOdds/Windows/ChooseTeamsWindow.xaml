@@ -7,11 +7,32 @@
         mc:Ignorable="d" WindowStyle="None"
         Title="SpeedOdds" Height="395.612" Width="432.342" Icon="/SpeedOdds;component/Resources/ImageFiles/Icon/red-icon.png" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         Background="#FF373638">
+    <Window.Resources>
+        <Style x:Key="_ListBoxItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border Name="_Border"
+                                Padding="4"
+                                SnapsToDevicePixels="true">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter TargetName="_Border" Property="Background" Value="#8A8584"/>
+                                <Setter Property="Foreground" Value="Red"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Image HorizontalAlignment="Left" Height="46" Margin="15,10,0,0" VerticalAlignment="Top" Width="46" Source="/SpeedOdds;component/Resources/ImageFiles/Icon/red-icon.png"/>
         <TextBlock HorizontalAlignment="Left" Margin="82,22,0,0" TextWrapping="Wrap" Text="SpeedOdds" VerticalAlignment="Top" Height="34" Width="129" FontSize="24" Foreground="White"/>
 
-        <TextBlock x:Name="TextBlockMsg"  HorizontalAlignment="Center" Margin="32,79,23,0" TextWrapping="Wrap" Text="Selecione as equipas que pretende filtrar:" VerticalAlignment="Top" Height="45" Width="377" TextElement.FontSize="22" Foreground="#FFFFFBFB" FontSize="20"/>
+        <TextBlock x:Name="TextBlockMsg"  HorizontalAlignment="Center" Margin="32,79,23,0" TextWrapping="Wrap" Text="Selecione as equipas que pretende filtrar:" VerticalAlignment="Top" Height="45" Width="377" TextElement.FontSize="22" Foreground="#FFFFFBFB" FontSize="19"/>
 
         <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonYes" TextElement.FontSize="22px" Padding="36, 0, 0, 0" Margin="41,320,0,0" VerticalAlignment="Top" Width="133" Height="54" Background="#FF454446" BorderBrush="{x:Null}" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Click="ButtonYes_Click">
             <StackPanel Orientation="Horizontal" Width="61" Height="44" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -25,11 +46,11 @@
             </StackPanel>
         </Button>
         <ListBox x:Name="ListBoxTeams" HorizontalAlignment="Left" Height="173" Margin="48,136,0,0" VerticalAlignment="Top" Width="328"
-                 SelectionMode="Multiple" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                 SelectionMode="Multiple" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemContainerStyle="{DynamicResource _ListBoxItemStyle}">
             <ListBox.ItemTemplate>
-            <DataTemplate>
-                    <TextBlock Text="{Binding TeamName}" Foreground="White"/>
-            </DataTemplate>
+                <DataTemplate>
+                        <TextBlock Text="{Binding TeamName}" Foreground="White" />
+                </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
     </Grid>
