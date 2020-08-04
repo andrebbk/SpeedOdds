@@ -164,6 +164,7 @@
     <Compile Include="Commons\Enums\MatchPeriodTypeValues.cs" />
     <Compile Include="Commons\Enums\MatchTypeValues.cs" />
     <Compile Include="Commons\Enums\MatchViewTypeValues.cs" />
+    <Compile Include="Commons\Enums\TimeGoalsTypeValues.cs" />
     <Compile Include="Commons\Helpers\NotificationHelper.cs" />
     <Compile Include="Commons\Helpers\Utils.cs" />
     <Compile Include="Commons\Helpers\UtilsDataGrid.cs" />
@@ -178,6 +179,7 @@
     <Compile Include="Models\Shared\ObservableObject.cs" />
     <Compile Include="Models\Shared\TeamComboModel.cs" />
     <Compile Include="Models\Team.cs" />
+    <Compile Include="Models\TimeGoal.cs" />
     <Compile Include="Notifications\CostumInput\CustomCommandExtensions.cs" />
     <Compile Include="Notifications\CostumInput\CustomInputDisplayPart.xaml.cs">
       <DependentUpon>CustomInputDisplayPart.xaml</DependentUpon>
@@ -193,6 +195,7 @@
     <Compile Include="Services\MatchService.cs" />
     <Compile Include="Services\SeasonService.cs" />
     <Compile Include="Services\TeamService.cs" />
+    <Compile Include="Services\TimeGoalsService.cs" />
     <Compile Include="UserControls\Begin\UserControl_Begin.xaml.cs">
       <DependentUpon>UserControl_Begin.xaml</DependentUpon>
     </Compile>
@@ -333,6 +336,7 @@
     <Compile Include="UserControls\Teams\UserControl_Teams.xaml.cs">
       <DependentUpon>UserControl_Teams.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\TimeGoals\TimeGoalsModel.cs" />
     <Compile Include="UserControls\TimeGoals\UserControl_TimeGoals.xaml.cs">
       <DependentUpon>UserControl_TimeGoals.xaml</DependentUpon>
     </Compile>

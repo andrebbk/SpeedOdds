@@ -17,5 +17,7 @@ namespace SpeedOdds.Data
         public DbSet<Team> Teams { get; set; }
 
         public DbSet<Match> Matches { get; set; }
+
+        public DbSet<TimeGoal> TimeGoals { get; set; }
     }
 }

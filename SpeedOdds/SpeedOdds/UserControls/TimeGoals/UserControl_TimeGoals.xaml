@@ -20,5 +20,85 @@
                 </TransformGroup>
             </Border.RenderTransform>
         </Border>
+
+        <!--FILTER CONTROLS-->
+        <Label Content="Competição:" HorizontalAlignment="Left" Margin="146,147,0,0" VerticalAlignment="Top" Foreground="#DD171717" FontSize="18" />
+        <ComboBox x:Name="ComboBoxFilterCompetition" HorizontalAlignment="Left" Margin="259,149,0,0" VerticalAlignment="Top" Width="288" FontSize="18" Background="{x:Null}" Foreground="#FF1B1A1A"
+            ItemsSource="{Binding CompetitionComboModel}" DisplayMemberPath="CompetitionName">
+            <ComboBox.Style>
+                <Style TargetType="{x:Type ComboBox}">
+                    <Style.Triggers>
+                        <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                            <Setter Property="IsDropDownOpen" Value="true" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ComboBox.Style>
+        </ComboBox>
+
+        <Border BorderThickness="1" HorizontalAlignment="Left" Height="6" Margin="126,194,0,0" VerticalAlignment="Top" Width="695" Background="#FF171717" RenderTransformOrigin="0.5,0.5">
+            <Border.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleY="-1"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Border.RenderTransform>
+        </Border>
+
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonLoadTimeGoals" TextElement.FontSize="22px" Padding="2, 0, 0, 0" 
+                Margin="572,147,0,0" VerticalAlignment="Top" Width="110" Height="36" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left"
+                HorizontalContentAlignment="Left" Click="ButtonLoadTimeGoals_Click">
+            <StackPanel Orientation="Horizontal" Width="110" Height="44" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Carregar dados" VerticalAlignment="Center" Margin="7,0,50,0" FontWeight="Normal" FontSize="14" />
+            </StackPanel>
+        </Button>
+
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonSaveTimeGoals" TextElement.FontSize="22px" Padding="2, 0, 0, 0" 
+            Margin="702,147,0,0" VerticalAlignment="Top" Width="110" Height="36" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left"
+            HorizontalContentAlignment="Left" Click="ButtonSaveTimeGoals_Click">
+            <StackPanel Orientation="Horizontal" Width="110" Height="44" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Guardar dados" VerticalAlignment="Center" Margin="7,0,50,0" FontWeight="Normal" FontSize="14" />
+            </StackPanel>
+        </Button>
+        
+
+        <!--DATA GRID-->
+        <DataGrid x:Name="DataGridTimeGoals" HorizontalAlignment="Left" Height="636" Margin="59,205,0,0" VerticalAlignment="Top" Width="1441" AutoGenerateColumns="False" FontSize="16"
+            IsReadOnly="false" CanUserAddRows="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden" SelectionUnit="Cell" SelectionMode="Single" 
+            Background="{x:Null}" Visibility="Visible" AllowDrop="False" CanUserReorderColumns="False" SelectedCellsChanged="DataGridTimeGoals_SelectedCellsChanged">
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background" Value="{Binding BackgroundColorSet}"/>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Equipas" Width="220" Binding="{Binding TeamName}" CanUserResize="False" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Golos" Width="70" Binding="{Binding TotalGoals}" CanUserResize="False" IsReadOnly="True"/>
+                <DataGridTextColumn Header="0-15Min" Width="100" Binding="{Binding Goal15}" CanUserResize="False"/>
+                <DataGridTextColumn Header="15-30Min" Width="100" Binding="{Binding Goal30}" CanUserResize="False"/>
+                <DataGridTextColumn Header="30-45Min" Width="100" Binding="{Binding Goal45}" CanUserResize="False"/>
+                <DataGridTextColumn Header="45-60Min" Width="100" Binding="{Binding Goal60}" CanUserResize="False"/>
+                <DataGridTextColumn Header="60-75Min" Width="100" Binding="{Binding Goal75}" CanUserResize="False"/>
+                <DataGridTextColumn Header="75-90Min" Width="100" Binding="{Binding Goal90}" CanUserResize="False"/>
+                <DataGridTextColumn Header="0-15Min %" Width="100" Binding="{Binding Goal15P}" CanUserResize="False" IsReadOnly="True"/>
+                <DataGridTextColumn Header="15-30Min %" Width="100" Binding="{Binding Goal30P}" CanUserResize="False" IsReadOnly="True"/>
+                <DataGridTextColumn Header="30-45Min %" Width="100" Binding="{Binding Goal45P}" CanUserResize="False" IsReadOnly="True"/>
+                <DataGridTextColumn Header="45-60Min %" Width="100" Binding="{Binding Goal60P}" CanUserResize="False" IsReadOnly="True"/>
+                <DataGridTextColumn Header="60-75Min %" Width="100" Binding="{Binding Goal75P}" CanUserResize="False" IsReadOnly="True"/>
+                <DataGridTextColumn Header="75-90Min %" Width="100" Binding="{Binding Goal90P}" CanUserResize="False" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+        <!--INFO-->
+        <Image x:Name="ImageLogo" HorizontalAlignment="Left" Height="130" Margin="672,308,0,0" VerticalAlignment="Top" Width="132" 
+               Source="/SpeedOdds;component/Resources/ImageFiles/Icon/red-icon.png" Visibility="Collapsed"/>
+        <Label x:Name="LabelInfo" Content="Para visualizar informações de golos é necessário escolher uma competição primeiro" 
+               HorizontalAlignment="Left" Margin="259,478,0,0" VerticalAlignment="Top" Visibility="Collapsed" Foreground="#DD171717" FontSize="24" FontWeight="Bold"/>
+        <Label x:Name="LabelExtraInfo" Content="(Utiliza a barra de escolha em cima para selecionares a competição que pretendes)" 
+               HorizontalAlignment="Left" Margin="368,518,0,0" VerticalAlignment="Top" Visibility="Collapsed" Foreground="#DD171717" FontSize="20" Width="742" />
+        
     </Grid>
 </UserControl>

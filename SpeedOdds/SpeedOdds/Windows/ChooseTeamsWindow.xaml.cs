@@ -78,18 +78,27 @@ namespace SpeedOdds.Windows
 
         private void ButtonYes_Click(object sender, RoutedEventArgs e)
         {
-            foreach(var item in ListBoxTeams.SelectedItems)
+            if (_typeDrawable == DrawableMenuTypeValues.Matches)
+            {
+                if (_parentMatches.teamsListToFilter == null) _parentMatches.teamsListToFilter = new List<int>();
+                _parentMatches.teamsListToFilter.Clear();
+            }
+            else if (_typeDrawable == DrawableMenuTypeValues.Teams)
+            {
+                if (_parentTeams.teamsListToFilter == null) _parentTeams.teamsListToFilter = new List<int>();
+                _parentTeams.teamsListToFilter.Clear();
+            }
+
+            foreach (var item in ListBoxTeams.SelectedItems)
             {
                 if((TeamComboModel)item != null)
                 {
                     if (_typeDrawable == DrawableMenuTypeValues.Matches)
                     {
-                        if(_parentMatches.teamsListToFilter == null) _parentMatches.teamsListToFilter = new List<int>();
                         _parentMatches.teamsListToFilter.Add(((TeamComboModel)item).TeamId);
                     }
                     else if (_typeDrawable == DrawableMenuTypeValues.Teams)
                     {
-                        if (_parentTeams.teamsListToFilter == null) _parentTeams.teamsListToFilter = new List<int>();
                         _parentTeams.teamsListToFilter.Add(((TeamComboModel)item).TeamId);
                     }                    
                 }
