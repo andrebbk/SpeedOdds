@@ -305,6 +305,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\TimeGoals\UserControl_TimeGoals.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\ChooseTeamsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -328,6 +332,9 @@
     <Compile Include="UserControls\Teams\TeamDataModel.cs" />
     <Compile Include="UserControls\Teams\UserControl_Teams.xaml.cs">
       <DependentUpon>UserControl_Teams.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\TimeGoals\UserControl_TimeGoals.xaml.cs">
+      <DependentUpon>UserControl_TimeGoals.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ChooseTeamsWindow.xaml.cs">
       <DependentUpon>ChooseTeamsWindow.xaml</DependentUpon>
@@ -361,6 +368,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\ImageFiles\Buttons\time_goals.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\ImageFiles\Buttons\half_time_light_grey.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
