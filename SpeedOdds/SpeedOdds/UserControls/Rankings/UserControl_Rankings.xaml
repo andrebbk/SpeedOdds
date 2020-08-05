@@ -1,0 +1,92 @@
+﻿<UserControl x:Class="SpeedOdds.UserControls.Rankings.UserControl_Rankings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SpeedOdds.UserControls.Rankings"
+             xmlns:lottieSharp="clr-namespace:LottieSharp;assembly=LottieSharp"
+             mc:Ignorable="d" 
+             Height="924" Width="1548">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="307*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <!--TITULO-->
+        <TextBlock TextElement.FontSize="55px" TextElement.FontWeight="Bold" Margin="142,42,1007,805" Foreground="#DD171717" Text="Classificações"/>
+
+        <Border BorderThickness="1" HorizontalAlignment="Left" Height="4" Margin="112,116,0,0" VerticalAlignment="Top" Width="1250" Background="#FF171717" RenderTransformOrigin="0.5,0.5">
+            <Border.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleY="-1"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Border.RenderTransform>
+        </Border>
+
+
+        <!--FILTER CONTROLS-->
+        <Label Content="Competição:" HorizontalAlignment="Left" Margin="146,147,0,0" VerticalAlignment="Top" Foreground="#DD171717" FontSize="18" />
+        <ComboBox x:Name="ComboBoxFilterCompetition" HorizontalAlignment="Left" Margin="259,149,0,0" VerticalAlignment="Top" Width="324" FontSize="18" Background="{x:Null}" Foreground="#FF1B1A1A"
+            ItemsSource="{Binding CompetitionComboModel}" DisplayMemberPath="CompetitionName">
+            <ComboBox.Style>
+                <Style TargetType="{x:Type ComboBox}">
+                    <Style.Triggers>
+                        <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                            <Setter Property="IsDropDownOpen" Value="true" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ComboBox.Style>
+        </ComboBox>
+
+        <Border BorderThickness="1" HorizontalAlignment="Left" Height="6" Margin="126,194,0,0" VerticalAlignment="Top" Width="677" Background="#FF171717" RenderTransformOrigin="0.5,0.5">
+            <Border.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleY="-1"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Border.RenderTransform>
+        </Border>
+
+        <Button Style="{DynamicResource MaterialDesignRaisedButton}" x:Name="ButtonShowRanks" TextElement.FontSize="22px" Padding="2, 0, 0, 0" 
+                Margin="623,147,0,0" VerticalAlignment="Top" Width="149" Height="36" Background="#FF373638" BorderBrush="{x:Null}" HorizontalAlignment="Left"
+                HorizontalContentAlignment="Left" Click="ButtonShowRanks_Click">
+            <StackPanel Orientation="Horizontal" Width="147" Height="44" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Mostrar classificações" VerticalAlignment="Center" Margin="7,12,50,12" FontWeight="Normal" FontSize="14" Width="137" />
+            </StackPanel>
+        </Button>
+
+
+        <!--DATA GRID-->
+        <DataGrid x:Name="DataGridRankings" Height="636" Margin="545,251,574,0" VerticalAlignment="Top" AutoGenerateColumns="False" FontSize="16"
+            IsReadOnly="false" CanUserAddRows="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden" SelectionUnit="Cell" SelectionMode="Single" 
+            Background="{x:Null}" Visibility="Visible" AllowDrop="False" CanUserReorderColumns="False">
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background" Value="{Binding BackgroundColorSet}"/>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Equipas" Width="220" Binding="{Binding TeamName}" CanUserResize="False" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Rating" Width="100" Binding="{Binding TeamRating}" CanUserResize="False" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Rank" Width="100" Binding="{Binding TeamRank}" CanUserResize="False" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+        <!--LOADING-->
+        <!--Edit UI: 1- Remove FileName section from LottieAnimationView-->
+        <!--Edit Loading: Remove Visibility="Hidden"-->
+        <!--FileName="Assets/ballsoccer.json"-->
+        <lottieSharp:LottieAnimationView x:Name="LottieAnimationRanksView" DefaultCacheStrategy="None" AutoPlay="True" Speed="1.5" Margin="691,362,690,387" 
+                                         Visibility="Collapsed" Panel.ZIndex="11"/>
+        <TextBlock x:Name="TextBoxLoading" HorizontalAlignment="Center" TextAlignment="Center"  Margin="380,496,382,399" TextWrapping="Wrap" Text="A carregar..."  FontFamily="Yu Gothic" 
+                   FontWeight="Bold" FontSize="18" Foreground="#FF363030" Visibility="Collapsed" Height="26" Width="786" Panel.ZIndex="10"/>
+
+    </Grid>
+</UserControl>

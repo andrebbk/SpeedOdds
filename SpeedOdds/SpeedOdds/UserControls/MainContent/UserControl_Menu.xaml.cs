@@ -3,24 +3,12 @@ using SpeedOdds.UserControls.Begin;
 using SpeedOdds.UserControls.Competitions;
 using SpeedOdds.UserControls.HomeAwayTeams;
 using SpeedOdds.UserControls.Matches;
+using SpeedOdds.UserControls.Rankings;
 using SpeedOdds.UserControls.Teams;
 using SpeedOdds.UserControls.TimeGoals;
-using SpeedOdds.Windows;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SpeedOdds.UserControls.MainContent
 {
@@ -93,6 +81,7 @@ namespace SpeedOdds.UserControls.MainContent
             ButtonRegisterMatches.Dispatcher.BeginInvoke((Action)(() => ButtonRegisterMatches.IsEnabled = false));
             ButtonHomeAwayTeams.Dispatcher.BeginInvoke((Action)(() => ButtonHomeAwayTeams.IsEnabled = false));
             ButtonTimeGoals.Dispatcher.BeginInvoke((Action)(() => ButtonTimeGoals.IsEnabled = false));
+            ButtonRanks.Dispatcher.BeginInvoke((Action)(() => ButtonRanks.IsEnabled = false));
         }
 
         public void UnlockMenu()
@@ -104,12 +93,19 @@ namespace SpeedOdds.UserControls.MainContent
             ButtonRegisterMatches.Dispatcher.BeginInvoke((Action)(() => ButtonRegisterMatches.IsEnabled = true));
             ButtonHomeAwayTeams.Dispatcher.BeginInvoke((Action)(() => ButtonHomeAwayTeams.IsEnabled = true));
             ButtonTimeGoals.Dispatcher.BeginInvoke((Action)(() => ButtonTimeGoals.IsEnabled = true));
+            ButtonRanks.Dispatcher.BeginInvoke((Action)(() => ButtonRanks.IsEnabled = true));
         }
 
         private void ButtonTimeGoals_Click(object sender, RoutedEventArgs e)
         {
             if (!(_mainContent.WFAPContentContainer.Content is UserControl_TimeGoals))
                 _mainContent.WFAPContentContainer.Content = new UserControl_TimeGoals(_mainContent);
+        }
+
+        private void ButtonRanks_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(_mainContent.WFAPContentContainer.Content is UserControl_Rankings))
+                _mainContent.WFAPContentContainer.Content = new UserControl_Rankings(_mainContent);
         }
     }
 }
