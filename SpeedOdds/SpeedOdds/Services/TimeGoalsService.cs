@@ -1,8 +1,10 @@
 ﻿using SpeedOdds.Commons.Enums;
 using SpeedOdds.Data;
 using SpeedOdds.Models;
+using SpeedOdds.UserControls.TimeGoals;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -87,6 +89,66 @@ namespace SpeedOdds.Services
             if (goals > totalGoals || totalGoals < 1) return "100%";
 
             return Math.Round(((decimal)goals / totalGoals) * 100, 1).ToString() + "%";
+        }
+
+        public bool InsertOrUpdateTimeGoals(ObservableCollection<TimeGoalsModel> dados)
+        {
+            if (dados == null || dados != null ? dados.Count() < 1 : true)
+                return false;
+
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    foreach(var item in dados)
+                    {
+                        if (item.TimeGoalsId.HasValue)
+                        {
+                            //Update
+                            var timeGoal = db.TimeGoals.Where(t => t.TimeGoalsId == item.TimeGoalsId).FirstOrDefault();
+                            if(timeGoal != null)
+                            {
+                                timeGoal.Goal15 = item.Goal15;
+                                timeGoal.Goal30 = item.Goal30;
+                                timeGoal.Goal45 = item.Goal45;
+                                timeGoal.Goal60 = item.Goal60;
+                                timeGoal.Goal75 = item.Goal75;
+                                timeGoal.Goal90 = item.Goal90;
+
+                                db.SaveChanges();
+                            }
+                        }
+                        else
+                        {
+                            //Create
+                            TimeGoal timeGoal = new TimeGoal()
+                            {
+                                CompetitionId = item.CompetitionId.Value,
+                                TeamId = item.TeamId.Value,
+                                Goal15 = item.Goal15,
+                                Goal30 = item.Goal30,
+                                Goal45 = item.Goal45,
+                                Goal60 = item.Goal60,
+                                Goal75 = item.Goal75,
+                                Goal90 = item.Goal90
+                            };
+
+                            db.TimeGoals.Add(timeGoal);
+                            db.SaveChanges();
+                        }
+                    }
+                }
+
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error saving TimeGoals in BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+
+                return false;
+            }
         }
     }
 }

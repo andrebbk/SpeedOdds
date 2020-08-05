@@ -260,6 +260,11 @@ namespace SpeedOdds.UserControls.TimeGoals
             }
         }
 
+        private void DataGridTimeGoals_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            ReCalculateDataFromDataGrid();
+        }
+
 
         //BUTTONS
         private void ButtonLoadTimeGoals_Click(object sender, RoutedEventArgs e)
@@ -284,12 +289,43 @@ namespace SpeedOdds.UserControls.TimeGoals
 
         private void ButtonSaveTimeGoals_Click(object sender, RoutedEventArgs e)
         {
+            if (matchItems == null || matchItems != null ? matchItems.Count() < 1 : true || DataGridTimeGoals.Visibility != Visibility.Visible)
+            {
+                NotificationHelper.notifier.ShowCustomMessage("Dados em falta!");
+                return;
+            }
 
-        }
+            //Reload - get competitionId
+            if ((CompetitionComboModel)ComboBoxFilterCompetition.SelectedValue == null ||
+            ((CompetitionComboModel)ComboBoxFilterCompetition.SelectedValue != null ?
+            ((CompetitionComboModel)ComboBoxFilterCompetition.SelectedValue).CompetitionId == 0 : true))
+            {
+                NotificationHelper.notifier.ShowCustomMessage("Falta escolher a competição!");
+                return;
+            }
+            int auxComp = ((CompetitionComboModel)ComboBoxFilterCompetition.SelectedValue).CompetitionId;
 
-        private void DataGridTimeGoals_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
-        {
-            ReCalculateDataFromDataGrid();
+            new Thread(() => 
+            {
+                UtilsNotification.StartLoadingAnimation();
+
+                if (timeGoalsService.InsertOrUpdateTimeGoals(matchItems))
+                {
+                    LabelInfoForSave.Dispatcher.BeginInvoke((Action)(() => LabelInfoForSave.Visibility = Visibility.Collapsed));
+                    NotificationHelper.notifier.ShowCustomMessage("Dados guardados com sucesso!");
+
+                    //Reload list
+                    LoadModelListWithCompetitionTeams(auxComp);
+                }
+                else
+                {
+                    NotificationHelper.notifier.ShowCustomMessage("Erro ao guardar os dados!");
+                    UtilsNotification.StopLoadingAnimation();
+                }
+                
+            }).Start();
+            
         }
+        
     }
 }
