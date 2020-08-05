@@ -99,6 +99,9 @@
                HorizontalAlignment="Left" Margin="259,478,0,0" VerticalAlignment="Top" Visibility="Collapsed" Foreground="#DD171717" FontSize="24" FontWeight="Bold"/>
         <Label x:Name="LabelExtraInfo" Content="(Utiliza a barra de escolha em cima para selecionares a competição que pretendes)" 
                HorizontalAlignment="Left" Margin="368,518,0,0" VerticalAlignment="Top" Visibility="Collapsed" Foreground="#DD171717" FontSize="20" Width="742" />
-        
+
+
+        <Label x:Name="LabelInfoForSave" Content="É necessário guardar as alterações!" 
+               HorizontalAlignment="Left" Margin="817,154,0,0" VerticalAlignment="Top" Visibility="Collapsed" Foreground="#FF761010" FontSize="14" FontWeight="Normal" />
     </Grid>
 </UserControl>

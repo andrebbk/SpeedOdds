@@ -31,6 +31,7 @@ namespace SpeedOdds.UserControls.TimeGoals
         private TeamService teamService;
         private TimeGoalsService timeGoalsService;
         private ObservableCollection<TimeGoalsModel> matchItems;
+        private ObservableCollection<TimeGoalsModel> matchItemsInitialState;
 
         public UserControl_TimeGoals(UserControl_MainContent mainContent)
         {
@@ -121,6 +122,7 @@ namespace SpeedOdds.UserControls.TimeGoals
         {
             //Init 
             matchItems.Clear();
+            matchItemsInitialState = new ObservableCollection<TimeGoalsModel>();
 
             var savedTimeGoals = timeGoalsService.GetTimeGoalsByCompetition(competitionId);
             
@@ -150,6 +152,23 @@ namespace SpeedOdds.UserControls.TimeGoals
                         Goal90 = teamTimeGoals.Goal90 ?? 0,
                         Goal90P = timeGoalsService.GetPercentageOfTimeGoal(TimeGoalsTypeValues.Goal90, teamTimeGoals),
                     });
+
+                    //Save initial data state
+                    matchItemsInitialState.Add(new TimeGoalsModel()
+                    {
+                        TimeGoalsId = teamTimeGoals.TimeGoalsId,
+                        CompetitionId = teamTimeGoals.CompetitionId,
+                        TeamId = teamTimeGoals.TeamId,
+                        TeamName = team.Name,
+                        TotalGoals = (teamTimeGoals.Goal15 + teamTimeGoals.Goal30 + teamTimeGoals.Goal45 + teamTimeGoals.Goal60 +
+                            teamTimeGoals.Goal75 + teamTimeGoals.Goal90) ?? 0,
+                        Goal15 = teamTimeGoals.Goal15 ?? 0,
+                        Goal30 = teamTimeGoals.Goal30 ?? 0,
+                        Goal45 = teamTimeGoals.Goal45 ?? 0,
+                        Goal60 = teamTimeGoals.Goal60 ?? 0,
+                        Goal75 = teamTimeGoals.Goal75 ?? 0,
+                        Goal90 = teamTimeGoals.Goal90 ?? 0,
+                    });
                 }
                 else
                 {
@@ -172,8 +191,23 @@ namespace SpeedOdds.UserControls.TimeGoals
                         Goal90 = 0,
                         Goal90P = "100%",
                     });
+
+                    //Save initial data state
+                    matchItemsInitialState.Add(new TimeGoalsModel()
+                    {
+                        CompetitionId = competitionId,
+                        TeamId = team.TeamId,
+                        TeamName = team.Name,
+                        TotalGoals = 0,
+                        Goal15 = 0,
+                        Goal30 = 0,
+                        Goal45 = 0,
+                        Goal60 = 0,
+                        Goal75 = 0,
+                        Goal90 = 0,
+                    });
                 }
-            }
+            }            
         }
 
         private void ReCalculateDataFromDataGrid()
@@ -184,6 +218,7 @@ namespace SpeedOdds.UserControls.TimeGoals
 
                 if (matchItems != null)
                 {
+                    bool flagShowForSave = false;
                     foreach (var timeGoal in matchItems)
                     {
                         timeGoal.TotalGoals = timeGoal.Goal15 + timeGoal.Goal30 + timeGoal.Goal45 + timeGoal.Goal60 +
@@ -194,7 +229,20 @@ namespace SpeedOdds.UserControls.TimeGoals
                         timeGoal.Goal60P = timeGoalsService.GetPercentageOfTimeGoalByValue(timeGoal.Goal60, timeGoal.TotalGoals);
                         timeGoal.Goal75P = timeGoalsService.GetPercentageOfTimeGoalByValue(timeGoal.Goal75, timeGoal.TotalGoals);
                         timeGoal.Goal90P = timeGoalsService.GetPercentageOfTimeGoalByValue(timeGoal.Goal90, timeGoal.TotalGoals);
+
+                        var itemInitialState = matchItemsInitialState[matchItems.IndexOf(timeGoal)];
+                        if(itemInitialState != null)
+                        {
+                            if (itemInitialState.Goal15 != timeGoal.Goal15 || itemInitialState.Goal30 != timeGoal.Goal30 || itemInitialState.Goal45 != timeGoal.Goal45 ||
+                            itemInitialState.Goal60 != timeGoal.Goal60 || itemInitialState.Goal75 != timeGoal.Goal75 || itemInitialState.Goal90 != timeGoal.Goal90)
+                                flagShowForSave = true;
+                        }
                     }
+
+                    if (flagShowForSave)
+                        LabelInfoForSave.Dispatcher.BeginInvoke((Action)(() => LabelInfoForSave.Visibility = Visibility.Visible));
+                    else
+                        LabelInfoForSave.Dispatcher.BeginInvoke((Action)(() => LabelInfoForSave.Visibility = Visibility.Collapsed));
                 }
 
                 UtilsNotification.StopLoadingAnimation();
