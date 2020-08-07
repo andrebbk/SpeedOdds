@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SpeedOdds.Commons.Helpers
@@ -14,6 +15,11 @@ namespace SpeedOdds.Commons.Helpers
                 _date.TimeOfDay.Hours.ToString() + "h" +
                 (_date.TimeOfDay.Minutes < 10 ? "0" : "") +
                 _date.TimeOfDay.Minutes.ToString();
+        }
+
+        public static string RemoveSpecialChars(string input)
+        {
+            return Regex.Replace(input, @"[^0-9a-zA-Z]", string.Empty);
         }
     }
 }

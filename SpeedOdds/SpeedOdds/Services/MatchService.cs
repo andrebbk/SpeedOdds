@@ -3,6 +3,7 @@ using SpeedOdds.Commons.Enums;
 using SpeedOdds.Commons.Helpers;
 using SpeedOdds.Data;
 using SpeedOdds.Models;
+using SpeedOdds.Models.Shared;
 using SpeedOdds.UserControls.Matches;
 using System;
 using System.Collections.Generic;
@@ -187,6 +188,40 @@ namespace SpeedOdds.Services
             catch (Exception ex)
             {
                 Console.WriteLine("Error getting Matches filtered from BD -> " + ex.ToString());
+                Console.WriteLine(ex.Message);
+
+                return null;
+            }
+        }
+
+        public IEnumerable<MatchSolverItem> GetMatchesByCompetitionId(int compId)
+        {
+            try
+            {
+                using (var db = new SpeedOddsContext())
+                {
+                    var query = db.Matches
+                        .Where(x => x.CompetitionId == compId && x.HalfHomeGoals.HasValue && x.HalfAwayGoals.HasValue)
+                        .OrderBy(x => x.MatchId)
+                        .Select(x => new MatchSolverItem()
+                        {
+                            HomeTeamId = x.HomeTeamId,
+                            AwayTeamId = x.AwayTeamId,
+                            HomeGoals = x.HomeGoals + x.HalfHomeGoals.Value,
+                            AwayGoals = x.AwayGoals + x.HalfAwayGoals.Value
+                        })
+                        .ToList();
+
+                    if (query != null)
+                        return query;
+                    else
+                        return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting Matches by competition from BD -> " + ex.ToString());
                 Console.WriteLine(ex.Message);
 
                 return null;

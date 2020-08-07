@@ -1,4 +1,5 @@
-﻿using SpeedOdds.Commons.Helpers;
+﻿using Microsoft.SolverFoundation.Services;
+using SpeedOdds.Commons.Helpers;
 using SpeedOdds.Models.Shared;
 using SpeedOdds.Notifications.CustomMessage;
 using SpeedOdds.Services;
@@ -29,31 +30,18 @@ namespace SpeedOdds.UserControls.Rankings
     {
         private UserControl_MainContent _mainContent;
         private CompetitionService competitionService;
+        private TeamService teamService;
+        private MatchService matchService;
 
         public UserControl_Rankings(UserControl_MainContent mainContent)
         {
             InitializeComponent();
             _mainContent = mainContent;
             competitionService = new CompetitionService();
+            teamService = new TeamService();
+            matchService = new MatchService();
 
-            LoadFormRankings();
-
-            //LottieAnimationRanksView.Dispatcher.BeginInvoke((Action)(() => LottieAnimationRanksView.PlayAnimation()));
-            //LottieAnimationRanksView.Dispatcher.BeginInvoke((Action)(() => LottieAnimationRanksView.Visibility = Visibility.Visible));
-
-            ObservableCollection<RankingsModel> data = new ObservableCollection<RankingsModel>()
-            {
-                new RankingsModel(){ TeamName = "F.C. Porto", TeamRating = "1.84", TeamRank = "1"},
-                new RankingsModel(){ TeamName = "S.L. Benfica", TeamRating = "1.53", TeamRank = "2"},
-                new RankingsModel(){ TeamName = "Braga S.C.", TeamRating = "1.31", TeamRank = "3"},
-                new RankingsModel(){ TeamName = "Sporting C.P.", TeamRating = "1.22", TeamRank = "4"},
-                new RankingsModel(){ TeamName = "Famalicão", TeamRating = "1.04", TeamRank = "5"},
-                new RankingsModel(){ TeamName = "Vitória S.C.", TeamRating = "0.83", TeamRank = "6"},
-                new RankingsModel(){ TeamName = "Marítimo", TeamRating = "0.49", TeamRank = "7"},
-            };
-
-            DataGridRankings.ItemsSource = null;
-            DataGridRankings.ItemsSource = data;
+            LoadFormRankings();           
         }
 
 
@@ -99,6 +87,111 @@ namespace SpeedOdds.UserControls.Rankings
             }).Start();
         }
 
+        private void StartRanksAnimation()
+        {
+            new Thread(() =>
+            {
+                LottieAnimationRanksView.Dispatcher.BeginInvoke((Action)(() => LottieAnimationRanksView.PlayAnimation()));
+                LottieAnimationRanksView.Dispatcher.BeginInvoke((Action)(() => LottieAnimationRanksView.Visibility = Visibility.Visible));
+                TextBoxLoading.Dispatcher.BeginInvoke((Action)(() => TextBoxLoading.Visibility = Visibility.Visible));
+            }).Start();
+        }
+
+        private void StopRanksAnimation()
+        {
+            new Thread(() =>
+            {
+                LottieAnimationRanksView.Dispatcher.BeginInvoke((Action)(() => LottieAnimationRanksView.PauseAnimation()));
+                LottieAnimationRanksView.Dispatcher.BeginInvoke((Action)(() => LottieAnimationRanksView.Visibility = Visibility.Collapsed));
+                TextBoxLoading.Dispatcher.BeginInvoke((Action)(() => TextBoxLoading.Visibility = Visibility.Collapsed));
+            }).Start();
+        }
+
+        private void SolveRankings(int competitionId)
+        {
+            new Thread(() => 
+            {
+                UtilsNotification.StartLoadingAnimation();
+                StartRanksAnimation();
+
+                TeamSolver solverData = new TeamSolver();
+
+                //Get Competition Teams
+                var teams = teamService.GetCompetitionTeams(competitionId);
+
+                if(teams != null && teams != null? teams.Count() > 0 : false)
+                {
+                    //Load teams into model
+                    foreach (var t in teams)
+                        solverData.Dados.Add(new TeamSolverData()
+                        {
+                            TeamId = t.TeamId,
+                            TeamName = t.Name,
+                            TeamDecision = new Decision(solverData.InputDomain, Utils.RemoveSpecialChars(t.Name))
+                        });
+
+
+                    //get Competition Matches
+                    var matches = matchService.GetMatchesByCompetitionId(competitionId);
+
+                    if (matches != null && matches != null ? matches.Count() > 0 : false)
+                    {
+                        //Load teams into model
+                        foreach (var m in matches)
+                            solverData.Jogos.Add(m);
+
+                        //Calculate rankings using Microsoft.Solver
+                        solverData = SolverHelper.SolverProblem(solverData);
+
+                        //load model with data
+                        ObservableCollection<RankingsModel> classificacoes = new ObservableCollection<RankingsModel>();
+
+                        foreach(var cls in solverData.Dados)
+                        {
+                            classificacoes.Add(new RankingsModel()
+                            {
+                                TeamName = cls.TeamName,
+                                TeamRatingValue = Math.Round(cls.TeamDecision.ToDouble(), 2),
+                                TeamRating = Math.Round(cls.TeamDecision.ToDouble(), 2).ToString()
+                            });
+                        }
+
+                        //checkRanks
+                        int rnk = 1;
+                        foreach (var r in classificacoes.OrderByDescending(x => x.TeamRatingValue))
+                        {
+                            r.TeamRankValue = rnk;
+                            r.TeamRank = rnk.ToString();
+                            rnk++;
+                        }
+
+                        DataGridRankings.Dispatcher.BeginInvoke((Action)(() => { DataGridRankings.ItemsSource = null; })); 
+                        DataGridRankings.Dispatcher.BeginInvoke((Action)(() => { DataGridRankings.ItemsSource = classificacoes.OrderBy(x => x.TeamRankValue); }));
+
+                        StopRanksAnimation();
+
+                        DataGridRankings.Dispatcher.BeginInvoke((Action)(() => { DataGridRankings.Visibility = Visibility.Visible; }));
+
+                        UtilsNotification.StopLoadingAnimation();
+                    }
+                    else
+                    {
+                        NotificationHelper.notifier.ShowCustomMessage("Não existem jogos registados na competição");
+                        StopRanksAnimation();
+                        UtilsNotification.StopLoadingAnimation();
+                    }
+
+                }
+                else
+                {
+                    NotificationHelper.notifier.ShowCustomMessage("Não existem equipas associadas à competição");
+                    StopRanksAnimation();
+                    UtilsNotification.StopLoadingAnimation();
+                }
+
+            }).Start();
+        }
+
 
         //BUTTONS
         private void ButtonShowRanks_Click(object sender, RoutedEventArgs e)
@@ -110,6 +203,8 @@ namespace SpeedOdds.UserControls.Rankings
                 NotificationHelper.notifier.ShowCustomMessage("Falta escolher a competição!");
                 return;
             }
+
+            SolveRankings(((CompetitionComboModel)ComboBoxFilterCompetition.SelectedValue).CompetitionId);
         }
     }
 }

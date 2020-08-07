@@ -31,6 +31,17 @@ namespace SpeedOdds.UserControls.Rankings
             }
         }
 
+        private double teamRatingValue;
+        public double TeamRatingValue
+        {
+            get { return teamRatingValue; }
+            set
+            {
+                teamRatingValue = value;
+                OnPropertyChanged("TeamRatingValue");
+            }
+        }
+
         private string teamRank;
         public string TeamRank
         {
@@ -39,6 +50,17 @@ namespace SpeedOdds.UserControls.Rankings
             {
                 teamRank = value;
                 OnPropertyChanged("TeamRank");
+            }
+        }
+
+        private int teamRankValue;
+        public int TeamRankValue
+        {
+            get { return teamRankValue; }
+            set
+            {
+                teamRankValue = value;
+                OnPropertyChanged("TeamRankValue");
             }
         }
     }

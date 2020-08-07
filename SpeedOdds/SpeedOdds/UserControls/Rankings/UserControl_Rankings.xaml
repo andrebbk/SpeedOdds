@@ -65,7 +65,7 @@
         <!--DATA GRID-->
         <DataGrid x:Name="DataGridRankings" Height="636" Margin="545,251,574,0" VerticalAlignment="Top" AutoGenerateColumns="False" FontSize="16"
             IsReadOnly="false" CanUserAddRows="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden" SelectionUnit="Cell" SelectionMode="Single" 
-            Background="{x:Null}" Visibility="Visible" AllowDrop="False" CanUserReorderColumns="False">
+            Background="{x:Null}" Visibility="Collapsed" AllowDrop="False" CanUserReorderColumns="False">
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
                     <Setter Property="Background" Value="{Binding BackgroundColorSet}"/>
@@ -84,8 +84,8 @@
         <!--Edit Loading: Remove Visibility="Hidden"-->
         <!--FileName="Assets/ballsoccer.json"-->
         <lottieSharp:LottieAnimationView x:Name="LottieAnimationRanksView" DefaultCacheStrategy="None" AutoPlay="True" Speed="1.5" Margin="691,362,690,387" 
-                                         Visibility="Collapsed" Panel.ZIndex="11"/>
-        <TextBlock x:Name="TextBoxLoading" HorizontalAlignment="Center" TextAlignment="Center"  Margin="380,496,382,399" TextWrapping="Wrap" Text="A carregar..."  FontFamily="Yu Gothic" 
+                                         FileName="Assets/ballsoccer.json" Visibility="Collapsed" Panel.ZIndex="11"/>
+        <TextBlock x:Name="TextBoxLoading" HorizontalAlignment="Center" TextAlignment="Center"  Margin="380,496,382,399" TextWrapping="Wrap" Text="A processar..."  FontFamily="Yu Gothic" 
                    FontWeight="Bold" FontSize="18" Foreground="#FF363030" Visibility="Collapsed" Height="26" Width="786" Panel.ZIndex="10"/>
 
     </Grid>
