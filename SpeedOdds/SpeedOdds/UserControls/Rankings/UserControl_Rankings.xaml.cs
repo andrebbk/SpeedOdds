@@ -73,46 +73,13 @@ namespace SpeedOdds.UserControls.Rankings
 
                 UtilsNotification.StopLoadingAnimation();
             }).Start();
-        }
-
-        private void CheckAndShowTeamRankings()
-        {
-            new Thread(() => 
-            {
-                UtilsNotification.StartLoadingAnimation();
-
-
-                UtilsNotification.StopLoadingAnimation();
-
-            }).Start();
-        }
-
-        private void StartRanksAnimation()
-        {
-            new Thread(() =>
-            {
-                LottieAnimationRanksView.Dispatcher.BeginInvoke((Action)(() => LottieAnimationRanksView.PlayAnimation()));
-                LottieAnimationRanksView.Dispatcher.BeginInvoke((Action)(() => LottieAnimationRanksView.Visibility = Visibility.Visible));
-                TextBoxLoading.Dispatcher.BeginInvoke((Action)(() => TextBoxLoading.Visibility = Visibility.Visible));
-            }).Start();
-        }
-
-        private void StopRanksAnimation()
-        {
-            new Thread(() =>
-            {
-                LottieAnimationRanksView.Dispatcher.BeginInvoke((Action)(() => LottieAnimationRanksView.PauseAnimation()));
-                LottieAnimationRanksView.Dispatcher.BeginInvoke((Action)(() => LottieAnimationRanksView.Visibility = Visibility.Collapsed));
-                TextBoxLoading.Dispatcher.BeginInvoke((Action)(() => TextBoxLoading.Visibility = Visibility.Collapsed));
-            }).Start();
-        }
+        }    
 
         private void SolveRankings(int competitionId)
         {
             new Thread(() => 
             {
                 UtilsNotification.StartLoadingAnimation();
-                StartRanksAnimation();
 
                 TeamSolver solverData = new TeamSolver();
 
@@ -167,25 +134,35 @@ namespace SpeedOdds.UserControls.Rankings
 
                         DataGridRankings.Dispatcher.BeginInvoke((Action)(() => { DataGridRankings.ItemsSource = null; })); 
                         DataGridRankings.Dispatcher.BeginInvoke((Action)(() => { DataGridRankings.ItemsSource = classificacoes.OrderBy(x => x.TeamRankValue); }));
-
-                        StopRanksAnimation();
+                        LabelHomeAdvantageValue.Dispatcher.BeginInvoke((Action)(() => { LabelHomeAdvantageValue.Text = Math.Round(solverData.HomeAdvantage.ToDouble(), 2).ToString(); }));
 
                         DataGridRankings.Dispatcher.BeginInvoke((Action)(() => { DataGridRankings.Visibility = Visibility.Visible; }));
+                        LabelHomeAdvantage.Dispatcher.BeginInvoke((Action)(() => { DataGridRankings.Visibility = Visibility.Visible; }));
+                        LabelHomeAdvantage.Dispatcher.BeginInvoke((Action)(() => { LabelHomeAdvantage.Visibility = Visibility.Visible; }));
+                        LabelHomeAdvantageValue.Dispatcher.BeginInvoke((Action)(() => { LabelHomeAdvantageValue.Visibility = Visibility.Visible; }));
 
                         UtilsNotification.StopLoadingAnimation();
                     }
                     else
                     {
+                        DataGridRankings.Dispatcher.BeginInvoke((Action)(() => { DataGridRankings.Visibility = Visibility.Collapsed; }));
+                        LabelHomeAdvantage.Dispatcher.BeginInvoke((Action)(() => { DataGridRankings.Visibility = Visibility.Collapsed; }));
+                        LabelHomeAdvantage.Dispatcher.BeginInvoke((Action)(() => { LabelHomeAdvantage.Visibility = Visibility.Collapsed; }));
+                        LabelHomeAdvantageValue.Dispatcher.BeginInvoke((Action)(() => { LabelHomeAdvantageValue.Visibility = Visibility.Collapsed; }));
+
                         NotificationHelper.notifier.ShowCustomMessage("Não existem jogos registados na competição");
-                        StopRanksAnimation();
                         UtilsNotification.StopLoadingAnimation();
                     }
 
                 }
                 else
                 {
+                    DataGridRankings.Dispatcher.BeginInvoke((Action)(() => { DataGridRankings.Visibility = Visibility.Collapsed; }));
+                    LabelHomeAdvantage.Dispatcher.BeginInvoke((Action)(() => { DataGridRankings.Visibility = Visibility.Collapsed; }));
+                    LabelHomeAdvantage.Dispatcher.BeginInvoke((Action)(() => { LabelHomeAdvantage.Visibility = Visibility.Collapsed; }));
+                    LabelHomeAdvantageValue.Dispatcher.BeginInvoke((Action)(() => { LabelHomeAdvantageValue.Visibility = Visibility.Collapsed; }));
+
                     NotificationHelper.notifier.ShowCustomMessage("Não existem equipas associadas à competição");
-                    StopRanksAnimation();
                     UtilsNotification.StopLoadingAnimation();
                 }
 
@@ -200,6 +177,11 @@ namespace SpeedOdds.UserControls.Rankings
                 ((CompetitionComboModel)ComboBoxFilterCompetition.SelectedValue != null ?
                 ((CompetitionComboModel)ComboBoxFilterCompetition.SelectedValue).CompetitionId == 0 : true))
             {
+                DataGridRankings.Dispatcher.BeginInvoke((Action)(() => { DataGridRankings.Visibility = Visibility.Collapsed; }));
+                LabelHomeAdvantage.Dispatcher.BeginInvoke((Action)(() => { DataGridRankings.Visibility = Visibility.Collapsed; }));
+                LabelHomeAdvantage.Dispatcher.BeginInvoke((Action)(() => { LabelHomeAdvantage.Visibility = Visibility.Collapsed; }));
+                LabelHomeAdvantageValue.Dispatcher.BeginInvoke((Action)(() => { LabelHomeAdvantageValue.Visibility = Visibility.Collapsed; }));
+
                 NotificationHelper.notifier.ShowCustomMessage("Falta escolher a competição!");
                 return;
             }

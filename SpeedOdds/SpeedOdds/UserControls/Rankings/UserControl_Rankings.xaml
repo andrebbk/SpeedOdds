@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SpeedOdds.UserControls.Rankings"
-             xmlns:lottieSharp="clr-namespace:LottieSharp;assembly=LottieSharp"
              mc:Ignorable="d" 
              Height="924" Width="1548">
     <Grid>
@@ -63,7 +62,7 @@
 
 
         <!--DATA GRID-->
-        <DataGrid x:Name="DataGridRankings" Height="636" Margin="545,251,574,0" VerticalAlignment="Top" AutoGenerateColumns="False" FontSize="16"
+        <DataGrid x:Name="DataGridRankings" Height="636" Margin="459,252,660,0" VerticalAlignment="Top" AutoGenerateColumns="False" FontSize="16"
             IsReadOnly="false" CanUserAddRows="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden" SelectionUnit="Cell" SelectionMode="Single" 
             Background="{x:Null}" Visibility="Collapsed" AllowDrop="False" CanUserReorderColumns="False">
             <DataGrid.RowStyle>
@@ -77,16 +76,10 @@
                 <DataGridTextColumn Header="Rank" Width="100" Binding="{Binding TeamRank}" CanUserResize="False" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
-
-
-        <!--LOADING-->
-        <!--Edit UI: 1- Remove FileName section from LottieAnimationView-->
-        <!--Edit Loading: Remove Visibility="Hidden"-->
-        <!--FileName="Assets/ballsoccer.json"-->
-        <lottieSharp:LottieAnimationView x:Name="LottieAnimationRanksView" DefaultCacheStrategy="None" AutoPlay="True" Speed="1.5" Margin="691,362,690,387" 
-                                         FileName="Assets/ballsoccer.json" Visibility="Collapsed" Panel.ZIndex="11"/>
-        <TextBlock x:Name="TextBoxLoading" HorizontalAlignment="Center" TextAlignment="Center"  Margin="380,496,382,399" TextWrapping="Wrap" Text="A processar..."  FontFamily="Yu Gothic" 
-                   FontWeight="Bold" FontSize="18" Foreground="#FF363030" Visibility="Collapsed" Height="26" Width="786" Panel.ZIndex="10"/>
+        <TextBlock x:Name="LabelHomeAdvantage" HorizontalAlignment="Left" Margin="1001,371,0,0" TextWrapping="Wrap" Text="Vantagem Casa"
+                   VerticalAlignment="Top" Foreground="#FF252424" FontSize="36" Visibility="Collapsed"/>
+        <TextBlock x:Name="LabelHomeAdvantageValue" HorizontalAlignment="Left"  Margin="1084,430,0,0" TextWrapping="Wrap" Text="1,80" 
+                   VerticalAlignment="Top" Foreground="#FF252424" FontSize="36" Visibility="Collapsed"/>
 
     </Grid>
 </UserControl>
